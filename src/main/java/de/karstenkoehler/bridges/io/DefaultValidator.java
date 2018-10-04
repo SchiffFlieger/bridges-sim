@@ -1,24 +1,15 @@
 package de.karstenkoehler.bridges.io;
 
+import de.karstenkoehler.bridges.io.validators.Validator;
 import de.karstenkoehler.bridges.model.Edge;
 import de.karstenkoehler.bridges.model.Node;
 
-public class DefaultValidator implements ResultValidator {
-
-    private final int MIN_FIELD_DIMENSION = 4;
-    private final int MAX_FIELD_DIMENSION = 25;
-
-    private final int MIN_BRIDGES_PER_ISLAND = 1;
-    private final int MAX_BRIDGES_PER_ISLAND = 8;
-
+public class DefaultValidator implements Validator {
     private final int MIN_COORDINATE = 0;
     private final int MIN_ISLAND_ID = 0;
 
-
     @Override
     public void validate(ParseResult result) throws ValidateException {
-        checkFieldSize(result);
-        checkRequiredBridgesCount(result);
         checkIslandsAreOnField(result);
         checkBridgeReferencesToIslands(result);
         checkIslandsHaveUniqueFields(result);
@@ -27,26 +18,6 @@ public class DefaultValidator implements ResultValidator {
         checkBridgesConnectDifferentIslands(result);
         // TODO PB-66
         // TODO PB-67
-    }
-
-    private void checkFieldSize(ParseResult result) throws ValidateException {
-        if (result.getWidth() < MIN_FIELD_DIMENSION || result.getWidth() > MAX_FIELD_DIMENSION) {
-            throw new ValidateException(String.format("field width is %d. should be in range %d to %d.",
-                    result.getWidth(), MIN_FIELD_DIMENSION, MAX_FIELD_DIMENSION));
-        }
-        if (result.getHeight() < MIN_FIELD_DIMENSION || result.getHeight() > MAX_FIELD_DIMENSION) {
-            throw new ValidateException(String.format("field height is %d. should be in range %d to %d.",
-                    result.getHeight(), MIN_FIELD_DIMENSION, MAX_FIELD_DIMENSION));
-        }
-    }
-
-    private void checkRequiredBridgesCount(ParseResult result) throws ValidateException {
-        for (Node island : result.getIslands().values()) {
-            if (island.getRequiredBridges() < MIN_BRIDGES_PER_ISLAND || island.getRequiredBridges() > MAX_BRIDGES_PER_ISLAND) {
-                throw new ValidateException(String.format("island at position (%d, %d) requires %d bridges. should be in range %d to %d.",
-                        island.getX(), island.getY(), island.getRequiredBridges(), MIN_BRIDGES_PER_ISLAND, MAX_BRIDGES_PER_ISLAND));
-            }
-        }
     }
 
     private void checkIslandsAreOnField(ParseResult result) throws ValidateException {

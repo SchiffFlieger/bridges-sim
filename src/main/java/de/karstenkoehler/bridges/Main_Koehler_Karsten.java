@@ -1,6 +1,7 @@
 package de.karstenkoehler.bridges;
 
 import de.karstenkoehler.bridges.io.*;
+import de.karstenkoehler.bridges.io.validators.Validator;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -12,7 +13,7 @@ public class Main_Koehler_Karsten {
         Parser parser = new DefaultBridgesParser();
         ParseResult result = parser.parse(readFile("src\\main\\resources\\data\\test_isolation_3.bgs"));
 
-        ResultValidator validator = new DefaultValidator();
+        Validator validator = new DefaultValidator();
         validator.validate(result);
 
         System.out.printf("width: %d\nheight: %d\nislands found: %d\nbridges found: %d\n",
