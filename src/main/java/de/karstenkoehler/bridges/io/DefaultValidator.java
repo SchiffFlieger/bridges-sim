@@ -21,8 +21,12 @@ public class DefaultValidator implements ResultValidator {
         checkRequiredBridgesCount(result);
         checkIslandsAreOnField(result);
         checkBridgeReferencesToIslands(result);
-        // TODO PB-63
-        // TODO PB-65
+        checkIslandsHaveUniqueFields(result);
+        checkIslandsOnAdjacentFields(result);
+        checkBridgesNotDiagonal(result);
+        checkBridgesConnectDifferentIslands(result);
+        // TODO PB-66
+        // TODO PB-67
     }
 
     private void checkFieldSize(ParseResult result) throws ValidateException {
@@ -68,6 +72,48 @@ public class DefaultValidator implements ResultValidator {
             if (bridge.getNode2() < MIN_ISLAND_ID || bridge.getNode2() > MAX_ISLAND_ID) {
                 throw new ValidateException(String.format("bridge %d connects to non-existing island %d.",
                         bridge.getId(), bridge.getNode2()));
+            }
+        }
+    }
+
+    private void checkIslandsHaveUniqueFields(ParseResult result) throws ValidateException {
+        for (Node island : result.getIslands().values()) {
+            for (Node other : result.getIslands().values()) {
+                if (island.getId() != other.getId() && island.getX() == other.getX() && island.getY() == other.getY()) {
+                    throw new ValidateException(String.format("there are two islands on field (%d, %d).",
+                            island.getX(), island.getY()));
+                }
+            }
+        }
+    }
+
+    private void checkIslandsOnAdjacentFields(ParseResult result) throws ValidateException {
+        for (Node island : result.getIslands().values()) {
+            for (Node other : result.getIslands().values()) {
+                if (island != other) {
+                    if (island.getX() == other.getX() && Math.abs(island.getY() - other.getY()) < 2) {
+                        throw new ValidateException(String.format("island (%d, %d) is adjacent to island (%d, %d). there must be at least one free space in between.",
+                                island.getX(), island.getY(), other.getX(), other.getY()));
+                    }
+                }
+            }
+        }
+    }
+
+    private void checkBridgesNotDiagonal(ParseResult result) throws ValidateException {
+        for (Edge bridge : result.getBridges()) {
+            Node a = result.getIslands().get(bridge.getNode1());
+            Node b = result.getIslands().get(bridge.getNode2());
+            if (a.getX() != b.getX() && a.getY() != b.getY()) {
+                throw new ValidateException(String.format("bridge %d is neither horizontal or vertical.", bridge.getId()));
+            }
+        }
+    }
+
+    private void checkBridgesConnectDifferentIslands(ParseResult result) throws ValidateException {
+        for (Edge bridge : result.getBridges()) {
+            if (bridge.getNode1() == bridge.getNode2()) {
+                throw new ValidateException(String.format("bridge %d connects to the same island twice.", bridge.getId()));
             }
         }
     }

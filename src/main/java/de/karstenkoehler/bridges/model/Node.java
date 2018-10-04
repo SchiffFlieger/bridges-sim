@@ -12,6 +12,10 @@ public class Node {
         this.requiredBridges = requiredBridges;
     }
 
+    public int getId() {
+        return id;
+    }
+
     public int getRequiredBridges() {
         return requiredBridges;
     }
