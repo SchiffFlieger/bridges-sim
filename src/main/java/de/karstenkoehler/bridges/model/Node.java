@@ -11,4 +11,16 @@ public class Node {
         this.y = y;
         this.requiredBridges = requiredBridges;
     }
+
+    public int getRequiredBridges() {
+        return requiredBridges;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
 }

@@ -51,6 +51,7 @@ public class DefaultBridgesParser implements Parser {
         }
         index++;
 
+        // TODO this should be a validate exception
         if (islands.size() != islandCount) {
             throw new ParseException(String.format("found %d islands. expected %d", islands.size(), islandCount));
         }
@@ -64,7 +65,8 @@ public class DefaultBridgesParser implements Parser {
         }
         index++;
 
-        for (int i = index; i < lines.size(); i++) {
+        for (int bridgeIndex = 0; bridgeIndex + index < lines.size(); bridgeIndex++) {
+            int i = bridgeIndex + index;
             String line = lines.get(i).replaceAll("\\(", "").replaceAll("\\)", "");
             String[] tmp2 = line.split("\\|");
             String[] coords = tmp2[0].split(",");
@@ -72,7 +74,7 @@ public class DefaultBridgesParser implements Parser {
             int node1 = Integer.parseInt(coords[0].trim());
             int node2 = Integer.parseInt(coords[1].trim());
             int existingBridges = Boolean.parseBoolean(tmp2[1].trim()) ? 2 : 1;
-            bridges.add(new Edge(node1, node2, existingBridges));
+            bridges.add(new Edge(bridgeIndex, node1, node2, existingBridges));
         }
 
         return new ParseResult(islands, bridges, width, height);
