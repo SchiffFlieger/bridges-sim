@@ -1,23 +1,36 @@
 package de.karstenkoehler.bridges;
 
 import de.karstenkoehler.bridges.io.*;
+import de.karstenkoehler.bridges.io.validators.DefaultValidator;
 import de.karstenkoehler.bridges.io.validators.Validator;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
 public class Main_Koehler_Karsten {
-    public static void main(String[] args) throws IOException, ParseException, ValidateException {
+    public static void main(String[] args) {
         Parser parser = new DefaultBridgesParser();
-        ParseResult result = parser.parse(readFile("src\\main\\resources\\data\\test_isolation_3.bgs"));
-
         Validator validator = new DefaultValidator();
-        validator.validate(result);
 
-        System.out.printf("width: %d\nheight: %d\nislands found: %d\nbridges found: %d\n",
-                result.getWidth(), result.getHeight(), result.getIslands().size(), result.getBridges().size());
+
+        File dir = new File("src\\main\\resources\\data\\");
+        for (File file : dir.listFiles()) {
+            if (!file.isFile()) {
+                continue;
+            }
+
+            try {
+                ParseResult result = parser.parse(readFile(file.getAbsolutePath()));
+                validator.validate(result);
+                System.out.printf("%-30s %2dx%2d %3d islands, %3d bridges\n", file.getName(), result.getWidth(), result.getHeight(), result.getIslands().size(), result.getBridges().size());
+
+            } catch (ParseException | ValidateException | IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private static String readFile(String path) throws IOException {
