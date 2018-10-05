@@ -5,12 +5,10 @@ import de.karstenkoehler.bridges.model.Edge;
 import de.karstenkoehler.bridges.model.Node;
 
 public class DefaultValidator implements Validator {
-    private final int MIN_COORDINATE = 0;
-    private final int MIN_ISLAND_ID = 0;
+    private static final int MIN_ISLAND_ID = 0;
 
     @Override
     public void validate(ParseResult result) throws ValidateException {
-        checkIslandsAreOnField(result);
         checkBridgeReferencesToIslands(result);
         checkIslandsHaveUniqueFields(result);
         checkIslandsOnAdjacentFields(result);
@@ -18,19 +16,6 @@ public class DefaultValidator implements Validator {
         checkBridgesConnectDifferentIslands(result);
         // TODO PB-66
         // TODO PB-67
-    }
-
-    private void checkIslandsAreOnField(ParseResult result) throws ValidateException {
-        for (Node island : result.getIslands().values()) {
-            if (island.getX() < MIN_COORDINATE || island.getX() > result.getWidth() - 1) {
-                throw new ValidateException(String.format("island at position (%d, %d) is off the field.",
-                        island.getX(), island.getY()));
-            }
-            if (island.getY() < MIN_COORDINATE || island.getY() > result.getHeight() - 1) {
-                throw new ValidateException(String.format("island at position (%d, %d) is off the field.",
-                        island.getX(), island.getY()));
-            }
-        }
     }
 
     private void checkBridgeReferencesToIslands(ParseResult result) throws ValidateException {
