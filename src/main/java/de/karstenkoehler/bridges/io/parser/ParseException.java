@@ -1,4 +1,4 @@
-package de.karstenkoehler.bridges.io;
+package de.karstenkoehler.bridges.io.parser;
 
 public class ParseException extends Exception {
     public ParseException() {

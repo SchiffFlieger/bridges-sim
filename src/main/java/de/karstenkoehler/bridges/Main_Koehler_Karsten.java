@@ -1,6 +1,6 @@
 package de.karstenkoehler.bridges;
 
-import de.karstenkoehler.bridges.io.*;
+import de.karstenkoehler.bridges.io.parser.*;
 import de.karstenkoehler.bridges.io.validators.DefaultValidator;
 import de.karstenkoehler.bridges.io.validators.Validator;
 import de.karstenkoehler.bridges.ui.MainController;
@@ -18,8 +18,9 @@ import java.nio.file.Paths;
 
 public class Main_Koehler_Karsten extends Application {
     public static void main(String[] args) {
-        // mainConsole();
-        mainGui(args);
+        mainConsole();
+//        mainGui(args);
+        System.out.println("finish");
     }
 
     public static void mainGui(String[] args) {
@@ -56,13 +57,21 @@ public class Main_Koehler_Karsten extends Application {
             }
 
             try {
-                ParseResult result = parser.parse(readFile(file.getAbsolutePath()));
-                validator.validate(result);
-                System.out.printf("%-30s %2dx%2d %3d islands, %3d bridges\n", file.getName(), result.getWidth(), result.getHeight(), result.getIslands().size(), result.getBridges().size());
+                System.out.println(file.getName());
+                Tokenizer tokenizer = new Tokenizer(readFile(file.getAbsolutePath()));
+                for (Token t = tokenizer.next(); t.getType() != Token.Type.EOF; t = tokenizer.next()) {
+                    System.out.println("t:" + t);
+                }
+                System.out.println("\n");
 
-            } catch (ParseException | ValidateException | IOException e) {
+//                ParseResult result = parser.parse(readFile(file.getAbsolutePath()));
+//                validator.validate(result);
+//                System.out.printf("%-30s %2dx%2d %3d islands, %3d bridges\n", file.getName(), result.getWidth(), result.getHeight(), result.getIslands().size(), result.getBridges().size());
+
+            } catch (IOException | ParseException e) {
                 e.printStackTrace();
             }
+
         }
     }
 
