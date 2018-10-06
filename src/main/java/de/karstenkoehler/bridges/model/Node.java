@@ -1,5 +1,7 @@
 package de.karstenkoehler.bridges.model;
 
+import java.util.Objects;
+
 public class Node {
     private final int id;
     private final int x, y;
@@ -26,5 +28,21 @@ public class Node {
 
     public int getY() {
         return y;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Node node = (Node) o;
+        return id == node.id &&
+                x == node.x &&
+                y == node.y &&
+                requiredBridges == node.requiredBridges;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, x, y, requiredBridges);
     }
 }
