@@ -16,7 +16,8 @@ public class DefaultValidator implements Validator {
         this.validators = new HashSet<>(Arrays.asList(
                 new BridgeReferenceToIslandValidator(), new BridgesConnectDifferentIslandsValidator(),
                 new BridgesNotDiagonalValidator(), new FieldSizeValidator(), new IslandOnUniqueFieldsValidator(),
-                new IslandsOnFieldValidator(), new NoIslandsOnAdjacentFieldsValidator(), new RequiredBridgesCountValidator()
+                new IslandsOnFieldValidator(), new NoIslandsOnAdjacentFieldsValidator(), new RequiredBridgesCountValidator(),
+                new MaxOneBridgePerIslandPairValidator()
         ));
     }
 
