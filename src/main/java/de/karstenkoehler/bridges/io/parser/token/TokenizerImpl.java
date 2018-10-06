@@ -5,7 +5,7 @@ import de.karstenkoehler.bridges.io.parser.ParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TokenizerImpl {
+public class TokenizerImpl implements Tokenizer {
 
     private String[] chars;
     private int pos;

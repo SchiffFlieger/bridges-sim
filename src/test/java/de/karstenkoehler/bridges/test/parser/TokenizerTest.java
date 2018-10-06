@@ -2,6 +2,7 @@ package de.karstenkoehler.bridges.test.parser;
 
 import de.karstenkoehler.bridges.io.parser.ParseException;
 import de.karstenkoehler.bridges.io.parser.token.Token;
+import de.karstenkoehler.bridges.io.parser.token.Tokenizer;
 import de.karstenkoehler.bridges.io.parser.token.TokenizerImpl;
 import org.junit.Rule;
 import org.junit.Test;
@@ -88,13 +89,13 @@ public class TokenizerTest {
             thrown.expect(expectedException);
         }
 
-        TokenizerImpl tokenizer = new TokenizerImpl(input);
+        Tokenizer tokenizer = new TokenizerImpl(input);
         Token[] actual = collect(tokenizer);
 
         assertTrue(Arrays.deepEquals(expectedOutput, actual));
     }
 
-    private Token[] collect(TokenizerImpl tokenizer) throws ParseException {
+    private Token[] collect(Tokenizer tokenizer) throws ParseException {
         List<Token> tokens = new ArrayList<>();
         for (Token tk = tokenizer.next(); tk.getType() != Token.Type.EOF; tk = tokenizer.next()) {
             tokens.add(tk);
