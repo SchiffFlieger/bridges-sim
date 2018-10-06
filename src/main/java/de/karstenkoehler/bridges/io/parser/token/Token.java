@@ -1,4 +1,4 @@
-package de.karstenkoehler.bridges.io.parser;
+package de.karstenkoehler.bridges.io.parser.token;
 
 import java.util.Objects;
 

@@ -1,6 +1,10 @@
 package de.karstenkoehler.bridges;
 
-import de.karstenkoehler.bridges.io.parser.*;
+import de.karstenkoehler.bridges.io.parser.DefaultBridgesParser;
+import de.karstenkoehler.bridges.io.parser.ParseException;
+import de.karstenkoehler.bridges.io.parser.Parser;
+import de.karstenkoehler.bridges.io.parser.token.Token;
+import de.karstenkoehler.bridges.io.parser.token.TokenizerImpl;
 import de.karstenkoehler.bridges.io.validators.DefaultValidator;
 import de.karstenkoehler.bridges.io.validators.Validator;
 import de.karstenkoehler.bridges.ui.MainController;
@@ -58,7 +62,7 @@ public class Main_Koehler_Karsten extends Application {
 
             try {
                 System.out.println(file.getName());
-                Tokenizer tokenizer = new Tokenizer(readFile(file.getAbsolutePath()));
+                TokenizerImpl tokenizer = new TokenizerImpl(readFile(file.getAbsolutePath()));
                 for (Token t = tokenizer.next(); t.getType() != Token.Type.EOF; t = tokenizer.next()) {
                     System.out.println("t:" + t);
                 }
