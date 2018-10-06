@@ -1,9 +1,10 @@
 package de.karstenkoehler.bridges;
 
-import de.karstenkoehler.bridges.io.parser.DefaultBridgesParser;
+import de.karstenkoehler.bridges.io.ParseResult;
+import de.karstenkoehler.bridges.io.ValidateException;
 import de.karstenkoehler.bridges.io.parser.ParseException;
 import de.karstenkoehler.bridges.io.parser.Parser;
-import de.karstenkoehler.bridges.io.parser.token.Token;
+import de.karstenkoehler.bridges.io.parser.TokenConsumingParser;
 import de.karstenkoehler.bridges.io.parser.token.TokenizerImpl;
 import de.karstenkoehler.bridges.io.validators.DefaultValidator;
 import de.karstenkoehler.bridges.io.validators.Validator;
@@ -50,9 +51,7 @@ public class Main_Koehler_Karsten extends Application {
     }
 
     public static void mainConsole() {
-        Parser parser = new DefaultBridgesParser();
         Validator validator = new DefaultValidator();
-
 
         File dir = new File("src\\main\\resources\\data\\");
         for (File file : dir.listFiles()) {
@@ -61,18 +60,12 @@ public class Main_Koehler_Karsten extends Application {
             }
 
             try {
-                System.out.println(file.getName());
-                TokenizerImpl tokenizer = new TokenizerImpl(readFile(file.getAbsolutePath()));
-                for (Token t = tokenizer.next(); t.getType() != Token.Type.EOF; t = tokenizer.next()) {
-                    System.out.println("t:" + t);
-                }
-                System.out.println("\n");
+                Parser parser = new TokenConsumingParser(new TokenizerImpl(readFile(file.getAbsolutePath())));
+                ParseResult result = parser.parse();
+                validator.validate(result);
+                System.out.printf("%-30s %2dx%2d %3d islands, %3d bridges\n", file.getName(), result.getWidth(), result.getHeight(), result.getIslands().size(), result.getBridges().size());
 
-//                ParseResult result = parser.parse(readFile(file.getAbsolutePath()));
-//                validator.validate(result);
-//                System.out.printf("%-30s %2dx%2d %3d islands, %3d bridges\n", file.getName(), result.getWidth(), result.getHeight(), result.getIslands().size(), result.getBridges().size());
-
-            } catch (IOException | ParseException e) {
+            } catch (IOException | ParseException | ValidateException e) {
                 e.printStackTrace();
             }
 
