@@ -1,6 +1,7 @@
 package de.karstenkoehler.bridges.ui;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,12 +16,15 @@ import java.io.IOException;
 
 public class MainController {
 
-    public ChoiceBox<String> islandDisplayChoice;
-    public Label stateText;
+    @FXML
+    private ChoiceBox<String> islandDisplayChoice;
+    @FXML
+    private Label stateText;
 
     private Window stage;
 
-    public void initialize() {
+    @FXML
+    private void initialize() {
         islandDisplayChoice.getItems().addAll(
                 "show required bridges", "show missing bridges"
         );
@@ -31,7 +35,8 @@ public class MainController {
         this.stage = stage;
     }
 
-    public void onNewPuzzle(ActionEvent actionEvent) {
+    @FXML
+    private void onNewPuzzle(ActionEvent actionEvent) {
         System.out.println("new");
 
         try {
@@ -49,35 +54,43 @@ public class MainController {
         }
     }
 
-    public void onRestartPuzzle(ActionEvent actionEvent) {
+    @FXML
+    private void onRestartPuzzle(ActionEvent actionEvent) {
         System.out.println("restart");
     }
 
-    public void onOpenPuzzle(ActionEvent actionEvent) {
+    @FXML
+    private void onOpenPuzzle(ActionEvent actionEvent) {
         System.out.println("open");
     }
 
-    public void onSavePuzzle(ActionEvent actionEvent) {
+    @FXML
+    private void onSavePuzzle(ActionEvent actionEvent) {
         System.out.println("save");
     }
 
-    public void onSaveAs(ActionEvent actionEvent) {
+    @FXML
+    private void onSaveAs(ActionEvent actionEvent) {
         System.out.println("save as");
     }
 
-    public void onClose(ActionEvent actionEvent) {
+    @FXML
+    private void onClose(ActionEvent actionEvent) {
         System.out.println("close");
     }
 
-    public void onAbout(ActionEvent actionEvent) {
+    @FXML
+    private void onAbout(ActionEvent actionEvent) {
         System.out.println("about");
     }
 
-    public void onNextBridge(ActionEvent actionEvent) {
+    @FXML
+    private void onNextBridge(ActionEvent actionEvent) {
         System.out.println("next bridge");
     }
 
-    public void onSolve(ActionEvent actionEvent) {
+    @FXML
+    private void onSolve(ActionEvent actionEvent) {
         System.out.println("solve");
     }
 }

@@ -1,24 +1,34 @@
 package de.karstenkoehler.bridges.ui;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 
 public class NewPuzzleController {
 
-    public RadioButton useRandom;
-    public RadioButton chooseParameters;
-    public CheckBox chooseNumOfIslands;
-    public TextField width;
-    public TextField height;
-    public TextField islands;
+    @FXML
+    private RadioButton useRandom;
+    @FXML
+    private RadioButton chooseParameters;
+    @FXML
+    private CheckBox chooseNumOfIslands;
+    @FXML
+    private TextField width;
+    @FXML
+    private TextField height;
+    @FXML
+    private TextField islands;
 
-    public void onOk(ActionEvent actionEvent) {
+
+    @FXML
+    private void onOk(ActionEvent actionEvent) {
         System.out.println("ok");
     }
 
-    public void onCancel(ActionEvent actionEvent) {
+    @FXML
+    private void onCancel(ActionEvent actionEvent) {
         System.out.println("cancel");
     }
 }
