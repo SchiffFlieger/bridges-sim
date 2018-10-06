@@ -3,6 +3,7 @@ package de.karstenkoehler.bridges;
 import de.karstenkoehler.bridges.io.*;
 import de.karstenkoehler.bridges.io.validators.DefaultValidator;
 import de.karstenkoehler.bridges.io.validators.Validator;
+import de.karstenkoehler.bridges.ui.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -27,12 +28,20 @@ public class Main_Koehler_Karsten extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("ui/main.fxml"));
+        Parent root = createRootPane(stage);
         Scene scene = new Scene(root);
 
         stage.setTitle("Bridges Simulator - Karsten Köhler - 8690570");
         stage.setScene(scene);
         stage.show();
+    }
+
+    private Parent createRootPane(Stage stage) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/main.fxml"));
+        Parent root = loader.load();
+        MainController controller = loader.getController();
+        controller.setStage(stage);
+        return root;
     }
 
     public static void mainConsole() {

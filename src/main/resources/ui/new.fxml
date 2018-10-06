@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0"
+            prefWidth="412.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="de.karstenkoehler.bridges.ui.NewPuzzleController">
+    <RadioButton fx:id="useRandom" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="random parameters"/>
+    <RadioButton fx:id="chooseParameters" layoutX="14.0" layoutY="37.0" mnemonicParsing="false"
+                 text="choose parameters"/>
+    <Label layoutX="40.0" layoutY="72.0" text="width:"/>
+    <Label layoutX="40.0" layoutY="103.0" text="height:"/>
+    <CheckBox fx:id="chooseNumOfIslands" layoutX="40.0" layoutY="140.0" mnemonicParsing="false"
+              text="choose number of islands"/>
+    <TextField fx:id="width" layoutX="92.0" layoutY="68.0"/>
+    <TextField fx:id="height" layoutX="92.0" layoutY="99.0"/>
+    <TextField fx:id="islands" layoutX="92.0" layoutY="163.0"/>
+    <Button layoutX="241.0" layoutY="204.0" mnemonicParsing="false" onAction="#onOk" prefWidth="75.0" text="OK"/>
+    <Button layoutX="325.0" layoutY="204.0" mnemonicParsing="false" onAction="#onCancel" prefWidth="75.0"
+            text="Cancel"/>
+</AnchorPane>
