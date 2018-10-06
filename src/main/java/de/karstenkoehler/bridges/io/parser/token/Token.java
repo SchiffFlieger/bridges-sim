@@ -6,7 +6,7 @@ public class Token {
     public enum Type {
         FieldSection, IslandSection, BridgesSection,
         OpenParenthesis, CloseParenthesis, Comma, Pipe, X,
-        Comment, Number, Bool, EOF
+        Number, Bool, EOF
     }
 
     private final String value;

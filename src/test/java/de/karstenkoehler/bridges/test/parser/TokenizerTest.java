@@ -53,15 +53,6 @@ public class TokenizerTest {
             new Token(",", Token.Type.Comma),
     };
 
-    private static final String comments = "#first!\r#second?\n#third with spaces...\n#fourth";
-    private static final Token[] tkComments = new Token[]{
-            new Token("first!", Token.Type.Comment),
-            new Token("second?", Token.Type.Comment),
-            new Token("third with spaces...", Token.Type.Comment),
-            new Token("fourth", Token.Type.Comment),
-    };
-
-
     @Parameterized.Parameters()
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
@@ -69,7 +60,6 @@ public class TokenizerTest {
                 {bools, tkBools, null},
                 {sections, tkSections, null},
                 {symbols, tkSymbols, null},
-                {comments, tkComments, null},
 
                 {"!", null, ParseException.class},
                 {"Field", null, ParseException.class},

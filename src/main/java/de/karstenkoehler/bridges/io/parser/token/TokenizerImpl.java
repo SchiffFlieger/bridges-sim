@@ -29,6 +29,8 @@ public class TokenizerImpl {
 
             if (whitespace.reset(current).matches()) {
                 consume(current);
+            } else if (current.equals("#")) {
+                skipComment();
             } else if (current.equals("(")) {
                 consume(current);
                 return new Token("(", Token.Type.OpenParenthesis);
@@ -50,8 +52,6 @@ public class TokenizerImpl {
                 return islandsToken();
             } else if (current.equals("B")) {
                 return bridgesToken();
-            } else if (current.equals("#")) {
-                return commentToken();
             } else if (numMatcher.reset(current).matches()) {
                 return numberToken();
             } else if (boolMatcher.reset(current).matches()) {
@@ -99,15 +99,11 @@ public class TokenizerImpl {
         }
     }
 
-    private Token commentToken() throws ParseException {
-        StringBuilder builder = new StringBuilder();
+    private void skipComment() throws ParseException {
         consume("#");
         while (pos < chars.length && !chars[pos].equals("\n") && !chars[pos].equals("\r")) {
-            builder.append(chars[pos]);
             consume(chars[pos]);
         }
-
-        return new Token(builder.toString(), Token.Type.Comment);
     }
 
     private void consumeString(String str) throws ParseException {
