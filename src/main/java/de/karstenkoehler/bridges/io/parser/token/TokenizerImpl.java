@@ -5,7 +5,7 @@ import de.karstenkoehler.bridges.io.parser.ParseException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class TokenizerImpl implements Tokenizer {
+public class TokenizerImpl {
 
     private String[] chars;
     private int pos;
@@ -13,8 +13,6 @@ public class TokenizerImpl implements Tokenizer {
     private final Matcher numMatcher;
     private final Matcher boolMatcher;
     private final Matcher whitespace;
-
-    private Token lookahead;
 
     public TokenizerImpl(final String input) {
         this.chars = input.split("");
@@ -25,14 +23,7 @@ public class TokenizerImpl implements Tokenizer {
         this.whitespace = Pattern.compile("\\s").matcher("");
     }
 
-    @Override
     public Token next() throws ParseException {
-        if (this.lookahead != null) {
-            Token tmp = this.lookahead;
-            this.lookahead = null;
-            return tmp;
-        }
-
         while (pos < chars.length) {
             String current = chars[pos];
 
@@ -71,15 +62,6 @@ public class TokenizerImpl implements Tokenizer {
         }
 
         return new Token("", Token.Type.EOF);
-    }
-
-    @Override
-    public Token peekNext() throws ParseException {
-        if (this.lookahead == null) {
-            this.lookahead = next();
-        }
-
-        return this.lookahead;
     }
 
     private Token fieldToken() throws ParseException {
