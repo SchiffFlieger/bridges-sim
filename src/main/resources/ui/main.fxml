@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0"
+            prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="de.karstenkoehler.bridges.ui.MainController">
+    <top>
+        <MenuBar BorderPane.alignment="CENTER">
+            <Menu mnemonicParsing="false" text="File">
+                <MenuItem mnemonicParsing="false" onAction="#onNewPuzzle" text="New Puzzle"/>
+                <MenuItem mnemonicParsing="false" onAction="#onRestartPuzzle" text="Restart Puzzle"/>
+                <MenuItem mnemonicParsing="false" onAction="#onOpenPuzzle" text="Open Puzzle"/>
+                <MenuItem mnemonicParsing="false" onAction="#onSavePuzzle" text="Save Puzzle"/>
+                <MenuItem mnemonicParsing="false" onAction="#onSaveAs" text="Save Puzzle As..."/>
+                <MenuItem mnemonicParsing="false" onAction="#onClose" text="Close"/>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Help">
+                <MenuItem mnemonicParsing="false" onAction="#onAbout" text="About"/>
+            </Menu>
+        </MenuBar>
+    </top>
+    <center>
+        <SplitPane dividerPositions="0.7" BorderPane.alignment="CENTER">
+            <Pane minHeight="635.0" minWidth="635.0" prefHeight="635.0" prefWidth="635.0">
+                <padding>
+                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                </padding>
+                <Canvas height="625.0" width="625.0"/>
+            </Pane>
+            <AnchorPane minHeight="0.0" minWidth="270.0">
+                <ChoiceBox fx:id="islandDisplayChoice" layoutX="14.0" layoutY="14.0" prefHeight="25.0"
+                           prefWidth="250.0"/>
+                <Button layoutX="14.0" layoutY="51.0" mnemonicParsing="false" onAction="#onNextBridge"
+                        prefWidth="120.0" text="next bridge"/>
+                <Button layoutX="144.0" layoutY="51.0" mnemonicParsing="false" onAction="#onSolve" prefWidth="120.0"
+                        text="solve"/>
+            </AnchorPane>
+        </SplitPane>
+    </center>
+    <bottom>
+        <HBox BorderPane.alignment="CENTER">
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+            <Label text="state: ">
+                <HBox.margin>
+                    <Insets right="5.0"/>
+                </HBox.margin>
+            </Label>
+            <Label fx:id="stateText" text="empty"/>
+        </HBox>
+    </bottom>
+</BorderPane>

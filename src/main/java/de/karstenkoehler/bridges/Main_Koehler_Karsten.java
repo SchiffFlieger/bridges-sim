@@ -3,6 +3,11 @@ package de.karstenkoehler.bridges;
 import de.karstenkoehler.bridges.io.*;
 import de.karstenkoehler.bridges.io.validators.DefaultValidator;
 import de.karstenkoehler.bridges.io.validators.Validator;
+import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,8 +15,27 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class Main_Koehler_Karsten {
+public class Main_Koehler_Karsten extends Application {
     public static void main(String[] args) {
+        // mainConsole();
+        mainGui(args);
+    }
+
+    public static void mainGui(String[] args) {
+        launch(args);
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("ui/main.fxml"));
+        Scene scene = new Scene(root);
+
+        stage.setTitle("Bridges Simulator - Karsten Köhler - 8690570");
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    public static void mainConsole() {
         Parser parser = new DefaultBridgesParser();
         Validator validator = new DefaultValidator();
 
@@ -36,4 +60,6 @@ public class Main_Koehler_Karsten {
     private static String readFile(String path) throws IOException {
         return new String(Files.readAllBytes(Paths.get(path)), Charset.defaultCharset());
     }
+
+
 }
