@@ -5,6 +5,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
@@ -20,6 +21,8 @@ public class MainController {
     private ChoiceBox<String> islandDisplayChoice;
     @FXML
     private Label stateText;
+    @FXML
+    private Canvas canvas;
 
     private Window stage;
 
@@ -29,6 +32,9 @@ public class MainController {
                 "show required bridges", "show missing bridges"
         );
         islandDisplayChoice.getSelectionModel().select(0);
+
+        CanvasController controller = new CanvasController(this.canvas);
+        controller.drawThings();
     }
 
     public void setStage(Window stage) {

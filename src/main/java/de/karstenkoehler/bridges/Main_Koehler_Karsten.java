@@ -23,8 +23,8 @@ import java.nio.file.Paths;
 
 public class Main_Koehler_Karsten extends Application {
     public static void main(String[] args) {
-        mainConsole();
-//        mainGui(args);
+//        mainConsole();
+        mainGui(args);
         System.out.println("finish");
     }
 
