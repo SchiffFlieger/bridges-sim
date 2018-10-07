@@ -3,6 +3,10 @@ package de.karstenkoehler.bridges.io.validators;
 import de.karstenkoehler.bridges.io.ParseResult;
 import de.karstenkoehler.bridges.io.ValidateException;
 
+/**
+ * Checks if the field's bounds are within the valid range. The dimensions on each axis
+ * must be at least 4 and at most 25 fields.
+ */
 public class FieldSizeValidator implements Validator {
     private static final int MIN_FIELD_DIMENSION = 4;
     private static final int MAX_FIELD_DIMENSION = 25;

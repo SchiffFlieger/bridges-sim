@@ -4,6 +4,11 @@ import de.karstenkoehler.bridges.io.ParseResult;
 import de.karstenkoehler.bridges.io.ValidateException;
 import de.karstenkoehler.bridges.model.Node;
 
+/**
+ * Checks if all islands are placed within the bound of the field. A island is
+ * within the bounds if the x coordinate is in range [0, field width - 1] and the
+ * y coordinate is in range [0, field height - 1].
+ */
 public class IslandsOnFieldValidator implements Validator {
     private static final int MIN_COORDINATE = 0;
 

@@ -4,6 +4,10 @@ import de.karstenkoehler.bridges.io.ParseResult;
 import de.karstenkoehler.bridges.io.ValidateException;
 import de.karstenkoehler.bridges.model.Edge;
 
+/**
+ * Checks if the island references of every defined bridge are valid. For the island reference to be valid
+ * it needs to be in the range [0, island count - 1].
+ */
 public class BridgeReferenceToIslandValidator implements Validator {
     private static final int MIN_ISLAND_ID = 0;
 

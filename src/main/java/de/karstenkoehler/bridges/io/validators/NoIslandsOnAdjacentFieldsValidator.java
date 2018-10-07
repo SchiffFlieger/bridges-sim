@@ -4,6 +4,11 @@ import de.karstenkoehler.bridges.io.ParseResult;
 import de.karstenkoehler.bridges.io.ValidateException;
 import de.karstenkoehler.bridges.model.Node;
 
+/**
+ * Checks if there are any islands on directly adjacent fields. Adjacent means
+ * that either the x or y coordinate of the islands deviate by one. If both
+ * deviate by one, they are diagonal adjacent, which is allowed.
+ */
 public class NoIslandsOnAdjacentFieldsValidator implements Validator {
     @Override
     public void validate(ParseResult result) throws ValidateException {

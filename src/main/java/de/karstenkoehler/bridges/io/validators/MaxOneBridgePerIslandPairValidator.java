@@ -4,6 +4,10 @@ import de.karstenkoehler.bridges.io.ParseResult;
 import de.karstenkoehler.bridges.io.ValidateException;
 import de.karstenkoehler.bridges.model.Edge;
 
+/**
+ * Checks if there is only one edge connecting the same two nodes. Double
+ * bridges can be set in the corresponding edge.
+ */
 public class MaxOneBridgePerIslandPairValidator implements Validator {
     @Override
     public void validate(ParseResult result) throws ValidateException {

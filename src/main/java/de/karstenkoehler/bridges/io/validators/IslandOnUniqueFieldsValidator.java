@@ -4,6 +4,10 @@ import de.karstenkoehler.bridges.io.ParseResult;
 import de.karstenkoehler.bridges.io.ValidateException;
 import de.karstenkoehler.bridges.model.Node;
 
+/**
+ * Checks if all islands are on separate fields. Islands are on separate fields
+ * if they do not share the same x and y coordinates.
+ */
 public class IslandOnUniqueFieldsValidator implements Validator {
     @Override
     public void validate(ParseResult result) throws ValidateException {

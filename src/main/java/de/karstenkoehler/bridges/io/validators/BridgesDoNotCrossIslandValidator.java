@@ -7,6 +7,11 @@ import de.karstenkoehler.bridges.model.Node;
 
 import java.util.Map;
 
+/**
+ * Checks if any defined bridge runs across another island. This third island must be between
+ * the two connected islands. Does not throw an exception if the bridge is diagonal or
+ * connects to the same island twice.
+ */
 public class BridgesDoNotCrossIslandValidator implements Validator {
     @Override
     public void validate(ParseResult result) throws ValidateException {

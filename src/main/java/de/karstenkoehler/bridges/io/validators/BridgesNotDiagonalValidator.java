@@ -5,6 +5,10 @@ import de.karstenkoehler.bridges.io.ValidateException;
 import de.karstenkoehler.bridges.model.Edge;
 import de.karstenkoehler.bridges.model.Node;
 
+/**
+ * Checks if every defined bridge is either horizontal or vertical. This means the
+ * two islands of the bridge must share either their x or y coordinate.
+ */
 public class BridgesNotDiagonalValidator implements Validator {
     @Override
     public void validate(ParseResult result) throws ValidateException {

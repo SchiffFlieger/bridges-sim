@@ -7,6 +7,11 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * This is the default validator to use for validation. It includes all existing validators
+ * in this package and applies them to the parsed structure.  If there are any errors in
+ * the structure, this validator points them out.
+ */
 public class DefaultValidator implements Validator {
 
     private final Set<Validator> validators;

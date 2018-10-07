@@ -4,6 +4,10 @@ import de.karstenkoehler.bridges.io.ParseResult;
 import de.karstenkoehler.bridges.io.ValidateException;
 import de.karstenkoehler.bridges.model.Node;
 
+/**
+ * Checks if the number of bridges required ist within the valid range.
+ * Valid are all integers from 1 to 8.
+ */
 public class RequiredBridgesCountValidator implements Validator {
     private static final int MIN_BRIDGES_PER_ISLAND = 1;
     private static final int MAX_BRIDGES_PER_ISLAND = 8;
