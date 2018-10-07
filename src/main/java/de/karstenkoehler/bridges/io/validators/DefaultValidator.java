@@ -22,15 +22,13 @@ public class DefaultValidator implements Validator {
                 new BridgeReferenceToIslandValidator(), new BridgesConnectDifferentIslandsValidator(),
                 new BridgesNotDiagonalValidator(), new FieldSizeValidator(), new IslandOnUniqueFieldsValidator(),
                 new IslandsOnFieldValidator(), new NoIslandsOnAdjacentFieldsValidator(), new RequiredBridgesCountValidator(),
-                new MaxOneBridgePerIslandPairValidator()
+                new MaxOneBridgePerIslandPairValidator(), new IslandOrderValidator(), new BridgeReferenceOrderValidator(),
+                new BridgeOrderValidator()
         ));
     }
 
     @Override
     public void validate(ParseResult result) throws ValidateException {
-        // TODO PB-66
-        // TODO PB-67
-
         for (Validator validator : this.validators) {
             validator.validate(result);
         }
