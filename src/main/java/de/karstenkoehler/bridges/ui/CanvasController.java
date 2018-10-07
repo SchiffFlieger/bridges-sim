@@ -24,10 +24,12 @@ import java.nio.file.Paths;
 import java.util.Collections;
 
 public class CanvasController {
-    private static final int GRID_LINES = 5;
+    private static final int GRID_LINES = 25;
 
     private static final int ISLAND_DIAMETER = 600 / GRID_LINES;
     private static final int ISLAND_OFFSET = ISLAND_DIAMETER / 2;
+
+    private static final int CLICK_AREA_SIZE = ISLAND_DIAMETER / 2;
 
     private static final int PADDING = (ISLAND_DIAMETER / 2) + 5;
     private static final int FONT_SIZE = 500 / GRID_LINES;
@@ -36,6 +38,7 @@ public class CanvasController {
     private final double fieldSize;
 
     private boolean gridVisible;
+    private boolean clickAreaVisible;
 
     public CanvasController(Canvas canvas) {
         this.canvas = canvas;
@@ -62,18 +65,19 @@ public class CanvasController {
         this.drawThings();
     }
 
+    public void setClickAreaVisible(boolean visible) {
+        this.clickAreaVisible = visible;
+        this.drawThings();
+    }
+
     private void drawGrid(GraphicsContext gc) {
         if (!gridVisible) {
             return;
         }
 
         final int lineWidth = 1;
-
-        gc.setStroke(Color.BLACK);
-        gc.setLineWidth(2);
-
-        double x1 = canvas.getWidth() - PADDING;
-        double y1 = canvas.getHeight() - PADDING;
+        final double x1 = canvas.getWidth() - PADDING;
+        final double y1 = canvas.getHeight() - PADDING;
 
         gc.setStroke(Color.RED);
         gc.setLineWidth(lineWidth);
@@ -100,12 +104,38 @@ public class CanvasController {
         gc.setFont(Font.font(FONT_SIZE));
         gc.setFill(Color.BLACK);
         gc.fillText(String.valueOf(island.getRequiredBridges()), x, y);
+
+        drawClickArea(gc, x, y);
+    }
+
+    private void drawClickArea(GraphicsContext gc, double x, double y) {
+        if (!this.clickAreaVisible) {
+            return;
+        }
+
+        final double x0 = x - CLICK_AREA_SIZE;
+        final double x1 = x + CLICK_AREA_SIZE;
+        final double y0 = y - CLICK_AREA_SIZE;
+        final double y1 = y + CLICK_AREA_SIZE;
+
+        gc.setStroke(Color.RED);
+        gc.setLineWidth(1);
+
+        // diagonals
+        gc.strokeLine(x0, y0, x1, y1);
+        gc.strokeLine(x0, y1, x1, y0);
+
+        // square
+        gc.strokeLine(x0, y0, x1, y0);
+        gc.strokeLine(x0, y0, x0, y1);
+        gc.strokeLine(x0, y1, x1, y1);
+        gc.strokeLine(x1, y1, x1, y0);
     }
 
     private ParseResult getParseResult() {
         Validator validator = new DefaultValidator();
 
-        File file = new File("src\\main\\resources\\data\\bsp_5x5.bgs");
+        File file = new File("src\\main\\resources\\data\\bsp_25x25.bgs");
 
         ParseResult result = new ParseResult(Collections.emptyMap(), Collections.emptyList(), 0, 0);
         try {

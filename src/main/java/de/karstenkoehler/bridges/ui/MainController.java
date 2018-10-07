@@ -42,6 +42,7 @@ public class MainController {
         islandDisplayChoice.getSelectionModel().select(0);
 
         cbxShowGrid.selectedProperty().addListener(setGridVisibility());
+        cbxShowClickArea.selectedProperty().addListener(setClickAreaVisibility());
 
         this.canvasController = new CanvasController(this.canvas);
         canvasController.drawThings();
@@ -112,5 +113,9 @@ public class MainController {
 
     private ChangeListener<Boolean> setGridVisibility() {
         return (observable, old, selected) -> canvasController.setGridVisible(selected);
+    }
+
+    private ChangeListener<Boolean> setClickAreaVisibility() {
+        return (observable, old, selected) -> canvasController.setClickAreaVisible(selected);
     }
 }
