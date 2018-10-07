@@ -35,6 +35,7 @@ public class CanvasController {
     private final Canvas canvas;
     private final double fieldSize;
 
+    private boolean gridVisible;
 
     public CanvasController(Canvas canvas) {
         this.canvas = canvas;
@@ -43,6 +44,7 @@ public class CanvasController {
 
     public void drawThings() {
         GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
 
         drawCanvasBorder(gc);
@@ -55,7 +57,16 @@ public class CanvasController {
         }
     }
 
+    public void setGridVisible(boolean visible) {
+        this.gridVisible = visible;
+        this.drawThings();
+    }
+
     private void drawGrid(GraphicsContext gc) {
+        if (!gridVisible) {
+            return;
+        }
+
         final int lineWidth = 1;
 
         gc.setStroke(Color.BLACK);
@@ -94,7 +105,7 @@ public class CanvasController {
     private ParseResult getParseResult() {
         Validator validator = new DefaultValidator();
 
-        File file = new File("src\\main\\resources\\data\\bsp_25x25.bgs");
+        File file = new File("src\\main\\resources\\data\\bsp_5x5.bgs");
 
         ParseResult result = new ParseResult(Collections.emptyMap(), Collections.emptyList(), 0, 0);
         try {

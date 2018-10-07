@@ -1,5 +1,6 @@
 package de.karstenkoehler.bridges.ui;
 
+import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -7,6 +8,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Alert;
+import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.stage.Modality;
@@ -17,6 +19,11 @@ import java.io.IOException;
 
 public class MainController {
 
+
+    @FXML
+    private CheckMenuItem cbxShowClickArea;
+    @FXML
+    private CheckMenuItem cbxShowGrid;
     @FXML
     private ChoiceBox<String> islandDisplayChoice;
     @FXML
@@ -25,6 +32,7 @@ public class MainController {
     private Canvas canvas;
 
     private Window stage;
+    private CanvasController canvasController;
 
     @FXML
     private void initialize() {
@@ -33,8 +41,10 @@ public class MainController {
         );
         islandDisplayChoice.getSelectionModel().select(0);
 
-        CanvasController controller = new CanvasController(this.canvas);
-        controller.drawThings();
+        cbxShowGrid.selectedProperty().addListener(setGridVisibility());
+
+        this.canvasController = new CanvasController(this.canvas);
+        canvasController.drawThings();
     }
 
     public void setStage(Window stage) {
@@ -98,5 +108,9 @@ public class MainController {
     @FXML
     private void onSolve(ActionEvent actionEvent) {
         System.out.println("solve");
+    }
+
+    private ChangeListener<Boolean> setGridVisibility() {
+        return (observable, old, selected) -> canvasController.setGridVisible(selected);
     }
 }

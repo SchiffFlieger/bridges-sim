@@ -9,32 +9,50 @@
             fx:controller="de.karstenkoehler.bridges.ui.MainController">
     <top>
         <MenuBar BorderPane.alignment="CENTER">
-            <Menu mnemonicParsing="false" text="File">
-                <MenuItem mnemonicParsing="false" onAction="#onNewPuzzle" text="New Puzzle"/>
-                <MenuItem mnemonicParsing="false" onAction="#onRestartPuzzle" text="Restart Puzzle"/>
-                <MenuItem mnemonicParsing="false" onAction="#onOpenPuzzle" text="Open Puzzle"/>
-                <MenuItem mnemonicParsing="false" onAction="#onSavePuzzle" text="Save Puzzle"/>
-                <MenuItem mnemonicParsing="false" onAction="#onSaveAs" text="Save Puzzle As..."/>
-                <MenuItem mnemonicParsing="false" onAction="#onClose" text="Close"/>
+            <menus>
+                <Menu mnemonicParsing="false" text="File">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#onNewPuzzle" text="New Puzzle"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onRestartPuzzle" text="Restart Puzzle"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onOpenPuzzle" text="Open Puzzle"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onSavePuzzle" text="Save Puzzle"/>
+                        <MenuItem mnemonicParsing="false" onAction="#onSaveAs" text="Save Puzzle As..."/>
+                        <MenuItem mnemonicParsing="false" onAction="#onClose" text="Close"/>
+                    </items>
+                </Menu>
+                <Menu mnemonicParsing="false" text="View">
+                    <items>
+                        <CheckMenuItem fx:id="cbxShowGrid" mnemonicParsing="false" text="Show Grid"/>
+                        <CheckMenuItem fx:id="cbxShowClickArea" mnemonicParsing="false" text="Show Click Area"/>
+                    </items>
             </Menu>
-            <Menu mnemonicParsing="false" text="Help">
-                <MenuItem mnemonicParsing="false" onAction="#onAbout" text="About"/>
-            </Menu>
+                <Menu mnemonicParsing="false" text="Help">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#onAbout" text="About"/>
+                    </items>
+                </Menu>
+            </menus>
         </MenuBar>
     </top>
     <center>
         <SplitPane dividerPositions="0.7" BorderPane.alignment="CENTER">
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-                <Canvas fx:id="canvas" height="625.0" width="625.0"/>
-            </HBox>
-            <AnchorPane minHeight="0.0" minWidth="270.0">
-                <ChoiceBox fx:id="islandDisplayChoice" layoutX="14.0" layoutY="14.0" prefHeight="25.0"
-                           prefWidth="250.0"/>
-                <Button layoutX="14.0" layoutY="51.0" mnemonicParsing="false" onAction="#onNextBridge"
-                        prefWidth="120.0" text="next bridge"/>
-                <Button layoutX="144.0" layoutY="51.0" mnemonicParsing="false" onAction="#onSolve"
-                        prefWidth="120.0" text="solve"/>
-            </AnchorPane>
+            <items>
+                <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <Canvas fx:id="canvas" height="625.0" width="625.0"/>
+                    </children>
+                </HBox>
+                <AnchorPane minHeight="0.0" minWidth="270.0">
+                    <children>
+                        <ChoiceBox fx:id="islandDisplayChoice" layoutX="14.0" layoutY="14.0" prefHeight="25.0"
+                                   prefWidth="250.0"/>
+                        <Button layoutX="14.0" layoutY="51.0" mnemonicParsing="false" onAction="#onNextBridge"
+                                prefWidth="120.0" text="next bridge"/>
+                        <Button layoutX="144.0" layoutY="51.0" mnemonicParsing="false" onAction="#onSolve"
+                                prefWidth="120.0" text="solve"/>
+                    </children>
+                </AnchorPane>
+            </items>
         </SplitPane>
     </center>
     <bottom>
@@ -42,12 +60,14 @@
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </padding>
-            <Label text="state: ">
-                <HBox.margin>
-                    <Insets right="5.0"/>
-                </HBox.margin>
-            </Label>
-            <Label fx:id="stateText" text="empty"/>
+            <children>
+                <Label text="state: ">
+                    <HBox.margin>
+                        <Insets right="5.0"/>
+                    </HBox.margin>
+                </Label>
+                <Label fx:id="stateText" text="empty"/>
+            </children>
         </HBox>
     </bottom>
 </BorderPane>
