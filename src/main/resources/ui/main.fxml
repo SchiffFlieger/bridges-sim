@@ -39,7 +39,13 @@
             <items>
                 <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                     <children>
-                        <Canvas fx:id="canvas" height="625.0" width="625.0"/>
+                        <StackPane>
+                            <children>
+                                <Canvas fx:id="canvas" height="625.0" width="625.0"/>
+                                <Pane fx:id="pane" maxHeight="625.0" maxWidth="625.0" minHeight="625.0" minWidth="625.0"
+                                      prefHeight="625.0" prefWidth="625.0"/>
+                            </children>
+                        </StackPane>
                     </children>
                 </HBox>
                 <AnchorPane minHeight="0.0" minWidth="270.0">

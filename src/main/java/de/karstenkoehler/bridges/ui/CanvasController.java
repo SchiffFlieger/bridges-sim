@@ -12,7 +12,9 @@ import de.karstenkoehler.bridges.model.Node;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
@@ -35,20 +37,25 @@ public class CanvasController {
     private static final int FONT_SIZE = 500 / GRID_LINES;
 
     private final Canvas canvas;
+    private final Pane pane;
     private final double fieldSize;
 
     private boolean gridVisible;
     private boolean clickAreaVisible;
 
-    public CanvasController(Canvas canvas) {
+    public CanvasController(Canvas canvas, Pane pane) {
         this.canvas = canvas;
+        this.canvas.setOnMouseClicked(event -> {
+            System.out.println("canvas clicked");
+        });
+
         this.fieldSize = (canvas.getWidth() - 2 * PADDING) / (GRID_LINES - 1);
+        this.pane = pane;
     }
 
     public void drawThings() {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-
 
         drawCanvasBorder(gc);
 
@@ -105,10 +112,10 @@ public class CanvasController {
         gc.setFill(Color.BLACK);
         gc.fillText(String.valueOf(island.getRequiredBridges()), x, y);
 
-        drawClickArea(gc, x, y);
+        drawClickArea(gc, x, y, island.getId());
     }
 
-    private void drawClickArea(GraphicsContext gc, double x, double y) {
+    private void drawClickArea(GraphicsContext gc, double x, double y, int id) {
         if (!this.clickAreaVisible) {
             return;
         }
@@ -130,6 +137,42 @@ public class CanvasController {
         gc.strokeLine(x0, y0, x0, y1);
         gc.strokeLine(x0, y1, x1, y1);
         gc.strokeLine(x1, y1, x1, y0);
+
+        Polygon north = new Polygon(x, y, x1, y0, x0, y0);
+        north.setStroke(Color.TRANSPARENT);
+        north.setFill(Color.TRANSPARENT);
+
+        Polygon east = new Polygon(x, y, x1, y0, x1, y1);
+        east.setStroke(Color.TRANSPARENT);
+        east.setFill(Color.TRANSPARENT);
+
+        Polygon south = new Polygon(x, y, x1, y1, x0, y1);
+        south.setStroke(Color.TRANSPARENT);
+        south.setFill(Color.TRANSPARENT);
+
+        Polygon west = new Polygon(x, y, x0, y1, x0, y0);
+        west.setStroke(Color.TRANSPARENT);
+        west.setFill(Color.TRANSPARENT);
+
+        north.setOnMouseEntered(event -> north.setFill(Color.YELLOW));
+        east.setOnMouseEntered(event -> east.setFill(Color.YELLOW));
+        south.setOnMouseEntered(event -> south.setFill(Color.YELLOW));
+        west.setOnMouseEntered(event -> west.setFill(Color.YELLOW));
+
+        north.setOnMouseExited(event -> north.setFill(Color.TRANSPARENT));
+        east.setOnMouseExited(event -> east.setFill(Color.TRANSPARENT));
+        south.setOnMouseExited(event -> south.setFill(Color.TRANSPARENT));
+        west.setOnMouseExited(event -> west.setFill(Color.TRANSPARENT));
+
+        north.setOnMouseClicked(event -> System.out.println(id + " north"));
+        east.setOnMouseClicked(event -> System.out.println(id + " east"));
+        south.setOnMouseClicked(event -> System.out.println(id + " south"));
+        west.setOnMouseClicked(event -> System.out.println(id + " west"));
+
+        this.pane.getChildren().add(0, north);
+        this.pane.getChildren().add(0, east);
+        this.pane.getChildren().add(0, south);
+        this.pane.getChildren().add(0, west);
     }
 
     private ParseResult getParseResult() {

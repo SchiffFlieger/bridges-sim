@@ -11,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -20,6 +21,7 @@ import java.io.IOException;
 public class MainController {
 
 
+    public Pane pane;
     @FXML
     private CheckMenuItem cbxShowClickArea;
     @FXML
@@ -44,7 +46,7 @@ public class MainController {
         cbxShowGrid.selectedProperty().addListener(setGridVisibility());
         cbxShowClickArea.selectedProperty().addListener(setClickAreaVisibility());
 
-        this.canvasController = new CanvasController(this.canvas);
+        this.canvasController = new CanvasController(this.canvas, this.pane);
         canvasController.drawThings();
     }
 
