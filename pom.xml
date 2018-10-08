@@ -21,6 +21,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <sonar.exclusions>src/main/java/de/feu/**, </sonar.exclusions>
+        <sonar.jacoco.reportPaths>target/coverage-reports/jacoco-ut.exec</sonar.jacoco.reportPaths>
     </properties>
 
     <build>
