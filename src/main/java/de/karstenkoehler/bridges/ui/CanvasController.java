@@ -29,29 +29,24 @@ public class CanvasController {
 
 
     private final Canvas canvas;
+    private final Pane pane;
 
     private boolean gridVisible;
     private boolean clickAreaVisible;
 
     private List<IslandCircle> islands;
     private List<BridgeLine> bridges;
-    private final ParameterObject params;
+    private ParameterObject params;
 
     public CanvasController(Canvas canvas, Pane pane) {
         this.canvas = canvas;
+        this.pane = pane;
         this.islands = new ArrayList<>();
         this.bridges = new ArrayList<>();
 
-        ParseResult result = getParseResult();
-        params = new ParameterObject(Math.max(result.getWidth(), result.getHeight()), this.canvas.getWidth());
 
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        for (Node island : result.getIslands().values()) {
-            this.islands.add(new IslandCircle(island, pane, gc, params));
-        }
-        for (Edge bridge : result.getBridges()) {
-            this.bridges.add(new BridgeLine(bridge, pane, result.getIslands(), params));
-        }
+        File file = new File("src\\main\\resources\\data\\bsp_5x5.sol.bgs");
+        openAndShowFile(file);
     }
 
     public void drawThings() {
@@ -101,10 +96,8 @@ public class CanvasController {
         return (i * (params.getFieldSize())) + params.getPadding();
     }
 
-    private ParseResult getParseResult() {
+    private ParseResult getParseResult(File file) {
         Validator validator = new DefaultValidator();
-
-        File file = new File("src\\main\\resources\\data\\bsp_5x5.sol.bgs");
 
         ParseResult result = new ParseResult(Collections.emptyMap(), Collections.emptyList(), 0, 0);
         try {
@@ -116,6 +109,7 @@ public class CanvasController {
             e.printStackTrace();
         }
 
+        this.params = new ParameterObject(Math.max(result.getWidth(), result.getHeight()), this.canvas.getWidth());
         return result;
     }
 
@@ -131,5 +125,35 @@ public class CanvasController {
 
     private static String readFile(String path) throws IOException {
         return new String(Files.readAllBytes(Paths.get(path)), Charset.defaultCharset());
+    }
+
+    private void clearEverything() {
+//        for (IslandCircle island : this.islands) {
+//            island.clear();
+//        }
+//        for (BridgeLine bridge : this.bridges) {
+//            bridge.clear();
+//        }
+        this.pane.getChildren().clear();
+        this.islands.clear();
+        this.bridges.clear();
+    }
+
+    public void openFile(File file) {
+        clearEverything();
+        openAndShowFile(file);
+    }
+
+    private void openAndShowFile(File file) {
+        ParseResult result = getParseResult(file);
+
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        for (Node island : result.getIslands().values()) {
+            this.islands.add(new IslandCircle(island, pane, gc, params));
+        }
+        for (Edge bridge : result.getBridges()) {
+            this.bridges.add(new BridgeLine(bridge, pane, result.getIslands(), params));
+        }
+        drawThings();
     }
 }

@@ -85,4 +85,7 @@ public class BridgeLine {
         return (i * (params.getFieldSize())) + params.getPadding();
     }
 
+    public void clear() {
+
+    }
 }

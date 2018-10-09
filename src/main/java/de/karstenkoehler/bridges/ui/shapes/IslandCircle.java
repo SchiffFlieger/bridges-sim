@@ -95,4 +95,6 @@ public class IslandCircle {
     }
 
 
+    public void clear() {
+    }
 }
