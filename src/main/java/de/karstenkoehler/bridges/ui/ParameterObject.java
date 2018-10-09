@@ -9,11 +9,15 @@ public class ParameterObject {
     private final double islandOffset;
     private final double padding;
     private final double clickAreaSize;
+    private final double doubleBridgeOffset;
+    private final double bridgeLineSize;
 
     public ParameterObject(final int gridLines, final double canvasSize) {
         this.gridLines = gridLines;
-        this.fontSize = 500 / gridLines;
-        this.islandDiameter = 600 / gridLines;
+        this.fontSize = 500.0 / gridLines;
+        this.islandDiameter = 600.0 / gridLines;
+        this.doubleBridgeOffset = 90.0 / gridLines;
+        this.bridgeLineSize = 6 - gridLines / 5.0;
         this.islandOffset = this.islandDiameter / 2;
         this.padding = (this.islandDiameter / 2) + 5;
         this.clickAreaSize = (this.islandDiameter / 2);
@@ -46,5 +50,13 @@ public class ParameterObject {
 
     public double getClickAreaSize() {
         return clickAreaSize;
+    }
+
+    public double getDoubleBridgeOffset() {
+        return doubleBridgeOffset;
+    }
+
+    public double getBridgeLineSize() {
+        return bridgeLineSize;
     }
 }

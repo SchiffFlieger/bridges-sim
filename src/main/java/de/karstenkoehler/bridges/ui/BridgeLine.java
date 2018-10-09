@@ -25,8 +25,8 @@ public class BridgeLine {
         this.islands = islands;
         this.params = params;
         singleBridge = createDoubleBridge(0);
-        doubleBridge1 = createDoubleBridge(-20);
-        doubleBridge2 = createDoubleBridge(+20);
+        doubleBridge1 = createDoubleBridge(-params.getDoubleBridgeOffset());
+        doubleBridge2 = createDoubleBridge(params.getDoubleBridgeOffset());
     }
 
     public void draw() {
@@ -50,7 +50,7 @@ public class BridgeLine {
         final double y0 = coordinate(this.islands.get(this.bridge.getNode1()).getY());
         final double x1 = coordinate(this.islands.get(this.bridge.getNode2()).getX());
         final double y1 = coordinate(this.islands.get(this.bridge.getNode2()).getY());
-        final double size = 5;
+        final double size = params.getBridgeLineSize();
 
         if (isVertical()) {
             return createLine(x0 - size + offset, y0, x0 + size + offset, y0, x1 + size + offset, y1, x1 - size + offset, y1);
