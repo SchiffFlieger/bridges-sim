@@ -8,6 +8,7 @@ import de.karstenkoehler.bridges.io.parser.TokenConsumingParser;
 import de.karstenkoehler.bridges.io.parser.token.TokenizerImpl;
 import de.karstenkoehler.bridges.io.validators.DefaultValidator;
 import de.karstenkoehler.bridges.io.validators.Validator;
+import de.karstenkoehler.bridges.model.Edge;
 import de.karstenkoehler.bridges.model.Node;
 import de.karstenkoehler.bridges.ui.shapes.IslandCircle;
 import javafx.scene.canvas.Canvas;
@@ -33,11 +34,13 @@ public class CanvasController {
     private boolean clickAreaVisible;
 
     private List<IslandCircle> islands;
+    private List<BridgeLine> bridges;
     private final ParameterObject params;
 
     public CanvasController(Canvas canvas, Pane pane) {
         this.canvas = canvas;
         this.islands = new ArrayList<>();
+        this.bridges = new ArrayList<>();
 
         ParseResult result = getParseResult();
         params = new ParameterObject(Math.max(result.getWidth(), result.getHeight()), this.canvas.getWidth());
@@ -45,6 +48,9 @@ public class CanvasController {
         GraphicsContext gc = canvas.getGraphicsContext2D();
         for (Node island : result.getIslands().values()) {
             this.islands.add(new IslandCircle(island, pane, gc, params));
+        }
+        for (Edge bridge : result.getBridges()) {
+            this.bridges.add(new BridgeLine(bridge, pane, result.getIslands(), params));
         }
     }
 
@@ -56,6 +62,9 @@ public class CanvasController {
         drawGrid(gc);
         for (int i = 0; i < this.islands.size(); i++) {
             this.islands.get(i).draw(this.clickAreaVisible);
+        }
+        for (int i = 0; i < this.bridges.size(); i++) {
+            this.bridges.get(i).draw();
         }
     }
 
@@ -95,7 +104,7 @@ public class CanvasController {
     private ParseResult getParseResult() {
         Validator validator = new DefaultValidator();
 
-        File file = new File("src\\main\\resources\\data\\bsp_5x5.bgs");
+        File file = new File("src\\main\\resources\\data\\bsp_5x5.sol.bgs");
 
         ParseResult result = new ParseResult(Collections.emptyMap(), Collections.emptyList(), 0, 0);
         try {
