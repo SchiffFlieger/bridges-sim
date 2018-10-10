@@ -52,16 +52,6 @@ public class BridgeLine {
         cg.setStroke(Color.BLACK);
         cg.setLineWidth(params.getBridgeLineSize());
         cg.strokeLine(x0, y0, x1, y1);
-
-//
-//        Polygon line = new Polygon(x0, y0, x1, y1, x2, y2, x3, y3);
-//        line.setStroke(Color.BLACK);
-//        line.setFill(Color.BLACK);
-//        line.setStrokeWidth(1);
-//        line.setOnMouseEntered(event -> line.setStroke(Color.RED));
-//        line.setOnMouseExited(event -> line.setStroke(Color.BLACK));
-//        line.setOnMouseClicked(event -> System.out.println(bridge.getId()));
-//        this.pane.getChildren().add(0, line);
     }
 
     private boolean isVertical () {
@@ -74,9 +64,5 @@ public class BridgeLine {
 
     private double coordinate (int i) {
         return (i * (params.getFieldSize())) + params.getPadding();
-    }
-
-    public void clear () {
-
     }
 }

@@ -33,16 +33,16 @@ public class TokenizerImpl implements Tokenizer {
                 skipComment();
             } else if (current.equals("(")) {
                 consume(current);
-                return new Token("(", Token.Type.OpenParenthesis);
+                return new Token("(", Token.Type.OPEN_PARENTHESIS);
             } else if (current.equals(")")) {
                 consume(current);
-                return new Token(")", Token.Type.CloseParenthesis);
+                return new Token(")", Token.Type.CLOSE_PARENTHESIS);
             } else if (current.equals(",")) {
                 consume(current);
-                return new Token(",", Token.Type.Comma);
+                return new Token(",", Token.Type.COMMA);
             } else if (current.equals("|")) {
                 consume(current);
-                return new Token("|", Token.Type.Pipe);
+                return new Token("|", Token.Type.PIPE);
             } else if (current.equals("x")) {
                 consume(current);
                 return new Token("x", Token.Type.X);
@@ -66,17 +66,17 @@ public class TokenizerImpl implements Tokenizer {
 
     private Token fieldToken() throws ParseException {
         consumeString("FIELD");
-        return new Token("FIELD", Token.Type.FieldSection);
+        return new Token("FIELD", Token.Type.FIELD_SECTION);
     }
 
     private Token islandsToken() throws ParseException {
         consumeString("ISLANDS");
-        return new Token("ISLANDS", Token.Type.IslandSection);
+        return new Token("ISLANDS", Token.Type.ISLAND_SECTION);
     }
 
     private Token bridgesToken() throws ParseException {
         consumeString("BRIDGES");
-        return new Token("BRIDGES", Token.Type.BridgesSection);
+        return new Token("BRIDGES", Token.Type.BRIDGES_SECTION);
     }
 
     private Token numberToken() throws ParseException {
@@ -86,16 +86,16 @@ public class TokenizerImpl implements Tokenizer {
             consume(chars[pos]);
         } while (pos < chars.length && chars[pos].matches("[0-9]"));
 
-        return new Token(builder.toString(), Token.Type.Number);
+        return new Token(builder.toString(), Token.Type.NUMBER);
     }
 
     private Token boolToken() throws ParseException {
         if (chars[pos].equals("t")) {
             consumeString("true");
-            return new Token("true", Token.Type.Bool);
+            return new Token("true", Token.Type.BOOL);
         } else {
             consumeString("false");
-            return new Token("false", Token.Type.Bool);
+            return new Token("false", Token.Type.BOOL);
         }
     }
 

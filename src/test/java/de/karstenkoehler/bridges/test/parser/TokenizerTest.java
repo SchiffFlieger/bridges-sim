@@ -22,36 +22,36 @@ public class TokenizerTest {
 
     private static final String numbers = "0 1 2 65 5486 012";
     private static final Token[] tkNumbers = new Token[]{
-            new Token("0", Token.Type.Number),
-            new Token("1", Token.Type.Number),
-            new Token("2", Token.Type.Number),
-            new Token("65", Token.Type.Number),
-            new Token("5486", Token.Type.Number),
-            new Token("012", Token.Type.Number),
+            new Token("0", Token.Type.NUMBER),
+            new Token("1", Token.Type.NUMBER),
+            new Token("2", Token.Type.NUMBER),
+            new Token("65", Token.Type.NUMBER),
+            new Token("5486", Token.Type.NUMBER),
+            new Token("012", Token.Type.NUMBER),
     };
 
     private static final String bools = "true false false true";
     private static final Token[] tkBools = new Token[]{
-            new Token("true", Token.Type.Bool),
-            new Token("false", Token.Type.Bool),
-            new Token("false", Token.Type.Bool),
-            new Token("true", Token.Type.Bool),
+            new Token("true", Token.Type.BOOL),
+            new Token("false", Token.Type.BOOL),
+            new Token("false", Token.Type.BOOL),
+            new Token("true", Token.Type.BOOL),
     };
 
     private static final String sections = "FIELD ISLANDS BRIDGES";
     private static final Token[] tkSections = new Token[]{
-            new Token("FIELD", Token.Type.FieldSection),
-            new Token("ISLANDS", Token.Type.IslandSection),
-            new Token("BRIDGES", Token.Type.BridgesSection),
+            new Token("FIELD", Token.Type.FIELD_SECTION),
+            new Token("ISLANDS", Token.Type.ISLAND_SECTION),
+            new Token("BRIDGES", Token.Type.BRIDGES_SECTION),
     };
 
     private static final String symbols = "()|x,";
     private static final Token[] tkSymbols = new Token[]{
-            new Token("(", Token.Type.OpenParenthesis),
-            new Token(")", Token.Type.CloseParenthesis),
-            new Token("|", Token.Type.Pipe),
+            new Token("(", Token.Type.OPEN_PARENTHESIS),
+            new Token(")", Token.Type.CLOSE_PARENTHESIS),
+            new Token("|", Token.Type.PIPE),
             new Token("x", Token.Type.X),
-            new Token(",", Token.Type.Comma),
+            new Token(",", Token.Type.COMMA),
     };
 
     @Parameterized.Parameters()

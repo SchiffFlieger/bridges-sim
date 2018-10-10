@@ -21,9 +21,8 @@ import java.io.File;
 import java.io.IOException;
 
 public class MainController {
-
-
-    public Pane pane;
+    @FXML
+    private Pane controlPane;
     @FXML
     private CheckMenuItem cbxShowClickArea;
     @FXML
@@ -39,24 +38,21 @@ public class MainController {
     private CanvasController canvasController;
 
     @FXML
-    private void initialize() {
-        islandDisplayChoice.getItems().addAll(
-                "show required bridges", "show missing bridges"
-        );
-        islandDisplayChoice.getSelectionModel().select(0);
+    private void initialize () {
+//        islandDisplayChoice.getSelectionModel().select(0);
 
         cbxShowGrid.selectedProperty().addListener(setGridVisibility());
         cbxShowClickArea.selectedProperty().addListener(setClickAreaVisibility());
 
-        this.canvasController = new CanvasController(this.canvas, this.pane);
+        this.canvasController = new CanvasController(this.canvas, this.controlPane);
     }
 
-    public void setStage(Window stage) {
+    public void setStage (Window stage) {
         this.stage = stage;
     }
 
     @FXML
-    private void onNewPuzzle(ActionEvent actionEvent) {
+    private void onNewPuzzle (ActionEvent actionEvent) {
         System.out.println("new");
 
         try {
@@ -75,12 +71,12 @@ public class MainController {
     }
 
     @FXML
-    private void onRestartPuzzle(ActionEvent actionEvent) {
+    private void onRestartPuzzle (ActionEvent actionEvent) {
         System.out.println("restart");
     }
 
     @FXML
-    private void onOpenPuzzle(ActionEvent actionEvent) {
+    private void onOpenPuzzle (ActionEvent actionEvent) {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("choose bridge file");
         // ToDo set meaningful default value and remember last directory
@@ -93,40 +89,40 @@ public class MainController {
     }
 
     @FXML
-    private void onSavePuzzle(ActionEvent actionEvent) {
+    private void onSavePuzzle (ActionEvent actionEvent) {
         System.out.println("save");
     }
 
     @FXML
-    private void onSaveAs(ActionEvent actionEvent) {
+    private void onSaveAs (ActionEvent actionEvent) {
         System.out.println("save as");
     }
 
     @FXML
-    private void onClose(ActionEvent actionEvent) {
+    private void onClose (ActionEvent actionEvent) {
         System.out.println("close");
     }
 
     @FXML
-    private void onAbout(ActionEvent actionEvent) {
+    private void onAbout (ActionEvent actionEvent) {
         System.out.println("about");
     }
 
     @FXML
-    private void onNextBridge(ActionEvent actionEvent) {
+    private void onNextBridge (ActionEvent actionEvent) {
         System.out.println("next bridge");
     }
 
     @FXML
-    private void onSolve(ActionEvent actionEvent) {
+    private void onSolve (ActionEvent actionEvent) {
         System.out.println("solve");
     }
 
-    private ChangeListener<Boolean> setGridVisibility() {
+    private ChangeListener<Boolean> setGridVisibility () {
         return (observable, old, selected) -> canvasController.setGridVisible(selected);
     }
 
-    private ChangeListener<Boolean> setClickAreaVisibility() {
+    private ChangeListener<Boolean> setClickAreaVisibility () {
         return (observable, old, selected) -> canvasController.setClickAreaVisible(selected);
     }
 }

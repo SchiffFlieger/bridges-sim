@@ -4,9 +4,9 @@ import java.util.Objects;
 
 public class Token {
     public enum Type {
-        FieldSection, IslandSection, BridgesSection,
-        OpenParenthesis, CloseParenthesis, Comma, Pipe, X,
-        Number, Bool, EOF
+        FIELD_SECTION, ISLAND_SECTION, BRIDGES_SECTION,
+        OPEN_PARENTHESIS, CLOSE_PARENTHESIS, COMMA, PIPE, X,
+        NUMBER, BOOL, EOF
     }
 
     private final String value;

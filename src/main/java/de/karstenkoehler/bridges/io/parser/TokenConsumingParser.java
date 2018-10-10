@@ -35,18 +35,18 @@ public class TokenConsumingParser extends AbstractTokenParser implements Parser 
     }
 
     private void field() throws ParseException {
-        consume(Token.Type.FieldSection);
+        consume(Token.Type.FIELD_SECTION);
 
         this.width = readNumberToken();
         consume(Token.Type.X);
         this.height = readNumberToken();
-        consume(Token.Type.Pipe);
+        consume(Token.Type.PIPE);
         this.islandCount = readNumberToken();
     }
 
 
     private void islands() throws ParseException {
-        consume(Token.Type.IslandSection);
+        consume(Token.Type.ISLAND_SECTION);
 
         for (int i = 0; i < this.islandCount; i++) {
             island();
@@ -54,57 +54,57 @@ public class TokenConsumingParser extends AbstractTokenParser implements Parser 
     }
 
     private void island() throws ParseException {
-        consume(Token.Type.OpenParenthesis);
+        consume(Token.Type.OPEN_PARENTHESIS);
 
         int x = readNumberToken();
-        consume(Token.Type.Comma);
+        consume(Token.Type.COMMA);
         int y = readNumberToken();
-        consume(Token.Type.Pipe);
+        consume(Token.Type.PIPE);
         int bridges = readNumberToken();
 
         int id = this.islands.size();
         this.islands.put(id, new Node(id, x, y, bridges));
 
-        consume(Token.Type.CloseParenthesis);
+        consume(Token.Type.CLOSE_PARENTHESIS);
     }
 
     private void bridges() throws ParseException {
-        if (current.getType() != Token.Type.BridgesSection) {
+        if (current.getType() != Token.Type.BRIDGES_SECTION) {
             return;
         }
 
-        consume(Token.Type.BridgesSection);
-        while (current.getType() == Token.Type.OpenParenthesis) {
+        consume(Token.Type.BRIDGES_SECTION);
+        while (current.getType() == Token.Type.OPEN_PARENTHESIS) {
             bridge();
         }
     }
 
     private void bridge() throws ParseException {
-        consume(Token.Type.OpenParenthesis);
+        consume(Token.Type.OPEN_PARENTHESIS);
 
         int node1 = readNumberToken();
-        consume(Token.Type.Comma);
+        consume(Token.Type.COMMA);
         int node2 = readNumberToken();
-        consume(Token.Type.Pipe);
+        consume(Token.Type.PIPE);
         int bridges = readBoolToken() ? 2 : 1; // double or single bridge
 
         int id = this.bridges.size();
         this.bridges.add(new Edge(id, node1, node2, bridges));
 
-        consume(Token.Type.CloseParenthesis);
+        consume(Token.Type.CLOSE_PARENTHESIS);
     }
 
     private int readNumberToken() throws ParseException {
-        check(Token.Type.Number);
+        check(Token.Type.NUMBER);
         int val = Integer.parseInt(token().getValue());
-        consume(Token.Type.Number);
+        consume(Token.Type.NUMBER);
         return val;
     }
 
     private boolean readBoolToken() throws ParseException {
-        check(Token.Type.Bool);
+        check(Token.Type.BOOL);
         boolean val = Boolean.parseBoolean(token().getValue());
-        consume(Token.Type.Bool);
+        consume(Token.Type.BOOL);
         return val;
     }
 }

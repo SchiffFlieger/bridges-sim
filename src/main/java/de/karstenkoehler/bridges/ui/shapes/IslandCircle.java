@@ -94,7 +94,4 @@ public class IslandCircle {
         return (i * (params.getFieldSize())) + params.getPadding();
     }
 
-
-    public void clear() {
-    }
 }

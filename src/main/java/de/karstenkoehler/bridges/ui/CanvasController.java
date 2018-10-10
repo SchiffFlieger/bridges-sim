@@ -29,7 +29,7 @@ public class CanvasController {
 
 
     private final Canvas canvas;
-    private final Pane pane;
+    private final Pane controlPane;
 
     private boolean gridVisible;
     private boolean clickAreaVisible;
@@ -38,9 +38,9 @@ public class CanvasController {
     private List<BridgeLine> bridges;
     private ParameterObject params;
 
-    public CanvasController(Canvas canvas, Pane pane) {
+    public CanvasController(Canvas canvas, Pane controlPane) {
         this.canvas = canvas;
-        this.pane = pane;
+        this.controlPane = controlPane;
         this.islands = new ArrayList<>();
         this.bridges = new ArrayList<>();
 
@@ -128,13 +128,7 @@ public class CanvasController {
     }
 
     private void clearEverything() {
-//        for (IslandCircle island : this.islands) {
-//            island.clear();
-//        }
-//        for (BridgeLine bridge : this.bridges) {
-//            bridge.clear();
-//        }
-        this.pane.getChildren().clear();
+        this.controlPane.getChildren().clear();
         this.islands.clear();
         this.bridges.clear();
     }
@@ -149,7 +143,7 @@ public class CanvasController {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
         for (Node island : result.getIslands().values()) {
-            this.islands.add(new IslandCircle(island, pane, gc, params));
+            this.islands.add(new IslandCircle(island, controlPane, gc, params));
         }
         for (Edge bridge : result.getBridges()) {
             this.bridges.add(new BridgeLine(bridge, canvas.getGraphicsContext2D(), result.getIslands(), params));
