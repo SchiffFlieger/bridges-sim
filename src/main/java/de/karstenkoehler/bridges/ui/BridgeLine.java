@@ -25,7 +25,7 @@ public class BridgeLine {
     }
 
     public void draw () {
-        if (bridge.getBridgeCount() == 1) {
+        if (bridge.getBridgeCount() <= 1) {
             drawBridge(0);
         } else {
             drawBridge(-params.getDoubleBridgeOffset());
@@ -49,6 +49,11 @@ public class BridgeLine {
     }
 
     private void createLine (double x0, double y0, double x1, double y1) {
+        if (bridge.getBridgeCount() == 0) {
+            cg.setLineDashes(params.getBridgeLineSize()*5);
+        } else {
+            cg.setLineDashes(0);
+        }
         cg.setStroke(Color.BLACK);
         cg.setLineWidth(params.getBridgeLineSize());
         cg.strokeLine(x0, y0, x1, y1);

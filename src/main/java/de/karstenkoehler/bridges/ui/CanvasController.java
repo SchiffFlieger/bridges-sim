@@ -45,7 +45,7 @@ public class CanvasController {
         this.bridges = new ArrayList<>();
 
 
-        File file = new File("src\\main\\resources\\data\\bsp_5x5.sol.bgs");
+        File file = new File("src\\main\\resources\\data\\bsp_5x5.bgs");
         openAndShowFile(file);
     }
 
@@ -140,6 +140,7 @@ public class CanvasController {
 
     private void openAndShowFile(File file) {
         ParseResult result = getParseResult(file);
+        result.fillMissingBridges();
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
         for (Node island : result.getIslands().values()) {
