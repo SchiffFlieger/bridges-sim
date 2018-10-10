@@ -55,11 +55,11 @@ public class CanvasController {
 
         drawCanvasBorder(gc);
         drawGrid(gc);
-        for (int i = 0; i < this.islands.size(); i++) {
-            this.islands.get(i).draw(this.clickAreaVisible);
-        }
         for (int i = 0; i < this.bridges.size(); i++) {
             this.bridges.get(i).draw();
+        }
+        for (int i = 0; i < this.islands.size(); i++) {
+            this.islands.get(i).draw(this.clickAreaVisible);
         }
     }
 
@@ -152,7 +152,7 @@ public class CanvasController {
             this.islands.add(new IslandCircle(island, pane, gc, params));
         }
         for (Edge bridge : result.getBridges()) {
-            this.bridges.add(new BridgeLine(bridge, pane, result.getIslands(), params));
+            this.bridges.add(new BridgeLine(bridge, canvas.getGraphicsContext2D(), result.getIslands(), params));
         }
         drawThings();
     }
