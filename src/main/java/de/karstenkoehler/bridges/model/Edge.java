@@ -1,6 +1,6 @@
 package de.karstenkoehler.bridges.model;
 
-import de.karstenkoehler.bridges.TooManyBridgesException;
+import de.karstenkoehler.bridges.InvalidBridgeCountException;
 
 import java.util.Objects;
 
@@ -52,10 +52,17 @@ public class Edge {
         return Objects.hash(id, bridgeCount, node1, node2);
     }
 
-    public void addBridge() throws TooManyBridgesException {
+    public void addBridge() throws InvalidBridgeCountException {
         if (this.bridgeCount > 1) {
-            throw new TooManyBridgesException();
+            throw new InvalidBridgeCountException();
         }
         this.bridgeCount++;
+    }
+
+    public void removeBridge() throws InvalidBridgeCountException {
+        if (this.bridgeCount == 0) {
+            throw new InvalidBridgeCountException();
+        }
+        this.bridgeCount--;
     }
 }

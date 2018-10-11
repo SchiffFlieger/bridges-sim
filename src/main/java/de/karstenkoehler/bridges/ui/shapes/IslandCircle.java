@@ -1,6 +1,6 @@
 package de.karstenkoehler.bridges.ui.shapes;
 
-import de.karstenkoehler.bridges.TooManyBridgesException;
+import de.karstenkoehler.bridges.InvalidBridgeCountException;
 import de.karstenkoehler.bridges.model.Node;
 import de.karstenkoehler.bridges.ui.CanvasController;
 import de.karstenkoehler.bridges.ui.ParameterObject;
@@ -8,6 +8,7 @@ import javafx.event.Event;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
@@ -79,29 +80,62 @@ public class IslandCircle {
         poly.setOnMouseExited(event -> poly.setFill(Color.TRANSPARENT));
         poly.setOnMouseClicked(event -> {
             System.out.println(id + " " + orientation);
-            try {
-                switch (orientation) {
-                    case "north":
-                        island.north().addBridge();
-                        break;
-                    case "east":
-                        island.east().addBridge();
-                        break;
-                    case "south":
-                        island.south().addBridge();
-                        break;
-                    case "west":
-                        island.west().addBridge();
-                        break;
-                    default:
-                        throw new RuntimeException("wrong bridge orientation");
-                }
-                canvas.fireEvent(new Event(CanvasController.REDRAW));
-            } catch (NullPointerException | TooManyBridgesException e) {
-                canvas.fireEvent(new Event(CanvasController.ERROR));
+            if (event.getButton().equals(MouseButton.PRIMARY)) {
+                onLeftMouseButton(orientation);
+            }
+            if (event.getButton().equals(MouseButton.SECONDARY)) {
+                onRightMouseButton(orientation);
             }
         });
         this.controlPane.getChildren().add(0, poly);
+    }
+
+    private void onRightMouseButton(String orientation) {
+        try {
+            switch (orientation) {
+                case "north":
+                    island.north().removeBridge();
+                    break;
+                case "east":
+                    island.east().removeBridge();
+                    break;
+                case "south":
+                    island.south().removeBridge();
+                    break;
+                case "west":
+                    island.west().removeBridge();
+                    break;
+                default:
+                    throw new RuntimeException("wrong bridge orientation");
+            }
+            canvas.fireEvent(new Event(CanvasController.REDRAW));
+        } catch (NullPointerException | InvalidBridgeCountException e) {
+            canvas.fireEvent(new Event(CanvasController.ERROR));
+        }
+    }
+
+    private void onLeftMouseButton(String orientation) {
+        try {
+            switch (orientation) {
+                case "north":
+                    island.north().addBridge();
+                    break;
+                case "east":
+                    island.east().addBridge();
+                    break;
+                case "south":
+                    island.south().addBridge();
+                    break;
+                case "west":
+                    island.west().addBridge();
+                    break;
+                default:
+                    throw new RuntimeException("wrong bridge orientation");
+            }
+            canvas.fireEvent(new Event(CanvasController.REDRAW));
+        } catch (NullPointerException | InvalidBridgeCountException e) {
+            canvas.fireEvent(new Event(CanvasController.ERROR));
+        }
     }
 
     private void drawClickArea() {
