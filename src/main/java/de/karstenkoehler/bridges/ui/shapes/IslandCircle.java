@@ -30,7 +30,15 @@ public class IslandCircle {
     public void draw(boolean drawClickArea) {
         double x = coordinate(island.getX());
         double y = coordinate(island.getY());
-        gc.setFill(Color.GREEN);
+
+        if (island.getRemainingBridgeCount() > 0) {
+            gc.setFill(Color.BLUE);
+        } else if (island.getRemainingBridgeCount() == 0) {
+            gc.setFill(Color.GREEN);
+        } else {
+            gc.setFill(Color.RED);
+        }
+
         gc.fillOval(x - params.getIslandOffset(), y - params.getIslandOffset(), params.getIslandDiameter(), params.getIslandDiameter());
 
         gc.setTextAlign(TextAlignment.CENTER);

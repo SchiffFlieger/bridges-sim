@@ -57,6 +57,15 @@ public class Node {
         return this.west;
     }
 
+    public int getRemainingBridgeCount() {
+        int bridgeCount = north != null ? north.getBridgeCount() : 0;
+        bridgeCount += east != null ? east.getBridgeCount() : 0;
+        bridgeCount += south != null ? south.getBridgeCount() : 0;
+        bridgeCount += west != null ? west.getBridgeCount() : 0;
+
+        return this.requiredBridges - bridgeCount;
+    }
+
     @Override
     public boolean equals (Object o) {
         if (this == o) return true;
