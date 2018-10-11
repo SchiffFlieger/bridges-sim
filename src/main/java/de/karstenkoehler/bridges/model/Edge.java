@@ -1,10 +1,12 @@
 package de.karstenkoehler.bridges.model;
 
+import de.karstenkoehler.bridges.TooManyBridgesException;
+
 import java.util.Objects;
 
 public class Edge {
     private final int id;
-    private final int bridgeCount;
+    private int bridgeCount;
     private final int node1, node2; // TODO think up better names
 
     public Edge(int id, int node1, int node2) {
@@ -48,5 +50,12 @@ public class Edge {
     @Override
     public int hashCode() {
         return Objects.hash(id, bridgeCount, node1, node2);
+    }
+
+    public void addBridge() throws TooManyBridgesException {
+        if (this.bridgeCount > 1) {
+            throw new TooManyBridgesException();
+        }
+        this.bridgeCount++;
     }
 }

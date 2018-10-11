@@ -11,6 +11,8 @@ import de.karstenkoehler.bridges.io.validators.Validator;
 import de.karstenkoehler.bridges.model.Edge;
 import de.karstenkoehler.bridges.model.Node;
 import de.karstenkoehler.bridges.ui.shapes.IslandCircle;
+import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
@@ -26,7 +28,8 @@ import java.util.Collections;
 import java.util.List;
 
 public class CanvasController {
-
+    public static final EventType<Event> REDRAW = new EventType<>("REDRAW");
+    public static final EventType<Event> ERROR = new EventType<>("ERROR");
 
     private final Canvas canvas;
     private final Pane controlPane;
@@ -43,6 +46,9 @@ public class CanvasController {
         this.controlPane = controlPane;
         this.islands = new ArrayList<>();
         this.bridges = new ArrayList<>();
+
+        this.canvas.addEventHandler(REDRAW, event -> drawThings());
+        this.canvas.addEventHandler(ERROR, event -> System.out.println("could not draw bridge"));
 
 
         File file = new File("src\\main\\resources\\data\\bsp_5x5.bgs");
@@ -144,7 +150,7 @@ public class CanvasController {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
         for (Node island : result.getIslands().values()) {
-            this.islands.add(new IslandCircle(island, controlPane, gc, params));
+            this.islands.add(new IslandCircle(this.canvas, island, controlPane, gc, params));
         }
         for (Edge bridge : result.getBridges()) {
             this.bridges.add(new BridgeLine(bridge, canvas.getGraphicsContext2D(), result.getIslands(), params));

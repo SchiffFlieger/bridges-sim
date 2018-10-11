@@ -1,8 +1,12 @@
 package de.karstenkoehler.bridges.ui.shapes;
 
+import de.karstenkoehler.bridges.TooManyBridgesException;
 import de.karstenkoehler.bridges.model.Node;
+import de.karstenkoehler.bridges.ui.CanvasController;
 import de.karstenkoehler.bridges.ui.ParameterObject;
+import javafx.event.Event;
 import javafx.geometry.VPos;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
@@ -13,12 +17,14 @@ import javafx.scene.text.TextAlignment;
 public class IslandCircle {
     private static final Color FILL_COLOR = Color.BLACK;
 
+    private final Canvas canvas;
     private final Node island;
     private final Pane controlPane;
     private final GraphicsContext gc;
     private ParameterObject params;
 
-    public IslandCircle(Node island, Pane controlPane, GraphicsContext gc, ParameterObject params) {
+    public IslandCircle(Canvas canvas, Node island, Pane controlPane, GraphicsContext gc, ParameterObject params) {
+        this.canvas = canvas;
         this.island = island;
         this.controlPane = controlPane;
         this.gc = gc;
@@ -66,13 +72,36 @@ public class IslandCircle {
     }
 
     private void createTriangle(String orientation, double x0, double y0, double x1, double y1, double x2, double y2, int id) {
-        Polygon north = new Polygon(x0, y0, x1, y1, x2, y2);
-        north.setStroke(Color.TRANSPARENT);
-        north.setFill(Color.TRANSPARENT);
-        north.setOnMouseEntered(event -> north.setFill(FILL_COLOR));
-        north.setOnMouseExited(event -> north.setFill(Color.TRANSPARENT));
-        north.setOnMouseClicked(event -> System.out.println(id + " " + orientation));
-        this.controlPane.getChildren().add(0, north);
+        Polygon poly = new Polygon(x0, y0, x1, y1, x2, y2);
+        poly.setStroke(Color.TRANSPARENT);
+        poly.setFill(Color.TRANSPARENT);
+        poly.setOnMouseEntered(event -> poly.setFill(FILL_COLOR));
+        poly.setOnMouseExited(event -> poly.setFill(Color.TRANSPARENT));
+        poly.setOnMouseClicked(event -> {
+            System.out.println(id + " " + orientation);
+            try {
+                switch (orientation) {
+                    case "north":
+                        island.north().addBridge();
+                        break;
+                    case "east":
+                        island.east().addBridge();
+                        break;
+                    case "south":
+                        island.south().addBridge();
+                        break;
+                    case "west":
+                        island.west().addBridge();
+                        break;
+                    default:
+                        throw new RuntimeException("wrong bridge orientation");
+                }
+                canvas.fireEvent(new Event(CanvasController.REDRAW));
+            } catch (NullPointerException | TooManyBridgesException e) {
+                canvas.fireEvent(new Event(CanvasController.ERROR));
+            }
+        });
+        this.controlPane.getChildren().add(0, poly);
     }
 
     private void drawClickArea() {
