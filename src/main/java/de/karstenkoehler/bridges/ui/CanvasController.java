@@ -153,7 +153,7 @@ public class CanvasController {
             this.islands.add(new IslandCircle(this.canvas, island, controlPane, gc, params));
         }
         for (Edge bridge : result.getBridges()) {
-            this.bridges.add(new BridgeLine(bridge, canvas.getGraphicsContext2D(), result.getIslands(), params));
+            this.bridges.add(new BridgeLine(bridge, canvas.getGraphicsContext2D(), result.getIslands(), params, result));
         }
         drawThings();
     }

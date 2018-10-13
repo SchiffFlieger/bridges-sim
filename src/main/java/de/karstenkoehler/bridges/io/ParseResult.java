@@ -50,6 +50,14 @@ public class ParseResult {
         }
     }
 
+    public boolean isVertical(Edge bridge) {
+        return islands.get(bridge.getNode1()).getX() == islands.get(bridge.getNode2()).getX();
+    }
+
+    public boolean isHorizontal(Edge bridge) {
+        return islands.get(bridge.getNode1()).getY() == islands.get(bridge.getNode2()).getY();
+    }
+
     private Edge fillBridgeInDirection (Node island, int dx, int dy) {
         Node north = findNextInDirection(island.getX(), island.getY(), dx, dy);
         if (north == null) {

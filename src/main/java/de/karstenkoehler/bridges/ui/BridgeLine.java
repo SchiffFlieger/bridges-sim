@@ -1,5 +1,6 @@
 package de.karstenkoehler.bridges.ui;
 
+import de.karstenkoehler.bridges.io.ParseResult;
 import de.karstenkoehler.bridges.model.Edge;
 import de.karstenkoehler.bridges.model.Node;
 import javafx.scene.canvas.GraphicsContext;
@@ -13,12 +14,14 @@ public class BridgeLine {
     private final GraphicsContext cg;
     private final List<Node> islands;
     private final ParameterObject params;
+    private final ParseResult result;
 
-    public BridgeLine(Edge bridge, GraphicsContext cg, List<Node> islands, ParameterObject params) {
+    public BridgeLine(Edge bridge, GraphicsContext cg, List<Node> islands, ParameterObject params, ParseResult result) {
         this.bridge = bridge;
         this.cg = cg;
         this.islands = islands;
         this.params = params;
+        this.result = result;
         drawBridge(0);
         drawBridge(-params.getDoubleBridgeOffset());
         drawBridge(params.getDoubleBridgeOffset());
@@ -39,9 +42,9 @@ public class BridgeLine {
         final double x1 = coordinate(this.islands.get(this.bridge.getNode2()).getX());
         final double y1 = coordinate(this.islands.get(this.bridge.getNode2()).getY());
 
-        if (isVertical()) {
+        if (result.isVertical(bridge)) {
             createLine(x0 + offset, y0, x1 + offset, y1);
-        } else if (isHorizontal()) {
+        } else if (result.isHorizontal(bridge)) {
             createLine(x0, y0 + offset, x1, y1 + offset);
         } else {
             throw new RuntimeException("fatal error: bridge is neither vertical nor horizontal");
@@ -57,14 +60,6 @@ public class BridgeLine {
         cg.setStroke(Color.BLACK);
         cg.setLineWidth(params.getBridgeLineSize());
         cg.strokeLine(x0, y0, x1, y1);
-    }
-
-    private boolean isVertical () {
-        return islands.get(bridge.getNode1()).getX() == islands.get(bridge.getNode2()).getX();
-    }
-
-    private boolean isHorizontal () {
-        return islands.get(bridge.getNode1()).getY() == islands.get(bridge.getNode2()).getY();
     }
 
     private double coordinate (int i) {
