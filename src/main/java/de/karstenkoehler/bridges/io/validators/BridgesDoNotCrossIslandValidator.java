@@ -5,7 +5,7 @@ import de.karstenkoehler.bridges.io.ValidateException;
 import de.karstenkoehler.bridges.model.Edge;
 import de.karstenkoehler.bridges.model.Node;
 
-import java.util.Map;
+import java.util.List;
 
 /**
  * Checks if any defined bridge runs across another island. This third island must be between
@@ -22,7 +22,7 @@ public class BridgesDoNotCrossIslandValidator implements Validator {
         }
     }
 
-    private boolean bridgeCrossesIsland(Edge bridge, Map<Integer, Node> islands) {
+    private boolean bridgeCrossesIsland(Edge bridge, List<Node> islands) {
         Node startIsland = islands.get(bridge.getNode1());
         Node endIsland = islands.get(bridge.getNode2());
 
@@ -63,8 +63,8 @@ public class BridgesDoNotCrossIslandValidator implements Validator {
         return y < endIsland.getY();
     }
 
-    private boolean existsIslandWithCoordinates(int x, int y, Map<Integer, Node> islands) {
-        for (Node island : islands.values()) {
+    private boolean existsIslandWithCoordinates(int x, int y, List<Node> islands) {
+        for (Node island : islands) {
             if (x == island.getX() && y == island.getY()) {
                 return true;
             }

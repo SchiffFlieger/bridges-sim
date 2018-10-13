@@ -11,8 +11,8 @@ import de.karstenkoehler.bridges.model.Node;
 public class IslandOnUniqueFieldsValidator implements Validator {
     @Override
     public void validate(ParseResult result) throws ValidateException {
-        for (Node island : result.getIslands().values()) {
-            for (Node other : result.getIslands().values()) {
+        for (Node island : result.getIslands()) {
+            for (Node other : result.getIslands()) {
                 if (islandsOnSameField(island, other)) {
                     throw new ValidateException(String.format("there are two islands on field (%d, %d).",
                             island.getX(), island.getY()));

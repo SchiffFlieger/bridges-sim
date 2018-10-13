@@ -14,7 +14,7 @@ public class RequiredBridgesCountValidator implements Validator {
 
     @Override
     public void validate(ParseResult result) throws ValidateException {
-        for (Node island : result.getIslands().values()) {
+        for (Node island : result.getIslands()) {
             if (requiredBridgesOutOfRange(island)) {
                 throw new ValidateException(String.format("island at position (%d, %d) requires %d bridges. should be in range %d to %d.",
                         island.getX(), island.getY(), island.getRequiredBridges(), MIN_BRIDGES_PER_ISLAND, MAX_BRIDGES_PER_ISLAND));

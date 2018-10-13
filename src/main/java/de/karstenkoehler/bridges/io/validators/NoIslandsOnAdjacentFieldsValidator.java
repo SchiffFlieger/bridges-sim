@@ -12,8 +12,8 @@ import de.karstenkoehler.bridges.model.Node;
 public class NoIslandsOnAdjacentFieldsValidator implements Validator {
     @Override
     public void validate(ParseResult result) throws ValidateException {
-        for (Node island : result.getIslands().values()) {
-            for (Node other : result.getIslands().values()) {
+        for (Node island : result.getIslands()) {
+            for (Node other : result.getIslands()) {
                 if (island != other && (adjacentOnX(island, other) || adjacentOnY(island, other))) {
                     throw new ValidateException(String.format("island (%d, %d) is adjacent to island (%d, %d). there must be at least one free space in between.",
                             island.getX(), island.getY(), other.getX(), other.getY()));

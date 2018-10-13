@@ -3,6 +3,8 @@ package de.karstenkoehler.bridges.io;
 import de.karstenkoehler.bridges.model.Edge;
 import de.karstenkoehler.bridges.model.Node;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -19,12 +21,12 @@ public class ParseResult {
         this.height = height;
     }
 
-    public Map<Integer, Node> getIslands () {
-        return islands;
+    public List<Node> getIslands() {
+        return Collections.unmodifiableList(new ArrayList<>(this.islands.values()));
     }
 
     public List<Edge> getBridges () {
-        return bridges;
+        return Collections.unmodifiableList(this.bridges);
     }
 
     public int getWidth () {

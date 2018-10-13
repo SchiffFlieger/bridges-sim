@@ -149,7 +149,7 @@ public class CanvasController {
         result.fillMissingBridges();
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        for (Node island : result.getIslands().values()) {
+        for (Node island : result.getIslands()) {
             this.islands.add(new IslandCircle(this.canvas, island, controlPane, gc, params));
         }
         for (Edge bridge : result.getBridges()) {

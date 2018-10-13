@@ -5,16 +5,16 @@ import de.karstenkoehler.bridges.model.Node;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
-import java.util.Map;
+import java.util.List;
 
 public class BridgeLine {
 
     private final Edge bridge;
     private final GraphicsContext cg;
-    private final Map<Integer, Node> islands;
+    private final List<Node> islands;
     private final ParameterObject params;
 
-    public BridgeLine (Edge bridge, GraphicsContext cg, Map<Integer, Node> islands, ParameterObject params) {
+    public BridgeLine(Edge bridge, GraphicsContext cg, List<Node> islands, ParameterObject params) {
         this.bridge = bridge;
         this.cg = cg;
         this.islands = islands;

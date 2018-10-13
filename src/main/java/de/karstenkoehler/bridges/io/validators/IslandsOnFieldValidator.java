@@ -14,7 +14,7 @@ public class IslandsOnFieldValidator implements Validator {
 
     @Override
     public void validate(ParseResult result) throws ValidateException {
-        for (Node island : result.getIslands().values()) {
+        for (Node island : result.getIslands()) {
             checkValueInRange(island, island.getX(), result.getWidth());
             checkValueInRange(island, island.getY(), result.getHeight());
         }
