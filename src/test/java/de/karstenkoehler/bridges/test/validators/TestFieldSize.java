@@ -1,8 +1,8 @@
 package de.karstenkoehler.bridges.test.validators;
 
 import de.karstenkoehler.bridges.io.ParseResult;
-import de.karstenkoehler.bridges.io.ValidateException;
 import de.karstenkoehler.bridges.io.validators.FieldSizeValidator;
+import de.karstenkoehler.bridges.io.validators.ValidateException;
 import de.karstenkoehler.bridges.io.validators.Validator;
 import org.junit.BeforeClass;
 import org.junit.Rule;

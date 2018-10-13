@@ -1,12 +1,12 @@
 package de.karstenkoehler.bridges;
 
 import de.karstenkoehler.bridges.io.ParseResult;
-import de.karstenkoehler.bridges.io.ValidateException;
 import de.karstenkoehler.bridges.io.parser.ParseException;
 import de.karstenkoehler.bridges.io.parser.Parser;
 import de.karstenkoehler.bridges.io.parser.TokenConsumingParser;
 import de.karstenkoehler.bridges.io.parser.token.TokenizerImpl;
 import de.karstenkoehler.bridges.io.validators.DefaultValidator;
+import de.karstenkoehler.bridges.io.validators.ValidateException;
 import de.karstenkoehler.bridges.io.validators.Validator;
 import de.karstenkoehler.bridges.ui.MainController;
 import javafx.application.Application;

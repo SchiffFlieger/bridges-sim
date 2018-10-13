@@ -1,7 +1,6 @@
 package de.karstenkoehler.bridges.io.validators;
 
 import de.karstenkoehler.bridges.io.ParseResult;
-import de.karstenkoehler.bridges.io.ValidateException;
 
 /**
  * Checks if the field's bounds are within the valid range. The dimensions on each axis

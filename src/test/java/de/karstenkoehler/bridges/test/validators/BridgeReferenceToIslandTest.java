@@ -1,8 +1,8 @@
 package de.karstenkoehler.bridges.test.validators;
 
 import de.karstenkoehler.bridges.io.ParseResult;
-import de.karstenkoehler.bridges.io.ValidateException;
 import de.karstenkoehler.bridges.io.validators.BridgeReferenceToIslandValidator;
+import de.karstenkoehler.bridges.io.validators.ValidateException;
 import de.karstenkoehler.bridges.io.validators.Validator;
 import de.karstenkoehler.bridges.model.Edge;
 import de.karstenkoehler.bridges.model.Node;

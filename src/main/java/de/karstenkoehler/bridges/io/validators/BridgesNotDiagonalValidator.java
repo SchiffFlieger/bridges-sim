@@ -1,7 +1,6 @@
 package de.karstenkoehler.bridges.io.validators;
 
 import de.karstenkoehler.bridges.io.ParseResult;
-import de.karstenkoehler.bridges.io.ValidateException;
 import de.karstenkoehler.bridges.model.Edge;
 import de.karstenkoehler.bridges.model.Node;
 

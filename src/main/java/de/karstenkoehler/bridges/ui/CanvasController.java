@@ -1,13 +1,9 @@
 package de.karstenkoehler.bridges.ui;
 
+import de.karstenkoehler.bridges.io.BridgesFileReader;
 import de.karstenkoehler.bridges.io.ParseResult;
-import de.karstenkoehler.bridges.io.ValidateException;
 import de.karstenkoehler.bridges.io.parser.ParseException;
-import de.karstenkoehler.bridges.io.parser.Parser;
-import de.karstenkoehler.bridges.io.parser.TokenConsumingParser;
-import de.karstenkoehler.bridges.io.parser.token.TokenizerImpl;
-import de.karstenkoehler.bridges.io.validators.DefaultValidator;
-import de.karstenkoehler.bridges.io.validators.Validator;
+import de.karstenkoehler.bridges.io.validators.ValidateException;
 import de.karstenkoehler.bridges.model.Edge;
 import de.karstenkoehler.bridges.model.Node;
 import de.karstenkoehler.bridges.ui.shapes.IslandCircle;
@@ -15,16 +11,13 @@ import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 public class CanvasController {
@@ -102,35 +95,17 @@ public class CanvasController {
         return (i * (params.getFieldSize())) + params.getPadding();
     }
 
-    private ParseResult getParseResult(File file) {
-        Validator validator = new DefaultValidator();
 
-        ParseResult result = new ParseResult(Collections.emptyMap(), Collections.emptyList(), 0, 0);
-        try {
-            Parser parser = new TokenConsumingParser(new TokenizerImpl(readFile(file.getAbsolutePath())));
-            result = parser.parse();
-            validator.validate(result);
-
-        } catch (IOException | ParseException | ValidateException e) {
-            e.printStackTrace();
-        }
-
-        this.params = new ParameterObject(Math.max(result.getWidth(), result.getHeight()), this.canvas.getWidth());
-        return result;
-    }
 
     private void drawCanvasBorder(GraphicsContext gc) {
         gc.setStroke(Color.DARKGRAY);
+        gc.setLineDashes(0);
         gc.setLineWidth(3);
         gc.strokePolygon(
                 new double[]{0, canvas.getWidth(), canvas.getWidth(), 0},
                 new double[]{0, 0, canvas.getHeight(), canvas.getHeight()},
                 4
         );
-    }
-
-    private static String readFile(String path) throws IOException {
-        return new String(Files.readAllBytes(Paths.get(path)), Charset.defaultCharset());
     }
 
     private void clearEverything() {
@@ -145,8 +120,12 @@ public class CanvasController {
     }
 
     private void openAndShowFile(File file) {
-        ParseResult result = getParseResult(file);
-        result.fillMissingBridges();
+        ParseResult result = tryReadFile(file);
+        if (result == null) {
+            return;
+        }
+
+        this.params = new ParameterObject(Math.max(result.getWidth(), result.getHeight()), this.canvas.getWidth());
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
         for (Node island : result.getIslands()) {
@@ -156,5 +135,22 @@ public class CanvasController {
             this.bridges.add(new BridgeLine(bridge, canvas.getGraphicsContext2D(), result.getIslands(), params, result));
         }
         drawThings();
+    }
+
+    private ParseResult tryReadFile(File file) {
+        ParseResult result = null;
+        try {
+            result = new BridgesFileReader().readFile(file);
+        } catch (ParseException e) {
+            Alert error = new Alert(Alert.AlertType.ERROR, "syntactic error in file:\n" + e.getMessage());
+            error.showAndWait();
+        } catch (ValidateException e) {
+            Alert error = new Alert(Alert.AlertType.ERROR, "semantic error in file:\n" + e.getMessage());
+            error.showAndWait();
+        } catch (IOException e) {
+            Alert error = new Alert(Alert.AlertType.ERROR, "could not read file:\n" + e.getMessage());
+            error.showAndWait();
+        }
+        return result;
     }
 }

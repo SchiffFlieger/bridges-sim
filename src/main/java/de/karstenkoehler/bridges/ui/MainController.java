@@ -39,8 +39,6 @@ public class MainController {
 
     @FXML
     private void initialize () {
-//        islandDisplayChoice.getSelectionModel().select(0);
-
         cbxShowGrid.selectedProperty().addListener(setGridVisibility());
         cbxShowClickArea.selectedProperty().addListener(setClickAreaVisibility());
 
@@ -53,8 +51,6 @@ public class MainController {
 
     @FXML
     private void onNewPuzzle (ActionEvent actionEvent) {
-        System.out.println("new");
-
         try {
             Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("ui/new.fxml"));
             Stage stage = new Stage();
