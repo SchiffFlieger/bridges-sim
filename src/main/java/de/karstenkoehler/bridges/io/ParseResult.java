@@ -2,15 +2,14 @@ package de.karstenkoehler.bridges.io;
 
 import de.karstenkoehler.bridges.model.Edge;
 import de.karstenkoehler.bridges.model.Node;
+import de.karstenkoehler.bridges.model.Orientation;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ParseResult {
     private final Map<Integer, Node> islands;
     private final List<Edge> bridges;
+    private final Map<Integer, Map<Orientation, Edge>> bridgeConnections;
     private final int width;
     private final int height;
 
@@ -19,6 +18,7 @@ public class ParseResult {
         this.bridges = bridges;
         this.width = width;
         this.height = height;
+        this.bridgeConnections = new HashMap<>();
     }
 
     public List<Node> getIslands() {
@@ -39,14 +39,14 @@ public class ParseResult {
 
     public void fillMissingBridges () {
         for (Node island : this.islands.values()) {
-            Edge north = fillBridgeInDirection(island, 0, -1);
-            Edge east = fillBridgeInDirection(island, 1, 0);
-            Edge south = fillBridgeInDirection(island, 0, 1);
-            Edge west = fillBridgeInDirection(island, -1, 0);
+            Map<Orientation, Edge> connections = new HashMap<>();
 
-            System.out.printf("island %2d: %s %s %s %s\n", island.getId(), north, east, south, west);
+            connections.put(Orientation.NORTH, fillBridgeInDirection(island, 0, -1));
+            connections.put(Orientation.EAST, fillBridgeInDirection(island, 1, 0));
+            connections.put(Orientation.SOUTH, fillBridgeInDirection(island, 0, 1));
+            connections.put(Orientation.WEST, fillBridgeInDirection(island, -1, 0));
 
-            island.setConnections(north, east, south, west);
+            this.bridgeConnections.put(island.getId(), connections);
         }
     }
 
@@ -56,6 +56,21 @@ public class ParseResult {
 
     public boolean isHorizontal(Edge bridge) {
         return islands.get(bridge.getNode1()).getY() == islands.get(bridge.getNode2()).getY();
+    }
+
+    public Edge getConnectedBridge(Node island, Orientation orientation) {
+        return this.bridgeConnections.get(island.getId()).get(orientation);
+    }
+
+    public int getRemainingBridgeCount(Node island) {
+        int bridgeCount = 0;
+        for (Edge bridge : this.bridgeConnections.get(island.getId()).values()) {
+            if (bridge != null) {
+                bridgeCount += bridge.getBridgeCount();
+            }
+        }
+
+        return island.getRequiredBridges() - bridgeCount;
     }
 
     private Edge fillBridgeInDirection (Node island, int dx, int dy) {

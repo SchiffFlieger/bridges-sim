@@ -150,7 +150,7 @@ public class CanvasController {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
         for (Node island : result.getIslands()) {
-            this.islands.add(new IslandCircle(this.canvas, island, controlPane, gc, params));
+            this.islands.add(new IslandCircle(this.canvas, island, controlPane, gc, params, result));
         }
         for (Edge bridge : result.getBridges()) {
             this.bridges.add(new BridgeLine(bridge, canvas.getGraphicsContext2D(), result.getIslands(), params, result));

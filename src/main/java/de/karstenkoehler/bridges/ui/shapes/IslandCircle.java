@@ -1,7 +1,9 @@
 package de.karstenkoehler.bridges.ui.shapes;
 
 import de.karstenkoehler.bridges.InvalidBridgeCountException;
+import de.karstenkoehler.bridges.io.ParseResult;
 import de.karstenkoehler.bridges.model.Node;
+import de.karstenkoehler.bridges.model.Orientation;
 import de.karstenkoehler.bridges.ui.CanvasController;
 import de.karstenkoehler.bridges.ui.ParameterObject;
 import javafx.event.Event;
@@ -22,14 +24,16 @@ public class IslandCircle {
     private final Node island;
     private final Pane controlPane;
     private final GraphicsContext gc;
-    private ParameterObject params;
+    private final ParameterObject params;
+    private final ParseResult result;
 
-    public IslandCircle(Canvas canvas, Node island, Pane controlPane, GraphicsContext gc, ParameterObject params) {
+    public IslandCircle(Canvas canvas, Node island, Pane controlPane, GraphicsContext gc, ParameterObject params, ParseResult result) {
         this.canvas = canvas;
         this.island = island;
         this.controlPane = controlPane;
         this.gc = gc;
         this.params = params;
+        this.result = result;
 
         initControls(coordinate(island.getX()), coordinate(island.getY()), island.getId());
     }
@@ -38,9 +42,9 @@ public class IslandCircle {
         double x = coordinate(island.getX());
         double y = coordinate(island.getY());
 
-        if (island.getRemainingBridgeCount() > 0) {
+        if (result.getRemainingBridgeCount(island) > 0) {
             gc.setFill(Color.BLUE);
-        } else if (island.getRemainingBridgeCount() == 0) {
+        } else if (result.getRemainingBridgeCount(island) == 0) {
             gc.setFill(Color.GREEN);
         } else {
             gc.setFill(Color.RED);
@@ -88,22 +92,7 @@ public class IslandCircle {
 
     private void onClick(Orientation orientation, int count) {
         try {
-            switch (orientation) {
-                case NORTH:
-                    island.north().addBridges(count);
-                    break;
-                case EAST:
-                    island.east().addBridges(count);
-                    break;
-                case SOUTH:
-                    island.south().addBridges(count);
-                    break;
-                case WEST:
-                    island.west().addBridges(count);
-                    break;
-                default:
-                    throw new RuntimeException("wrong bridge orientation");
-            }
+            this.result.getConnectedBridge(this.island, orientation).addBridges(count);
             canvas.fireEvent(new Event(CanvasController.REDRAW));
         } catch (NullPointerException | InvalidBridgeCountException e) {
             canvas.fireEvent(new Event(CanvasController.ERROR));
@@ -135,9 +124,5 @@ public class IslandCircle {
 
     private double coordinate(int i) {
         return (i * (params.getFieldSize())) + params.getPadding();
-    }
-
-    private enum Orientation {
-        NORTH, EAST, SOUTH, WEST
     }
 }

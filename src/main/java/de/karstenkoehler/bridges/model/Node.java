@@ -6,11 +6,6 @@ public class Node {
     private final int id;
     private final int x, y;
     private final int requiredBridges;
-    private Edge north;
-    private Edge east;
-    private Edge south;
-    private Edge west;
-
     public Node (int id, int x, int y, int requiredBridges) {
         this.id = id;
         this.x = x;
@@ -32,38 +27,6 @@ public class Node {
 
     public int getY () {
         return y;
-    }
-
-    public void setConnections (Edge north, Edge east, Edge south, Edge west) {
-        this.north = north;
-        this.east = east;
-        this.south = south;
-        this.west = west;
-    }
-
-    public Edge north () {
-        return this.north;
-    }
-
-    public Edge east () {
-        return this.east;
-    }
-
-    public Edge south () {
-        return this.south;
-    }
-
-    public Edge west () {
-        return this.west;
-    }
-
-    public int getRemainingBridgeCount() {
-        int bridgeCount = north != null ? north.getBridgeCount() : 0;
-        bridgeCount += east != null ? east.getBridgeCount() : 0;
-        bridgeCount += south != null ? south.getBridgeCount() : 0;
-        bridgeCount += west != null ? west.getBridgeCount() : 0;
-
-        return this.requiredBridges - bridgeCount;
     }
 
     @Override
