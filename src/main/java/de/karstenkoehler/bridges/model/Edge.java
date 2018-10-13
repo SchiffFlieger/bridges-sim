@@ -52,17 +52,17 @@ public class Edge {
         return Objects.hash(id, bridgeCount, node1, node2);
     }
 
-    public void addBridge() throws InvalidBridgeCountException {
-        if (this.bridgeCount > 1) {
-            throw new InvalidBridgeCountException();
+    public void addBridges(int count) throws InvalidBridgeCountException {
+        if (count != 1 && count != -1) {
+            throw new IllegalArgumentException(String.format("Edge.addBridges got %d as argument", count));
         }
-        this.bridgeCount++;
-    }
 
-    public void removeBridge() throws InvalidBridgeCountException {
-        if (this.bridgeCount == 0) {
+        if (count == 1 && this.bridgeCount > 1) {
+            throw new InvalidBridgeCountException();
+        } else if (count == -1 && this.bridgeCount == 0) {
             throw new InvalidBridgeCountException();
         }
-        this.bridgeCount--;
+
+        this.bridgeCount += count;
     }
 }

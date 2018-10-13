@@ -66,13 +66,13 @@ public class IslandCircle {
         final double y0 = y - params.getClickAreaSize();
         final double y1 = y + params.getClickAreaSize();
 
-        createTriangle("north", x, y, x1, y0, x0, y0, id);
-        createTriangle("east", x, y, x1, y0, x1, y1, id);
-        createTriangle("south", x, y, x1, y1, x0, y1, id);
-        createTriangle("west", x, y, x0, y1, x0, y0, id);
+        createTriangle(Orientation.NORTH, x, y, x1, y0, x0, y0, id);
+        createTriangle(Orientation.EAST, x, y, x1, y0, x1, y1, id);
+        createTriangle(Orientation.SOUTH, x, y, x1, y1, x0, y1, id);
+        createTriangle(Orientation.WEST, x, y, x0, y1, x0, y0, id);
     }
 
-    private void createTriangle(String orientation, double x0, double y0, double x1, double y1, double x2, double y2, int id) {
+    private void createTriangle(Orientation orientation, double x0, double y0, double x1, double y1, double x2, double y2, int id) {
         Polygon poly = new Polygon(x0, y0, x1, y1, x2, y2);
         poly.setStroke(Color.TRANSPARENT);
         poly.setFill(Color.TRANSPARENT);
@@ -80,54 +80,26 @@ public class IslandCircle {
         poly.setOnMouseExited(event -> poly.setFill(Color.TRANSPARENT));
         poly.setOnMouseClicked(event -> {
             System.out.println(id + " " + orientation);
-            if (event.getButton().equals(MouseButton.PRIMARY)) {
-                onLeftMouseButton(orientation);
-            }
-            if (event.getButton().equals(MouseButton.SECONDARY)) {
-                onRightMouseButton(orientation);
-            }
+            int count = event.getButton().equals(MouseButton.PRIMARY) ? 1 : -1;
+            onClick(orientation, count);
         });
         this.controlPane.getChildren().add(0, poly);
     }
 
-    private void onRightMouseButton(String orientation) {
+    private void onClick(Orientation orientation, int count) {
         try {
             switch (orientation) {
-                case "north":
-                    island.north().removeBridge();
+                case NORTH:
+                    island.north().addBridges(count);
                     break;
-                case "east":
-                    island.east().removeBridge();
+                case EAST:
+                    island.east().addBridges(count);
                     break;
-                case "south":
-                    island.south().removeBridge();
+                case SOUTH:
+                    island.south().addBridges(count);
                     break;
-                case "west":
-                    island.west().removeBridge();
-                    break;
-                default:
-                    throw new RuntimeException("wrong bridge orientation");
-            }
-            canvas.fireEvent(new Event(CanvasController.REDRAW));
-        } catch (NullPointerException | InvalidBridgeCountException e) {
-            canvas.fireEvent(new Event(CanvasController.ERROR));
-        }
-    }
-
-    private void onLeftMouseButton(String orientation) {
-        try {
-            switch (orientation) {
-                case "north":
-                    island.north().addBridge();
-                    break;
-                case "east":
-                    island.east().addBridge();
-                    break;
-                case "south":
-                    island.south().addBridge();
-                    break;
-                case "west":
-                    island.west().addBridge();
+                case WEST:
+                    island.west().addBridges(count);
                     break;
                 default:
                     throw new RuntimeException("wrong bridge orientation");
@@ -165,4 +137,7 @@ public class IslandCircle {
         return (i * (params.getFieldSize())) + params.getPadding();
     }
 
+    private enum Orientation {
+        NORTH, EAST, SOUTH, WEST
+    }
 }
