@@ -37,10 +37,10 @@ public class BridgeLine {
     }
 
     private void drawBridge (final double offset) {
-        final double x0 = coordinate(this.islands.get(this.bridge.getNode1()).getX());
-        final double y0 = coordinate(this.islands.get(this.bridge.getNode1()).getY());
-        final double x1 = coordinate(this.islands.get(this.bridge.getNode2()).getX());
-        final double y1 = coordinate(this.islands.get(this.bridge.getNode2()).getY());
+        final double x0 = params.coordinate(this.islands.get(this.bridge.getNode1()).getX());
+        final double y0 = params.coordinate(this.islands.get(this.bridge.getNode1()).getY());
+        final double x1 = params.coordinate(this.islands.get(this.bridge.getNode2()).getX());
+        final double y1 = params.coordinate(this.islands.get(this.bridge.getNode2()).getY());
 
         if (result.isVertical(bridge)) {
             createLine(x0 + offset, y0, x1 + offset, y1);
@@ -60,9 +60,5 @@ public class BridgeLine {
         cg.setStroke(Color.BLACK);
         cg.setLineWidth(params.getBridgeLineSize());
         cg.strokeLine(x0, y0, x1, y1);
-    }
-
-    private double coordinate (int i) {
-        return (i * (params.getFieldSize())) + params.getPadding();
     }
 }

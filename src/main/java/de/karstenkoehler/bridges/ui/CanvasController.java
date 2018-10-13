@@ -85,17 +85,11 @@ public class CanvasController {
         gc.setLineWidth(lineWidth);
 
         for (int i = 0; i < params.getGridLines(); i++) {
-            final double val = coordinate(i);
+            final double val = params.coordinate(i);
             gc.strokeLine(params.getPadding(), val, x1, val);
             gc.strokeLine(val, params.getPadding(), val, y1);
         }
     }
-
-    private double coordinate(int i) {
-        return (i * (params.getFieldSize())) + params.getPadding();
-    }
-
-
 
     private void drawCanvasBorder(GraphicsContext gc) {
         gc.setStroke(Color.DARKGRAY);

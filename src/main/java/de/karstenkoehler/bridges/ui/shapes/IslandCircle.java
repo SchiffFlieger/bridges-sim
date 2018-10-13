@@ -35,12 +35,12 @@ public class IslandCircle {
         this.params = params;
         this.result = result;
 
-        initControls(coordinate(island.getX()), coordinate(island.getY()), island.getId());
+        initControls(params.coordinate(island.getX()), params.coordinate(island.getY()), island.getId());
     }
 
     public void draw(boolean drawClickArea) {
-        double x = coordinate(island.getX());
-        double y = coordinate(island.getY());
+        double x = params.coordinate(island.getX());
+        double y = params.coordinate(island.getY());
 
         if (result.getRemainingBridgeCount(island) > 0) {
             gc.setFill(Color.BLUE);
@@ -100,8 +100,8 @@ public class IslandCircle {
     }
 
     private void drawClickArea() {
-        final double x = coordinate(island.getX());
-        final double y = coordinate(island.getY());
+        final double x = params.coordinate(island.getX());
+        final double y = params.coordinate(island.getY());
 
         final double x0 = x - params.getClickAreaSize();
         final double x1 = x + params.getClickAreaSize();
@@ -120,9 +120,5 @@ public class IslandCircle {
         gc.strokeLine(x0, y0, x0, y1);
         gc.strokeLine(x0, y1, x1, y1);
         gc.strokeLine(x1, y1, x1, y0);
-    }
-
-    private double coordinate(int i) {
-        return (i * (params.getFieldSize())) + params.getPadding();
     }
 }

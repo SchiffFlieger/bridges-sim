@@ -59,4 +59,8 @@ public class ParameterObject {
     public double getBridgeLineSize() {
         return bridgeLineSize;
     }
+
+    public double coordinate(int i) {
+        return (i * (this.getFieldSize())) + this.getPadding();
+    }
 }
