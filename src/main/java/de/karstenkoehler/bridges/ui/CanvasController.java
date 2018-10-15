@@ -33,6 +33,7 @@ public class CanvasController {
     private List<IslandCircle> islands;
     private List<BridgeLine> bridges;
     private ParameterObject params;
+    private ParseResult result;
 
     public CanvasController(Canvas canvas, Pane controlPane) {
         this.canvas = canvas;
@@ -48,7 +49,10 @@ public class CanvasController {
         openAndShowFile(file);
     }
 
+
     public void drawThings() {
+        this.result.markInvalidBridges();
+
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 
@@ -114,7 +118,7 @@ public class CanvasController {
     }
 
     private void openAndShowFile(File file) {
-        ParseResult result = tryReadFile(file);
+        this.result = tryReadFile(file);
         if (result == null) {
             return;
         }

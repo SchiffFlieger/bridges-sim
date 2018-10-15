@@ -57,7 +57,11 @@ public class BridgeLine {
         } else {
             cg.setLineDashes(0);
         }
-        cg.setStroke(Color.BLACK);
+        if (bridge.isValid()) {
+            cg.setStroke(Color.BLACK);
+        } else {
+            cg.setStroke(Color.RED);
+        }
         cg.setLineWidth(params.getBridgeLineSize());
         cg.strokeLine(x0, y0, x1, y1);
     }

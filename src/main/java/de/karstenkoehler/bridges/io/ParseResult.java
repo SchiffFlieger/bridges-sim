@@ -73,6 +73,41 @@ public class ParseResult {
         return island.getRequiredBridges() - bridgeCount;
     }
 
+    public void markInvalidBridges() {
+        this.bridges.forEach(edge -> edge.setValid(true));
+
+        for (Edge bridge : this.bridges) {
+            for (Edge other : this.bridges) {
+                if (bridge == other || bridge.getBridgeCount() == 0 || other.getBridgeCount() == 0) {
+                    continue;
+                }
+
+                if (isHorizontal(bridge) && isVertical(other)) {
+                    areBridgesCrossing(bridge, other);
+                }
+
+                if (isVertical(bridge) && isHorizontal(other)) {
+                    areBridgesCrossing(other, bridge);
+                }
+
+            }
+        }
+    }
+
+    private void areBridgesCrossing(Edge bridge, Edge other) {
+        int y1 = this.islands.get(bridge.getNode1()).getY();
+        int x2 = this.islands.get(other.getNode2()).getX();
+
+        int x1a = this.islands.get(bridge.getNode1()).getX();
+        int x1e = this.islands.get(bridge.getNode2()).getX();
+        int y2a = this.islands.get(other.getNode1()).getY();
+        int y2e = this.islands.get(other.getNode2()).getY();
+        if (x1a < x2 && x2 < x1e && y2a < y1 && y1 < y2e) {
+            bridge.setValid(false);
+            other.setValid(false);
+        }
+    }
+
     private Edge fillBridgeInDirection (Node island, int dx, int dy) {
         Node north = findNextInDirection(island.getX(), island.getY(), dx, dy);
         if (north == null) {

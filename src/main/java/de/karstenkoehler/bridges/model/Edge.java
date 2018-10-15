@@ -8,6 +8,7 @@ public class Edge {
     private final int id;
     private int bridgeCount;
     private final int node1, node2; // TODO think up better names
+    private boolean valid;
 
     public Edge(int id, int node1, int node2) {
         this(id, node1, node2, 0);
@@ -18,6 +19,7 @@ public class Edge {
         this.bridgeCount = bridgeCount;
         this.node1 = node1;
         this.node2 = node2;
+        this.valid = true;
     }
 
     public int getId() {
@@ -34,6 +36,14 @@ public class Edge {
 
     public int getBridgeCount() {
         return bridgeCount;
+    }
+
+    public boolean isValid() {
+        return valid;
+    }
+
+    public void setValid(boolean valid) {
+        this.valid = valid;
     }
 
     @Override
