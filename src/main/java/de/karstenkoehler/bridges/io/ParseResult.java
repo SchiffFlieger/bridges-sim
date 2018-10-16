@@ -50,6 +50,13 @@ public class ParseResult {
         }
     }
 
+    public void emphasizeBridge (Edge bridge) {
+        this.bridges.forEach(edge -> edge.setEmphasized(false));
+        if (bridge != null) {
+            bridge.setEmphasized(true);
+        }
+    }
+
     public boolean isVertical(Edge bridge) {
         return islands.get(bridge.getNode1()).getX() == islands.get(bridge.getNode2()).getX();
     }

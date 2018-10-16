@@ -93,6 +93,7 @@ public class IslandCircle {
     private void onClick(Orientation orientation, int count) {
         try {
             this.result.getConnectedBridge(this.island, orientation).addBridges(count);
+            this.result.emphasizeBridge(this.result.getConnectedBridge(this.island, orientation));
             canvas.fireEvent(new Event(CanvasController.REDRAW));
         } catch (NullPointerException | InvalidBridgeCountException e) {
             canvas.fireEvent(new Event(CanvasController.ERROR));

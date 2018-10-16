@@ -9,6 +9,7 @@ public class Edge {
     private int bridgeCount;
     private final int node1, node2; // TODO think up better names
     private boolean valid;
+    private boolean emphasized;
 
     public Edge(int id, int node1, int node2) {
         this(id, node1, node2, 0);
@@ -20,6 +21,7 @@ public class Edge {
         this.node1 = node1;
         this.node2 = node2;
         this.valid = true;
+        this.emphasized = false;
     }
 
     public int getId() {
@@ -72,5 +74,13 @@ public class Edge {
         }
 
         this.bridgeCount += count;
+    }
+
+    public boolean isEmphasized () {
+        return emphasized;
+    }
+
+    public void setEmphasized (boolean emphasized) {
+        this.emphasized = emphasized;
     }
 }
