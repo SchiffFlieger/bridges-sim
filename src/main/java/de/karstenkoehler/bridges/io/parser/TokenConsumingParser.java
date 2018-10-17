@@ -1,10 +1,10 @@
 package de.karstenkoehler.bridges.io.parser;
 
-import de.karstenkoehler.bridges.io.ParseResult;
+import de.karstenkoehler.bridges.model.Bridge;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.io.parser.token.Token;
 import de.karstenkoehler.bridges.io.parser.token.Tokenizer;
-import de.karstenkoehler.bridges.model.Edge;
-import de.karstenkoehler.bridges.model.Node;
+import de.karstenkoehler.bridges.model.Island;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -13,8 +13,8 @@ import java.util.Map;
 
 public class TokenConsumingParser extends AbstractTokenParser implements Parser {
 
-    private final Map<Integer, Node> islands = new HashMap<>();
-    private final List<Edge> bridges = new ArrayList<>();
+    private final Map<Integer, Island> islands = new HashMap<>();
+    private final List<Bridge> bridges = new ArrayList<>();
     private int width, height, islandCount;
 
     public TokenConsumingParser(Tokenizer tokenizer) {
@@ -22,10 +22,10 @@ public class TokenConsumingParser extends AbstractTokenParser implements Parser 
     }
 
     @Override
-    public ParseResult parse() throws ParseException {
+    public BridgesPuzzle parse() throws ParseException {
         start();
         check(Token.Type.EOF);
-        return new ParseResult(islands, bridges, width, height);
+        return new BridgesPuzzle(islands, bridges, width, height);
     }
 
     private void start() throws ParseException {
@@ -63,7 +63,7 @@ public class TokenConsumingParser extends AbstractTokenParser implements Parser 
         int bridges = readNumberToken();
 
         int id = this.islands.size();
-        this.islands.put(id, new Node(id, x, y, bridges));
+        this.islands.put(id, new Island(id, x, y, bridges));
 
         consume(Token.Type.CLOSE_PARENTHESIS);
     }
@@ -89,7 +89,7 @@ public class TokenConsumingParser extends AbstractTokenParser implements Parser 
         int bridges = readBoolToken() ? 2 : 1; // double or single bridge
 
         int id = this.bridges.size();
-        this.bridges.add(new Edge(id, node1, node2, bridges));
+        this.bridges.add(new Bridge(id, node1, node2, bridges));
 
         consume(Token.Type.CLOSE_PARENTHESIS);
     }

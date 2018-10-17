@@ -1,7 +1,7 @@
-package de.karstenkoehler.bridges.io.validators;
+package de.karstenkoehler.bridges.io.validator;
 
-import de.karstenkoehler.bridges.io.ParseResult;
-import de.karstenkoehler.bridges.model.Node;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Island;
 
 /**
  * Checks if the number of bridges required ist within the valid range.
@@ -12,8 +12,8 @@ public class RequiredBridgesCountValidator implements Validator {
     private static final int MAX_BRIDGES_PER_ISLAND = 8;
 
     @Override
-    public void validate(ParseResult result) throws ValidateException {
-        for (Node island : result.getIslands()) {
+    public void validate(BridgesPuzzle puzzle) throws ValidateException {
+        for (Island island : puzzle.getIslands()) {
             if (requiredBridgesOutOfRange(island)) {
                 throw new ValidateException(String.format("island at position (%d, %d) requires %d bridges. should be in range %d to %d.",
                         island.getX(), island.getY(), island.getRequiredBridges(), MIN_BRIDGES_PER_ISLAND, MAX_BRIDGES_PER_ISLAND));
@@ -21,7 +21,7 @@ public class RequiredBridgesCountValidator implements Validator {
         }
     }
 
-    private boolean requiredBridgesOutOfRange(Node island) {
+    private boolean requiredBridgesOutOfRange(Island island) {
         return island.getRequiredBridges() < MIN_BRIDGES_PER_ISLAND || island.getRequiredBridges() > MAX_BRIDGES_PER_ISLAND;
     }
 }

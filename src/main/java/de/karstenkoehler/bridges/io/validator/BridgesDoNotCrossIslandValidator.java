@@ -1,8 +1,8 @@
-package de.karstenkoehler.bridges.io.validators;
+package de.karstenkoehler.bridges.io.validator;
 
-import de.karstenkoehler.bridges.io.ParseResult;
-import de.karstenkoehler.bridges.model.Edge;
-import de.karstenkoehler.bridges.model.Node;
+import de.karstenkoehler.bridges.model.Bridge;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Island;
 
 import java.util.List;
 
@@ -13,17 +13,17 @@ import java.util.List;
  */
 public class BridgesDoNotCrossIslandValidator implements Validator {
     @Override
-    public void validate(ParseResult result) throws ValidateException {
-        for (Edge bridge : result.getBridges()) {
-            if (bridgeCrossesIsland(bridge, result.getIslands())) {
+    public void validate(BridgesPuzzle puzzle) throws ValidateException {
+        for (Bridge bridge : puzzle.getBridges()) {
+            if (bridgeCrossesIsland(bridge, puzzle.getIslands())) {
                 throw new ValidateException(String.format("bridge %d runs over another island.", bridge.getId()));
             }
         }
     }
 
-    private boolean bridgeCrossesIsland(Edge bridge, List<Node> islands) {
-        Node startIsland = islands.get(bridge.getNode1());
-        Node endIsland = islands.get(bridge.getNode2());
+    private boolean bridgeCrossesIsland(Bridge bridge, List<Island> islands) {
+        Island startIsland = islands.get(bridge.getStartIsland());
+        Island endIsland = islands.get(bridge.getEndIsland());
 
         int x = startIsland.getX();
         int y = startIsland.getY();
@@ -44,7 +44,7 @@ public class BridgesDoNotCrossIslandValidator implements Validator {
         return false;
     }
 
-    private boolean shouldContinue(Node endIsland, int x, int y, int dx, int dy) {
+    private boolean shouldContinue(Island endIsland, int x, int y, int dx, int dy) {
         if (dx == dy) { // bridge is either diagonal or connects the same island twice
             return false;
         }
@@ -62,8 +62,8 @@ public class BridgesDoNotCrossIslandValidator implements Validator {
         return y < endIsland.getY();
     }
 
-    private boolean existsIslandWithCoordinates(int x, int y, List<Node> islands) {
-        for (Node island : islands) {
+    private boolean existsIslandWithCoordinates(int x, int y, List<Island> islands) {
+        for (Island island : islands) {
             if (x == island.getX() && y == island.getY()) {
                 return true;
             }

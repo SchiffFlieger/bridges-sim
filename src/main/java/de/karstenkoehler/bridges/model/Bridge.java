@@ -4,22 +4,22 @@ import de.karstenkoehler.bridges.InvalidBridgeCountException;
 
 import java.util.Objects;
 
-public class Edge {
+public class Bridge {
     private final int id;
     private int bridgeCount;
-    private final int node1, node2; // TODO think up better names
+    private final int startIsland, endIsland; // TODO maybe use Island type?
     private boolean valid;
     private boolean emphasized;
 
-    public Edge(int id, int node1, int node2) {
-        this(id, node1, node2, 0);
+    public Bridge (int id, int startIsland, int endIsland) {
+        this(id, startIsland, endIsland, 0);
     }
 
-    public Edge(int id, int node1, int node2, int bridgeCount) {
+    public Bridge (int id, int startIsland, int endIsland, int bridgeCount) {
         this.id = id;
         this.bridgeCount = bridgeCount;
-        this.node1 = node1;
-        this.node2 = node2;
+        this.startIsland = startIsland;
+        this.endIsland = endIsland;
         this.valid = true;
         this.emphasized = false;
     }
@@ -28,12 +28,12 @@ public class Edge {
         return id;
     }
 
-    public int getNode1() {
-        return node1;
+    public int getStartIsland() {
+        return startIsland;
     }
 
-    public int getNode2() {
-        return node2;
+    public int getEndIsland() {
+        return endIsland;
     }
 
     public int getBridgeCount() {
@@ -52,21 +52,21 @@ public class Edge {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Edge edge = (Edge) o;
-        return id == edge.id &&
-                bridgeCount == edge.bridgeCount &&
-                node1 == edge.node1 &&
-                node2 == edge.node2;
+        Bridge bridge = (Bridge) o;
+        return id == bridge.id &&
+                bridgeCount == bridge.bridgeCount &&
+                startIsland == bridge.startIsland &&
+                endIsland == bridge.endIsland;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, bridgeCount, node1, node2);
+        return Objects.hash(id, bridgeCount, startIsland, endIsland);
     }
 
     public void addBridges(int count) throws InvalidBridgeCountException {
         if (count != 1 && count != -1) {
-            throw new IllegalArgumentException(String.format("Edge.addBridges got %d as argument", count));
+            throw new IllegalArgumentException(String.format("Bridge.addBridges got %d as argument", count));
         }
 
         if ((count == 1 && this.bridgeCount > 1) || (count == -1 && this.bridgeCount == 0)) {

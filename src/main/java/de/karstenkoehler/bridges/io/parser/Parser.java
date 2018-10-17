@@ -1,7 +1,7 @@
 package de.karstenkoehler.bridges.io.parser;
 
-import de.karstenkoehler.bridges.io.ParseResult;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
 
 public interface Parser {
-    ParseResult parse() throws ParseException;
+    BridgesPuzzle parse() throws ParseException;
 }

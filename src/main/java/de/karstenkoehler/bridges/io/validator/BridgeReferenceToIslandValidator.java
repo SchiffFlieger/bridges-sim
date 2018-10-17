@@ -1,7 +1,7 @@
-package de.karstenkoehler.bridges.io.validators;
+package de.karstenkoehler.bridges.io.validator;
 
-import de.karstenkoehler.bridges.io.ParseResult;
-import de.karstenkoehler.bridges.model.Edge;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Bridge;
 
 /**
  * Checks if the island references of every defined bridge are valid. For the island reference to be valid
@@ -11,11 +11,11 @@ public class BridgeReferenceToIslandValidator implements Validator {
     private static final int MIN_ISLAND_ID = 0;
 
     @Override
-    public void validate(ParseResult result) throws ValidateException {
-        final int MAX_ISLAND_ID = result.getIslands().size() - 1;
-        for (Edge bridge : result.getBridges()) {
-            checkIslandsExist(bridge.getNode1(), bridge.getId(), MAX_ISLAND_ID);
-            checkIslandsExist(bridge.getNode2(), bridge.getId(), MAX_ISLAND_ID);
+    public void validate(BridgesPuzzle puzzle) throws ValidateException {
+        final int MAX_ISLAND_ID = puzzle.getIslands().size() - 1;
+        for (Bridge bridge : puzzle.getBridges()) {
+            checkIslandsExist(bridge.getStartIsland(), bridge.getId(), MAX_ISLAND_ID);
+            checkIslandsExist(bridge.getEndIsland(), bridge.getId(), MAX_ISLAND_ID);
         }
     }
 

@@ -1,11 +1,11 @@
 package de.karstenkoehler.bridges.test.validators;
 
-import de.karstenkoehler.bridges.io.ParseResult;
-import de.karstenkoehler.bridges.io.validators.NoIslandsOnAdjacentFieldsValidator;
-import de.karstenkoehler.bridges.io.validators.ValidateException;
-import de.karstenkoehler.bridges.io.validators.Validator;
-import de.karstenkoehler.bridges.model.Edge;
-import de.karstenkoehler.bridges.model.Node;
+import de.karstenkoehler.bridges.model.Bridge;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.io.validator.NoIslandsOnAdjacentFieldsValidator;
+import de.karstenkoehler.bridges.io.validator.ValidateException;
+import de.karstenkoehler.bridges.io.validator.Validator;
+import de.karstenkoehler.bridges.model.Island;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -19,40 +19,40 @@ import java.util.*;
 public class NoIslandsOnAdjacentFieldsTest {
 
     private static final int FIELD_SIZE = 10;
-    private static final List<Edge> bridges = new ArrayList<>();
+    private static final List<Bridge> bridges = new ArrayList<>();
 
-    private static final Node node1 = new Node(0, 2, 0, 2);
-    private static final Node node1adjacent = new Node(1, 2, 1, 2);
-    private static final Node node2 = new Node(2, 6, 1, 2);
-    private static final Node node2adjacent = new Node(3, 5, 1, 2);
-    private static final Node node3 = new Node(4, 6, 6, 2);
-    private static final Node node3diagonal = new Node(5, 7, 7, 2);
+    private static final Island ISLAND_1 = new Island(0, 2, 0, 2);
+    private static final Island ISLAND_1_ADJACENT = new Island(1, 2, 1, 2);
+    private static final Island ISLAND_2 = new Island(2, 6, 1, 2);
+    private static final Island ISLAND_2_ADJACENT = new Island(3, 5, 1, 2);
+    private static final Island ISLAND_3 = new Island(4, 6, 6, 2);
+    private static final Island ISLAND_3_DIAGONAL = new Island(5, 7, 7, 2);
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        final Map<Integer, Node> valid1 = new HashMap<>();
-        valid1.put(node1.getId(), node1);
-        valid1.put(node2.getId(), node2);
-        valid1.put(node3.getId(), node3);
+        final Map<Integer, Island> valid1 = new HashMap<>();
+        valid1.put(ISLAND_1.getId(), ISLAND_1);
+        valid1.put(ISLAND_2.getId(), ISLAND_2);
+        valid1.put(ISLAND_3.getId(), ISLAND_3);
 
-        final Map<Integer, Node> valid2 = new HashMap<>();
-        valid2.put(node3.getId(), node3);
-        valid2.put(node3diagonal.getId(), node3diagonal);
+        final Map<Integer, Island> valid2 = new HashMap<>();
+        valid2.put(ISLAND_3.getId(), ISLAND_3);
+        valid2.put(ISLAND_3_DIAGONAL.getId(), ISLAND_3_DIAGONAL);
 
-        final Map<Integer, Node> invalid1 = new HashMap<>();
-        invalid1.put(node1.getId(), node1);
-        invalid1.put(node1adjacent.getId(), node1adjacent);
+        final Map<Integer, Island> invalid1 = new HashMap<>();
+        invalid1.put(ISLAND_1.getId(), ISLAND_1);
+        invalid1.put(ISLAND_1_ADJACENT.getId(), ISLAND_1_ADJACENT);
 
-        final Map<Integer, Node> invalid2 = new HashMap<>();
-        invalid2.put(node2.getId(), node2);
-        invalid2.put(node2adjacent.getId(), node2adjacent);
+        final Map<Integer, Island> invalid2 = new HashMap<>();
+        invalid2.put(ISLAND_2.getId(), ISLAND_2);
+        invalid2.put(ISLAND_2_ADJACENT.getId(), ISLAND_2_ADJACENT);
 
         return Arrays.asList(new Object[][]{
-                {null, new ParseResult(valid1, bridges, FIELD_SIZE, FIELD_SIZE)},
-                {null, new ParseResult(valid2, bridges, FIELD_SIZE, FIELD_SIZE)},
+                {null, new BridgesPuzzle(valid1, bridges, FIELD_SIZE, FIELD_SIZE)},
+                {null, new BridgesPuzzle(valid2, bridges, FIELD_SIZE, FIELD_SIZE)},
 
-                {ValidateException.class, new ParseResult(invalid1, bridges, FIELD_SIZE, FIELD_SIZE)},
-                {ValidateException.class, new ParseResult(invalid2, bridges, FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(invalid1, bridges, FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(invalid2, bridges, FIELD_SIZE, FIELD_SIZE)},
 
         });
     }
@@ -61,7 +61,7 @@ public class NoIslandsOnAdjacentFieldsTest {
     public Class<? extends Exception> expectedException;
 
     @Parameterized.Parameter(1)
-    public ParseResult input;
+    public BridgesPuzzle input;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();

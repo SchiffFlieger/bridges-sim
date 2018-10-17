@@ -1,12 +1,13 @@
 package de.karstenkoehler.bridges.ui;
 
 import de.karstenkoehler.bridges.io.BridgesFileReader;
-import de.karstenkoehler.bridges.io.ParseResult;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.io.parser.ParseException;
-import de.karstenkoehler.bridges.io.validators.ValidateException;
-import de.karstenkoehler.bridges.model.Edge;
-import de.karstenkoehler.bridges.model.Node;
-import de.karstenkoehler.bridges.ui.shapes.IslandCircle;
+import de.karstenkoehler.bridges.io.validator.ValidateException;
+import de.karstenkoehler.bridges.model.Bridge;
+import de.karstenkoehler.bridges.model.Island;
+import de.karstenkoehler.bridges.ui.shapes.BridgeShape;
+import de.karstenkoehler.bridges.ui.shapes.IslandShape;
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.scene.canvas.Canvas;
@@ -30,10 +31,10 @@ public class CanvasController {
     private boolean gridVisible;
     private boolean clickAreaVisible;
 
-    private List<IslandCircle> islands;
-    private List<BridgeLine> bridges;
+    private List<IslandShape> islands;
+    private List<BridgeShape> bridges;
     private ParameterObject params;
-    private ParseResult result;
+    private BridgesPuzzle puzzle;
 
     public CanvasController(Canvas canvas, Pane controlPane) {
         this.canvas = canvas;
@@ -51,7 +52,7 @@ public class CanvasController {
 
 
     public void drawThings() {
-        this.result.markInvalidBridges();
+        this.puzzle.markInvalidBridges();
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -118,27 +119,27 @@ public class CanvasController {
     }
 
     private void openAndShowFile(File file) {
-        this.result = tryReadFile(file);
-        if (result == null) {
+        this.puzzle = tryReadFile(file);
+        if (puzzle == null) {
             return;
         }
 
-        this.params = new ParameterObject(Math.max(result.getWidth(), result.getHeight()), this.canvas.getWidth());
+        this.params = new ParameterObject(Math.max(puzzle.getWidth(), puzzle.getHeight()), this.canvas.getWidth());
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        for (Node island : result.getIslands()) {
-            this.islands.add(new IslandCircle(this.canvas, island, controlPane, gc, params, result));
+        for (Island island : puzzle.getIslands()) {
+            this.islands.add(new IslandShape(this.canvas, island, controlPane, gc, params, puzzle));
         }
-        for (Edge bridge : result.getBridges()) {
-            this.bridges.add(new BridgeLine(bridge, canvas.getGraphicsContext2D(), result.getIslands(), params, result));
+        for (Bridge bridge : puzzle.getBridges()) {
+            this.bridges.add(new BridgeShape(bridge, canvas.getGraphicsContext2D(), puzzle.getIslands(), params, puzzle));
         }
         drawThings();
     }
 
-    private ParseResult tryReadFile(File file) {
-        ParseResult result = null;
+    private BridgesPuzzle tryReadFile(File file) {
+        BridgesPuzzle puzzle = null;
         try {
-            result = new BridgesFileReader().readFile(file);
+            puzzle = new BridgesFileReader().readFile(file);
         } catch (ParseException e) {
             Alert error = new Alert(Alert.AlertType.ERROR, "syntactic error in file:\n" + e.getMessage());
             error.showAndWait();
@@ -149,11 +150,11 @@ public class CanvasController {
             Alert error = new Alert(Alert.AlertType.ERROR, "could not read file:\n" + e.getMessage());
             error.showAndWait();
         }
-        return result;
+        return puzzle;
     }
 
     public void setNumberDisplay (NumberDisplay display) {
-        for (IslandCircle island : this.islands) {
+        for (IslandShape island : this.islands) {
             island.setNumberDisplay(display);
         }
     }

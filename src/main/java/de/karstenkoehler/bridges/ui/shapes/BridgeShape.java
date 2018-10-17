@@ -1,27 +1,28 @@
-package de.karstenkoehler.bridges.ui;
+package de.karstenkoehler.bridges.ui.shapes;
 
-import de.karstenkoehler.bridges.io.ParseResult;
-import de.karstenkoehler.bridges.model.Edge;
-import de.karstenkoehler.bridges.model.Node;
+import de.karstenkoehler.bridges.model.Bridge;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Island;
+import de.karstenkoehler.bridges.ui.ParameterObject;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
 import java.util.List;
 
-public class BridgeLine {
+public class BridgeShape {
 
-    private final Edge bridge;
+    private final Bridge bridge;
     private final GraphicsContext cg;
-    private final List<Node> islands;
+    private final List<Island> islands;
     private final ParameterObject params;
-    private final ParseResult result;
+    private final BridgesPuzzle puzzle;
 
-    public BridgeLine(Edge bridge, GraphicsContext cg, List<Node> islands, ParameterObject params, ParseResult result) {
+    public BridgeShape (Bridge bridge, GraphicsContext cg, List<Island> islands, ParameterObject params, BridgesPuzzle puzzle) {
         this.bridge = bridge;
         this.cg = cg;
         this.islands = islands;
         this.params = params;
-        this.result = result;
+        this.puzzle = puzzle;
         drawBridge(0);
         drawBridge(-params.getDoubleBridgeOffset());
         drawBridge(params.getDoubleBridgeOffset());
@@ -37,14 +38,14 @@ public class BridgeLine {
     }
 
     private void drawBridge (final double offset) {
-        final double x0 = params.coordinate(this.islands.get(this.bridge.getNode1()).getX());
-        final double y0 = params.coordinate(this.islands.get(this.bridge.getNode1()).getY());
-        final double x1 = params.coordinate(this.islands.get(this.bridge.getNode2()).getX());
-        final double y1 = params.coordinate(this.islands.get(this.bridge.getNode2()).getY());
+        final double x0 = params.coordinate(this.islands.get(this.bridge.getStartIsland()).getX());
+        final double y0 = params.coordinate(this.islands.get(this.bridge.getStartIsland()).getY());
+        final double x1 = params.coordinate(this.islands.get(this.bridge.getEndIsland()).getX());
+        final double y1 = params.coordinate(this.islands.get(this.bridge.getEndIsland()).getY());
 
-        if (result.isVertical(bridge)) {
+        if (puzzle.isVertical(bridge)) {
             createLine(x0 + offset, y0, x1 + offset, y1);
-        } else if (result.isHorizontal(bridge)) {
+        } else if (puzzle.isHorizontal(bridge)) {
             createLine(x0, y0 + offset, x1, y1 + offset);
         } else {
             throw new RuntimeException("fatal error: bridge is neither vertical nor horizontal");

@@ -1,8 +1,8 @@
 package de.karstenkoehler.bridges.test.model;
 
-import de.karstenkoehler.bridges.io.ParseResult;
-import de.karstenkoehler.bridges.model.Edge;
-import de.karstenkoehler.bridges.model.Node;
+import de.karstenkoehler.bridges.model.Bridge;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Island;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -16,87 +16,87 @@ import static org.junit.Assert.assertTrue;
 public class InvalidBridgesTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        Map<Integer, Node> bsp_6x6 = new HashMap<>();
-        bsp_6x6.put(0, new Node(0, 0, 0, 1));
-        bsp_6x6.put(1, new Node(1, 0, 2, 4));
-        bsp_6x6.put(2, new Node(2, 0, 5, 3));
-        bsp_6x6.put(3, new Node(3, 2, 0, 4));
-        bsp_6x6.put(4, new Node(4, 2, 2, 7));
-        bsp_6x6.put(5, new Node(5, 2, 4, 3));
-        bsp_6x6.put(6, new Node(6, 3, 1, 2));
-        bsp_6x6.put(7, new Node(7, 3, 3, 2));
-        bsp_6x6.put(8, new Node(8, 3, 5, 3));
-        bsp_6x6.put(9, new Node(9, 4, 0, 2));
-        bsp_6x6.put(10, new Node(10, 4, 2, 1));
-        bsp_6x6.put(11, new Node(11, 4, 4, 1));
-        bsp_6x6.put(12, new Node(12, 5, 1, 3));
-        bsp_6x6.put(13, new Node(13, 5, 3, 5));
-        bsp_6x6.put(14, new Node(14, 5, 5, 3));
+        Map<Integer, Island> bsp_6x6 = new HashMap<>();
+        bsp_6x6.put(0, new Island(0, 0, 0, 1));
+        bsp_6x6.put(1, new Island(1, 0, 2, 4));
+        bsp_6x6.put(2, new Island(2, 0, 5, 3));
+        bsp_6x6.put(3, new Island(3, 2, 0, 4));
+        bsp_6x6.put(4, new Island(4, 2, 2, 7));
+        bsp_6x6.put(5, new Island(5, 2, 4, 3));
+        bsp_6x6.put(6, new Island(6, 3, 1, 2));
+        bsp_6x6.put(7, new Island(7, 3, 3, 2));
+        bsp_6x6.put(8, new Island(8, 3, 5, 3));
+        bsp_6x6.put(9, new Island(9, 4, 0, 2));
+        bsp_6x6.put(10, new Island(10, 4, 2, 1));
+        bsp_6x6.put(11, new Island(11, 4, 4, 1));
+        bsp_6x6.put(12, new Island(12, 5, 1, 3));
+        bsp_6x6.put(13, new Island(13, 5, 3, 5));
+        bsp_6x6.put(14, new Island(14, 5, 5, 3));
 
         // all valid
-        Edge a1 = new Edge(0, 0, 1, 1);
-        Edge a2 = new Edge(1, 3, 4, 1);
-        Edge b1 = new Edge(0, 0, 3, 1);
-        Edge b2 = new Edge(1, 1, 4, 1);
-        Edge c1 = new Edge(0, 0, 3, 1);
-        Edge c2 = new Edge(1, 0, 1, 1);
+        Bridge a1 = new Bridge(0, 0, 1, 1);
+        Bridge a2 = new Bridge(1, 3, 4, 1);
+        Bridge b1 = new Bridge(0, 0, 3, 1);
+        Bridge b2 = new Bridge(1, 1, 4, 1);
+        Bridge c1 = new Bridge(0, 0, 3, 1);
+        Bridge c2 = new Bridge(1, 0, 1, 1);
 
         // partially invalid
-        Edge d1 = new Edge(0, 9, 10, 1);
-        Edge d2 = new Edge(1, 6, 12, 1);
-        Edge d3 = new Edge(2, 0, 1, 1);
+        Bridge d1 = new Bridge(0, 9, 10, 1);
+        Bridge d2 = new Bridge(1, 6, 12, 1);
+        Bridge d3 = new Bridge(2, 0, 1, 1);
 
-        Edge e1 = new Edge(0, 4, 10, 1);
-        Edge e2 = new Edge(1, 6, 7, 1);
-        Edge e3 = new Edge(2, 9, 10, 1);
+        Bridge e1 = new Bridge(0, 4, 10, 1);
+        Bridge e2 = new Bridge(1, 6, 7, 1);
+        Bridge e3 = new Bridge(2, 9, 10, 1);
 
-        Edge f1 = new Edge(0, 5, 11, 1);
-        Edge f2 = new Edge(1, 7, 8, 1);
+        Bridge f1 = new Bridge(0, 5, 11, 1);
+        Bridge f2 = new Bridge(1, 7, 8, 1);
 
         // all valid
-        Edge g1 = new Edge(0, 9, 10, 0);
-        Edge g2 = new Edge(1, 6, 12, 1);
-        Edge g3 = new Edge(2, 0, 1, 1);
+        Bridge g1 = new Bridge(0, 9, 10, 0);
+        Bridge g2 = new Bridge(1, 6, 12, 1);
+        Bridge g3 = new Bridge(2, 0, 1, 1);
 
-        Edge h1 = new Edge(0, 4, 10, 1);
-        Edge h2 = new Edge(1, 6, 7, 0);
-        Edge h3 = new Edge(2, 9, 10, 1);
+        Bridge h1 = new Bridge(0, 4, 10, 1);
+        Bridge h2 = new Bridge(1, 6, 7, 0);
+        Bridge h3 = new Bridge(2, 9, 10, 1);
 
-        Edge i1 = new Edge(0, 5, 11, 0);
-        Edge i2 = new Edge(1, 7, 8, 1);
+        Bridge i1 = new Bridge(0, 5, 11, 0);
+        Bridge i2 = new Bridge(1, 7, 8, 1);
 
         return Arrays.asList(new Object[][]{
-                {new ParseResult(bsp_6x6, Arrays.asList(a1, a2), 6, 6), Arrays.asList(a1, a2), Collections.emptyList()},
-                {new ParseResult(bsp_6x6, Arrays.asList(b1, b2), 6, 6), Arrays.asList(b1, b2), Collections.emptyList()},
-                {new ParseResult(bsp_6x6, Arrays.asList(c1, c2), 6, 6), Arrays.asList(c1, c2), Collections.emptyList()},
+                {new BridgesPuzzle(bsp_6x6, Arrays.asList(a1, a2), 6, 6), Arrays.asList(a1, a2), Collections.emptyList()},
+                {new BridgesPuzzle(bsp_6x6, Arrays.asList(b1, b2), 6, 6), Arrays.asList(b1, b2), Collections.emptyList()},
+                {new BridgesPuzzle(bsp_6x6, Arrays.asList(c1, c2), 6, 6), Arrays.asList(c1, c2), Collections.emptyList()},
 
-                {new ParseResult(bsp_6x6, Arrays.asList(d1, d2, d3), 6, 6), Collections.singletonList(d3), Arrays.asList(d1, d2)},
-                {new ParseResult(bsp_6x6, Arrays.asList(e1, e2, e3), 6, 6), Collections.singletonList(e3), Arrays.asList(e1, e2)},
-                {new ParseResult(bsp_6x6, Arrays.asList(f1, f2), 6, 6), Collections.emptyList(), Arrays.asList(f1, f2)},
+                {new BridgesPuzzle(bsp_6x6, Arrays.asList(d1, d2, d3), 6, 6), Collections.singletonList(d3), Arrays.asList(d1, d2)},
+                {new BridgesPuzzle(bsp_6x6, Arrays.asList(e1, e2, e3), 6, 6), Collections.singletonList(e3), Arrays.asList(e1, e2)},
+                {new BridgesPuzzle(bsp_6x6, Arrays.asList(f1, f2), 6, 6), Collections.emptyList(), Arrays.asList(f1, f2)},
 
-                {new ParseResult(bsp_6x6, Arrays.asList(g1, g2, g3), 6, 6), Arrays.asList(g1, g2, g3), Collections.emptyList()},
-                {new ParseResult(bsp_6x6, Arrays.asList(h1, h2, h3), 6, 6), Arrays.asList(h1, h2, h3), Collections.emptyList()},
-                {new ParseResult(bsp_6x6, Arrays.asList(i1, i2), 6, 6), Arrays.asList(i1, i2), Collections.emptyList()},
+                {new BridgesPuzzle(bsp_6x6, Arrays.asList(g1, g2, g3), 6, 6), Arrays.asList(g1, g2, g3), Collections.emptyList()},
+                {new BridgesPuzzle(bsp_6x6, Arrays.asList(h1, h2, h3), 6, 6), Arrays.asList(h1, h2, h3), Collections.emptyList()},
+                {new BridgesPuzzle(bsp_6x6, Arrays.asList(i1, i2), 6, 6), Arrays.asList(i1, i2), Collections.emptyList()},
         });
     }
 
     @Parameterized.Parameter
-    public ParseResult input;
+    public BridgesPuzzle input;
 
     @Parameterized.Parameter(1)
-    public List<Edge> valid;
+    public List<Bridge> valid;
 
     @Parameterized.Parameter(2)
-    public List<Edge> invalid;
+    public List<Bridge> invalid;
 
     @Test
     public void testFillBridges() {
         this.input.markInvalidBridges();
 
-        for (Edge bridge : valid) {
+        for (Bridge bridge : valid) {
             assertTrue(bridge.isValid());
         }
-        for (Edge bridge : invalid) {
+        for (Bridge bridge : invalid) {
             assertFalse(bridge.isValid());
         }
     }

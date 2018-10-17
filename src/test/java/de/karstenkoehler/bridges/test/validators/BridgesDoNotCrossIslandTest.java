@@ -1,11 +1,11 @@
 package de.karstenkoehler.bridges.test.validators;
 
-import de.karstenkoehler.bridges.io.ParseResult;
-import de.karstenkoehler.bridges.io.validators.BridgesDoNotCrossIslandValidator;
-import de.karstenkoehler.bridges.io.validators.ValidateException;
-import de.karstenkoehler.bridges.io.validators.Validator;
-import de.karstenkoehler.bridges.model.Edge;
-import de.karstenkoehler.bridges.model.Node;
+import de.karstenkoehler.bridges.model.Bridge;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.io.validator.BridgesDoNotCrossIslandValidator;
+import de.karstenkoehler.bridges.io.validator.ValidateException;
+import de.karstenkoehler.bridges.io.validator.Validator;
+import de.karstenkoehler.bridges.model.Island;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -22,32 +22,32 @@ public class BridgesDoNotCrossIslandTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        final Map<Integer, Node> islands = new HashMap<>();
-        islands.put(0, new Node(0, 0, 0, 2));
-        islands.put(1, new Node(1, 1, 3, 2));
-        islands.put(2, new Node(2, 2, 0, 2));
-        islands.put(3, new Node(3, 2, 2, 2));
-        islands.put(4, new Node(4, 2, 4, 2));
-        islands.put(5, new Node(5, 4, 0, 2));
-        islands.put(6, new Node(6, 4, 3, 2));
+        final Map<Integer, Island> islands = new HashMap<>();
+        islands.put(0, new Island(0, 0, 0, 2));
+        islands.put(1, new Island(1, 1, 3, 2));
+        islands.put(2, new Island(2, 2, 0, 2));
+        islands.put(3, new Island(3, 2, 2, 2));
+        islands.put(4, new Island(4, 2, 4, 2));
+        islands.put(5, new Island(5, 4, 0, 2));
+        islands.put(6, new Island(6, 4, 3, 2));
 
-        final Edge validLeft = new Edge(0, 5, 2);
-        final Edge validRight = new Edge(1, 0, 2);
-        final Edge validUp = new Edge(2, 6, 5);
-        final Edge validDown = new Edge(3, 3, 4);
+        final Bridge validLeft = new Bridge(0, 5, 2);
+        final Bridge validRight = new Bridge(1, 0, 2);
+        final Bridge validUp = new Bridge(2, 6, 5);
+        final Bridge validDown = new Bridge(3, 3, 4);
 
-        final Edge invalidLeft = new Edge(4, 5, 0);
-        final Edge invalidRight = new Edge(5, 0, 5);
-        final Edge invalidUp = new Edge(6, 4, 2);
-        final Edge invalidDown = new Edge(7, 2, 4);
+        final Bridge invalidLeft = new Bridge(4, 5, 0);
+        final Bridge invalidRight = new Bridge(5, 0, 5);
+        final Bridge invalidUp = new Bridge(6, 4, 2);
+        final Bridge invalidDown = new Bridge(7, 2, 4);
 
         return Arrays.asList(new Object[][]{
-                {null, new ParseResult(islands, Arrays.asList(validLeft, validRight, validUp, validDown), FIELD_SIZE, FIELD_SIZE)},
+                {null, new BridgesPuzzle(islands, Arrays.asList(validLeft, validRight, validUp, validDown), FIELD_SIZE, FIELD_SIZE)},
 
-                {ValidateException.class, new ParseResult(islands, Collections.singletonList(invalidLeft), FIELD_SIZE, FIELD_SIZE)},
-                {ValidateException.class, new ParseResult(islands, Collections.singletonList(invalidRight), FIELD_SIZE, FIELD_SIZE)},
-                {ValidateException.class, new ParseResult(islands, Collections.singletonList(invalidUp), FIELD_SIZE, FIELD_SIZE)},
-                {ValidateException.class, new ParseResult(islands, Collections.singletonList(invalidDown), FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(islands, Collections.singletonList(invalidLeft), FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(islands, Collections.singletonList(invalidRight), FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(islands, Collections.singletonList(invalidUp), FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(islands, Collections.singletonList(invalidDown), FIELD_SIZE, FIELD_SIZE)},
         });
     }
 
@@ -55,7 +55,7 @@ public class BridgesDoNotCrossIslandTest {
     public Class<? extends Exception> expectedException;
 
     @Parameterized.Parameter(1)
-    public ParseResult input;
+    public BridgesPuzzle input;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();

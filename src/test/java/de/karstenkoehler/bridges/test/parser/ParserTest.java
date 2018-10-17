@@ -1,13 +1,13 @@
 package de.karstenkoehler.bridges.test.parser;
 
-import de.karstenkoehler.bridges.io.ParseResult;
+import de.karstenkoehler.bridges.model.Bridge;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.io.parser.ParseException;
 import de.karstenkoehler.bridges.io.parser.Parser;
 import de.karstenkoehler.bridges.io.parser.TokenConsumingParser;
 import de.karstenkoehler.bridges.io.parser.token.Token;
 import de.karstenkoehler.bridges.io.parser.token.Tokenizer;
-import de.karstenkoehler.bridges.model.Edge;
-import de.karstenkoehler.bridges.model.Node;
+import de.karstenkoehler.bridges.model.Island;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -51,11 +51,11 @@ public class ParserTest {
 
     @Parameterized.Parameters(name = "{index} - {0}")
     public static Collection<Object[]> data() {
-        Map<Integer, Node> islands = Collections.singletonMap(0, new Node(0, 0, 0, 3));
-        List<Edge> bridges = Collections.singletonList(new Edge(0, 0, 1, 2));
+        Map<Integer, Island> islands = Collections.singletonMap(0, new Island(0, 0, 0, 3));
+        List<Bridge> bridges = Collections.singletonList(new Bridge(0, 0, 1, 2));
 
-        ParseResult bsp_5x5_parsed = new ParseResult(islands, new ArrayList<>(), 5, 5);
-        ParseResult bsp_5x5_parsed_sol = new ParseResult(islands, bridges, 5, 5);
+        BridgesPuzzle bsp_5x5_parsed = new BridgesPuzzle(islands, new ArrayList<>(), 5, 5);
+        BridgesPuzzle bsp_5x5_parsed_sol = new BridgesPuzzle(islands, bridges, 5, 5);
 
         return Arrays.asList(new Object[][]{
                 {"bsp_5x5", bsp_5x5, bsp_5x5_parsed, null},
@@ -94,7 +94,7 @@ public class ParserTest {
     public List<Token> input;
 
     @Parameterized.Parameter(2)
-    public ParseResult expectedOutput;
+    public BridgesPuzzle expectedOutput;
 
     @Parameterized.Parameter(3)
     public Class<? extends Exception> expectedException;
@@ -109,7 +109,7 @@ public class ParserTest {
         }
 
         Parser parser = new TokenConsumingParser(new MockTokenizer(input));
-        ParseResult actual = parser.parse();
+        BridgesPuzzle actual = parser.parse();
 
         assertEquals(expectedOutput.getWidth(), actual.getWidth());
         assertEquals(expectedOutput.getHeight(), actual.getHeight());

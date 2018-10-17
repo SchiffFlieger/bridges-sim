@@ -1,7 +1,7 @@
-package de.karstenkoehler.bridges.io.validators;
+package de.karstenkoehler.bridges.io.validator;
 
-import de.karstenkoehler.bridges.io.ParseResult;
-import de.karstenkoehler.bridges.model.Node;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Island;
 
 /**
  * Checks if there are any islands on directly adjacent fields. Adjacent means
@@ -10,9 +10,9 @@ import de.karstenkoehler.bridges.model.Node;
  */
 public class NoIslandsOnAdjacentFieldsValidator implements Validator {
     @Override
-    public void validate(ParseResult result) throws ValidateException {
-        for (Node island : result.getIslands()) {
-            for (Node other : result.getIslands()) {
+    public void validate(BridgesPuzzle puzzle) throws ValidateException {
+        for (Island island : puzzle.getIslands()) {
+            for (Island other : puzzle.getIslands()) {
                 if (island != other && (adjacentOnX(island, other) || adjacentOnY(island, other))) {
                     throw new ValidateException(String.format("island (%d, %d) is adjacent to island (%d, %d). there must be at least one free space in between.",
                             island.getX(), island.getY(), other.getX(), other.getY()));
@@ -21,11 +21,11 @@ public class NoIslandsOnAdjacentFieldsValidator implements Validator {
         }
     }
 
-    private boolean adjacentOnX(Node island, Node other) {
+    private boolean adjacentOnX(Island island, Island other) {
         return island.getX() == other.getX() && Math.abs(island.getY() - other.getY()) < 2;
     }
 
-    private boolean adjacentOnY(Node island, Node other) {
+    private boolean adjacentOnY(Island island, Island other) {
         return island.getY() == other.getY() && Math.abs(island.getX() - other.getX()) < 2;
     }
 }

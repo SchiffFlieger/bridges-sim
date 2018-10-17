@@ -1,8 +1,8 @@
 package de.karstenkoehler.bridges.ui.shapes;
 
 import de.karstenkoehler.bridges.InvalidBridgeCountException;
-import de.karstenkoehler.bridges.io.ParseResult;
-import de.karstenkoehler.bridges.model.Node;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Island;
 import de.karstenkoehler.bridges.model.Orientation;
 import de.karstenkoehler.bridges.ui.CanvasController;
 import de.karstenkoehler.bridges.ui.NumberDisplay;
@@ -18,24 +18,24 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
-public class IslandCircle {
+public class IslandShape {
     private static final Color FILL_COLOR = Color.BLACK;
 
     private final Canvas canvas;
-    private final Node island;
+    private final Island island;
     private final Pane controlPane;
     private final GraphicsContext gc;
     private final ParameterObject params;
-    private final ParseResult result;
+    private final BridgesPuzzle puzzle;
     private NumberDisplay display;
 
-    public IslandCircle(Canvas canvas, Node island, Pane controlPane, GraphicsContext gc, ParameterObject params, ParseResult result) {
+    public IslandShape (Canvas canvas, Island island, Pane controlPane, GraphicsContext gc, ParameterObject params, BridgesPuzzle puzzle) {
         this.canvas = canvas;
         this.island = island;
         this.controlPane = controlPane;
         this.gc = gc;
         this.params = params;
-        this.result = result;
+        this.puzzle = puzzle;
         this.display = NumberDisplay.SHOW_REQUIRED;
 
         initControls(params.coordinate(island.getX()), params.coordinate(island.getY()), island.getId());
@@ -45,9 +45,9 @@ public class IslandCircle {
         double x = params.coordinate(island.getX());
         double y = params.coordinate(island.getY());
 
-        if (result.getRemainingBridgeCount(island) > 0) {
+        if (puzzle.getRemainingBridgeCount(island) > 0) {
             gc.setFill(Color.BLUE);
-        } else if (result.getRemainingBridgeCount(island) == 0) {
+        } else if (puzzle.getRemainingBridgeCount(island) == 0) {
             gc.setFill(Color.GREEN);
         } else {
             gc.setFill(Color.RED);
@@ -71,10 +71,10 @@ public class IslandCircle {
         if (this.display == NumberDisplay.SHOW_REQUIRED) {
             return String.valueOf(island.getRequiredBridges());
         } else if (this.display == NumberDisplay.SHOW_REMAINING) {
-            return String.valueOf(result.getRemainingBridgeCount(this.island));
+            return String.valueOf(puzzle.getRemainingBridgeCount(this.island));
         }
 
-        throw new RuntimeException("IslandCircle#getDisplayNumber: found invalid enum value");
+        throw new RuntimeException("IslandShape#getDisplayNumber: found invalid enum value");
     }
 
     private void initControls(double x, double y, int id) {
@@ -105,8 +105,8 @@ public class IslandCircle {
 
     private void onClick(Orientation orientation, int count) {
         try {
-            this.result.getConnectedBridge(this.island, orientation).addBridges(count);
-            this.result.emphasizeBridge(this.result.getConnectedBridge(this.island, orientation));
+            this.puzzle.getConnectedBridge(this.island, orientation).addBridges(count);
+            this.puzzle.emphasizeBridge(this.puzzle.getConnectedBridge(this.island, orientation));
             canvas.fireEvent(new Event(CanvasController.REDRAW));
         } catch (NullPointerException | InvalidBridgeCountException e) {
             canvas.fireEvent(new Event(CanvasController.ERROR));

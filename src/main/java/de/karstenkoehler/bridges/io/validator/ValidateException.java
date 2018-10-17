@@ -1,4 +1,4 @@
-package de.karstenkoehler.bridges.io.validators;
+package de.karstenkoehler.bridges.io.validator;
 
 public class ValidateException extends Exception {
     public ValidateException() {

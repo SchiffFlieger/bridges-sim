@@ -1,7 +1,7 @@
-package de.karstenkoehler.bridges.io.validators;
+package de.karstenkoehler.bridges.io.validator;
 
-import de.karstenkoehler.bridges.io.ParseResult;
-import de.karstenkoehler.bridges.model.Node;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Island;
 
 /**
  * Checks if all islands are on separate fields. Islands are on separate fields
@@ -9,9 +9,9 @@ import de.karstenkoehler.bridges.model.Node;
  */
 public class IslandOnUniqueFieldsValidator implements Validator {
     @Override
-    public void validate(ParseResult result) throws ValidateException {
-        for (Node island : result.getIslands()) {
-            for (Node other : result.getIslands()) {
+    public void validate(BridgesPuzzle puzzle) throws ValidateException {
+        for (Island island : puzzle.getIslands()) {
+            for (Island other : puzzle.getIslands()) {
                 if (islandsOnSameField(island, other)) {
                     throw new ValidateException(String.format("there are two islands on field (%d, %d).",
                             island.getX(), island.getY()));
@@ -20,7 +20,7 @@ public class IslandOnUniqueFieldsValidator implements Validator {
         }
     }
 
-    private boolean islandsOnSameField(Node island, Node other) {
+    private boolean islandsOnSameField(Island island, Island other) {
         return island.getId() != other.getId() && island.getX() == other.getX() && island.getY() == other.getY();
     }
 }

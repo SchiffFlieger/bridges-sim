@@ -2,11 +2,11 @@ package de.karstenkoehler.bridges.model;
 
 import java.util.Objects;
 
-public class Node {
+public class Island {
     private final int id;
     private final int x, y;
     private final int requiredBridges;
-    public Node (int id, int x, int y, int requiredBridges) {
+    public Island (int id, int x, int y, int requiredBridges) {
         this.id = id;
         this.x = x;
         this.y = y;
@@ -33,11 +33,11 @@ public class Node {
     public boolean equals (Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Node node = (Node) o;
-        return id == node.id &&
-                x == node.x &&
-                y == node.y &&
-                requiredBridges == node.requiredBridges;
+        Island island = (Island) o;
+        return id == island.id &&
+                x == island.x &&
+                y == island.y &&
+                requiredBridges == island.requiredBridges;
     }
 
     @Override

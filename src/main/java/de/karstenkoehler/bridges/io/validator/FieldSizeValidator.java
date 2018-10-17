@@ -1,6 +1,6 @@
-package de.karstenkoehler.bridges.io.validators;
+package de.karstenkoehler.bridges.io.validator;
 
-import de.karstenkoehler.bridges.io.ParseResult;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
 
 /**
  * Checks if the field's bounds are within the valid range. The dimensions on each axis
@@ -11,9 +11,9 @@ public class FieldSizeValidator implements Validator {
     private static final int MAX_FIELD_DIMENSION = 25;
 
     @Override
-    public void validate(ParseResult result) throws ValidateException {
-        checkValue("width", result.getWidth());
-        checkValue("height", result.getHeight());
+    public void validate(BridgesPuzzle puzzle) throws ValidateException {
+        checkValue("width", puzzle.getWidth());
+        checkValue("height", puzzle.getHeight());
     }
 
     private void checkValue(final String name, final int value) throws ValidateException {

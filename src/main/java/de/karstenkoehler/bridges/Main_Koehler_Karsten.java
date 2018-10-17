@@ -1,13 +1,13 @@
 package de.karstenkoehler.bridges;
 
-import de.karstenkoehler.bridges.io.ParseResult;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.io.parser.ParseException;
 import de.karstenkoehler.bridges.io.parser.Parser;
 import de.karstenkoehler.bridges.io.parser.TokenConsumingParser;
 import de.karstenkoehler.bridges.io.parser.token.TokenizerImpl;
-import de.karstenkoehler.bridges.io.validators.DefaultValidator;
-import de.karstenkoehler.bridges.io.validators.ValidateException;
-import de.karstenkoehler.bridges.io.validators.Validator;
+import de.karstenkoehler.bridges.io.validator.DefaultValidator;
+import de.karstenkoehler.bridges.io.validator.ValidateException;
+import de.karstenkoehler.bridges.io.validator.Validator;
 import de.karstenkoehler.bridges.ui.MainController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -61,7 +61,7 @@ public class Main_Koehler_Karsten extends Application {
 
             try {
                 Parser parser = new TokenConsumingParser(new TokenizerImpl(readFile(file.getAbsolutePath())));
-                ParseResult result = parser.parse();
+                BridgesPuzzle result = parser.parse();
                 validator.validate(result);
                 System.out.printf("%-30s %2dx%2d %3d islands, %3d bridges\n", file.getName(), result.getWidth(), result.getHeight(), result.getIslands().size(), result.getBridges().size());
 

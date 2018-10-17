@@ -1,7 +1,7 @@
-package de.karstenkoehler.bridges.io.validators;
+package de.karstenkoehler.bridges.io.validator;
 
-import de.karstenkoehler.bridges.io.ParseResult;
-import de.karstenkoehler.bridges.model.Node;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Island;
 
 /**
  * Checks if islands are sorted correctly. They must first be sorted by x coordinate and then by y coordinate.
@@ -9,12 +9,12 @@ import de.karstenkoehler.bridges.model.Node;
 public class IslandOrderValidator implements Validator {
 
     @Override
-    public void validate(ParseResult result) throws ValidateException {
+    public void validate(BridgesPuzzle puzzle) throws ValidateException {
         int prevX = -1;
         int prevY = -1;
 
-        for (int i = 0; i < result.getIslands().size(); i++) {
-            Node island = result.getIslands().get(i);
+        for (int i = 0; i < puzzle.getIslands().size(); i++) {
+            Island island = puzzle.getIslands().get(i);
 
             if (island.getX() < prevX) {
                 throw new ValidateException(String.format("island sort order not valid. check island %d.", island.getId()));

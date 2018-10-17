@@ -1,11 +1,11 @@
 package de.karstenkoehler.bridges.test.validators;
 
-import de.karstenkoehler.bridges.io.ParseResult;
-import de.karstenkoehler.bridges.io.validators.MaxOneBridgePerIslandPairValidator;
-import de.karstenkoehler.bridges.io.validators.ValidateException;
-import de.karstenkoehler.bridges.io.validators.Validator;
-import de.karstenkoehler.bridges.model.Edge;
-import de.karstenkoehler.bridges.model.Node;
+import de.karstenkoehler.bridges.model.Bridge;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.io.validator.MaxOneBridgePerIslandPairValidator;
+import de.karstenkoehler.bridges.io.validator.ValidateException;
+import de.karstenkoehler.bridges.io.validator.Validator;
+import de.karstenkoehler.bridges.model.Island;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -25,28 +25,28 @@ public class MaxOneBridgePerIslandPairTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        final Map<Integer, Node> islands = new HashMap<>();
-        islands.put(0, new Node(0, 0, 0, 2));
-        islands.put(1, new Node(1, 2, 1, 2));
-        islands.put(2, new Node(2, 3, 1, 2));
-        islands.put(3, new Node(3, 3, 4, 2));
-        islands.put(4, new Node(4, 5, 1, 2));
-        islands.put(5, new Node(5, 6, 0, 2));
-        islands.put(6, new Node(6, 6, 2, 2));
+        final Map<Integer, Island> islands = new HashMap<>();
+        islands.put(0, new Island(0, 0, 0, 2));
+        islands.put(1, new Island(1, 2, 1, 2));
+        islands.put(2, new Island(2, 3, 1, 2));
+        islands.put(3, new Island(3, 3, 4, 2));
+        islands.put(4, new Island(4, 5, 1, 2));
+        islands.put(5, new Island(5, 6, 0, 2));
+        islands.put(6, new Island(6, 6, 2, 2));
 
-        final Edge bridge1a = new Edge(0, 0, 5);
-        final Edge bridge1b = new Edge(1, 0, 5);
-        final Edge bridge2a = new Edge(2, 2, 3);
-        final Edge bridge2b = new Edge(3, 2, 3);
-        final Edge bridge3a = new Edge(4, 1, 6);
-        final Edge bridge3b = new Edge(5, 6, 1);
+        final Bridge bridge1a = new Bridge(0, 0, 5);
+        final Bridge bridge1b = new Bridge(1, 0, 5);
+        final Bridge bridge2a = new Bridge(2, 2, 3);
+        final Bridge bridge2b = new Bridge(3, 2, 3);
+        final Bridge bridge3a = new Bridge(4, 1, 6);
+        final Bridge bridge3b = new Bridge(5, 6, 1);
 
         return Arrays.asList(new Object[][]{
-                {null, new ParseResult(islands, Arrays.asList(bridge1a, bridge2a, bridge3a), FIELD_SIZE, FIELD_SIZE)},
+                {null, new BridgesPuzzle(islands, Arrays.asList(bridge1a, bridge2a, bridge3a), FIELD_SIZE, FIELD_SIZE)},
 
-                {ValidateException.class, new ParseResult(islands, Arrays.asList(bridge1a, bridge1b), FIELD_SIZE, FIELD_SIZE)},
-                {ValidateException.class, new ParseResult(islands, Arrays.asList(bridge2a, bridge2b), FIELD_SIZE, FIELD_SIZE)},
-                {ValidateException.class, new ParseResult(islands, Arrays.asList(bridge3a, bridge3b), FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(islands, Arrays.asList(bridge1a, bridge1b), FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(islands, Arrays.asList(bridge2a, bridge2b), FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(islands, Arrays.asList(bridge3a, bridge3b), FIELD_SIZE, FIELD_SIZE)},
         });
     }
 
@@ -54,7 +54,7 @@ public class MaxOneBridgePerIslandPairTest {
     public Class<? extends Exception> expectedException;
 
     @Parameterized.Parameter(1)
-    public ParseResult input;
+    public BridgesPuzzle input;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();

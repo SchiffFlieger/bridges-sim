@@ -1,13 +1,13 @@
-package de.karstenkoehler.bridges.io.validators;
+package de.karstenkoehler.bridges.io.validator;
 
-import de.karstenkoehler.bridges.io.ParseResult;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * This is the default validator to use for validation. It includes all existing validators
+ * This is the default validator to use for validation. It includes all existing validator
  * in this package and applies them to the parsed structure.  If there are any errors in
  * the structure, this validator points them out.
  */
@@ -27,9 +27,9 @@ public class DefaultValidator implements Validator {
     }
 
     @Override
-    public void validate(ParseResult result) throws ValidateException {
+    public void validate(BridgesPuzzle puzzle) throws ValidateException {
         for (Validator validator : this.validators) {
-            validator.validate(result);
+            validator.validate(puzzle);
         }
     }
 
