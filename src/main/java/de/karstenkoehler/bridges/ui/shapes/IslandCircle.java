@@ -5,6 +5,7 @@ import de.karstenkoehler.bridges.io.ParseResult;
 import de.karstenkoehler.bridges.model.Node;
 import de.karstenkoehler.bridges.model.Orientation;
 import de.karstenkoehler.bridges.ui.CanvasController;
+import de.karstenkoehler.bridges.ui.NumberDisplay;
 import de.karstenkoehler.bridges.ui.ParameterObject;
 import javafx.event.Event;
 import javafx.geometry.VPos;
@@ -26,6 +27,7 @@ public class IslandCircle {
     private final GraphicsContext gc;
     private final ParameterObject params;
     private final ParseResult result;
+    private NumberDisplay display;
 
     public IslandCircle(Canvas canvas, Node island, Pane controlPane, GraphicsContext gc, ParameterObject params, ParseResult result) {
         this.canvas = canvas;
@@ -34,6 +36,7 @@ public class IslandCircle {
         this.gc = gc;
         this.params = params;
         this.result = result;
+        this.display = NumberDisplay.SHOW_REQUIRED;
 
         initControls(params.coordinate(island.getX()), params.coordinate(island.getY()), island.getId());
     }
@@ -56,12 +59,22 @@ public class IslandCircle {
         gc.setTextBaseline(VPos.CENTER);
         gc.setFont(Font.font(params.getFontSize()));
         gc.setFill(Color.BLACK);
-        gc.fillText(String.valueOf(island.getRequiredBridges()), x, y);
+        gc.fillText(getDisplayNumber(), x, y);
 
         if (drawClickArea) {
             drawClickArea();
         }
 
+    }
+
+    private String getDisplayNumber () {
+        if (this.display == NumberDisplay.SHOW_REQUIRED) {
+            return String.valueOf(island.getRequiredBridges());
+        } else if (this.display == NumberDisplay.SHOW_REMAINING) {
+            return String.valueOf(result.getRemainingBridgeCount(this.island));
+        }
+
+        throw new RuntimeException("IslandCircle#getDisplayNumber: found invalid enum value");
     }
 
     private void initControls(double x, double y, int id) {
@@ -121,5 +134,9 @@ public class IslandCircle {
         gc.strokeLine(x0, y0, x0, y1);
         gc.strokeLine(x0, y1, x1, y1);
         gc.strokeLine(x1, y1, x1, y0);
+    }
+
+    public void setNumberDisplay (NumberDisplay display) {
+        this.display = display;
     }
 }

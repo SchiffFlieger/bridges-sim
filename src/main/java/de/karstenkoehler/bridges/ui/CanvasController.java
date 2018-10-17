@@ -151,4 +151,10 @@ public class CanvasController {
         }
         return result;
     }
+
+    public void setNumberDisplay (NumberDisplay display) {
+        for (IslandCircle island : this.islands) {
+            island.setNumberDisplay(display);
+        }
+    }
 }

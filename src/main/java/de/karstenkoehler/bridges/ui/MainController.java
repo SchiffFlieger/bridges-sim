@@ -43,6 +43,11 @@ public class MainController {
         cbxShowClickArea.selectedProperty().addListener(setClickAreaVisibility());
 
         this.canvasController = new CanvasController(this.canvas, this.controlPane);
+        this.islandDisplayChoice.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
+            NumberDisplay display = NumberDisplay.values()[newValue.intValue()];
+            this.canvasController.setNumberDisplay(display);
+            this.canvasController.drawThings();
+        });
     }
 
     public void setStage (Window stage) {
