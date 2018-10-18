@@ -13,7 +13,7 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(Parameterized.class)
-public class InvalidBridgesTest {
+public class MarkCrossingBridgesTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         Map<Integer, Island> bsp_6x6 = new HashMap<>();
@@ -34,36 +34,36 @@ public class InvalidBridgesTest {
         bsp_6x6.put(14, new Island(14, 5, 5, 3));
 
         // all valid
-        Bridge a1 = new Bridge(0, 0, 1, 1);
-        Bridge a2 = new Bridge(1, 3, 4, 1);
-        Bridge b1 = new Bridge(0, 0, 3, 1);
-        Bridge b2 = new Bridge(1, 1, 4, 1);
-        Bridge c1 = new Bridge(0, 0, 3, 1);
-        Bridge c2 = new Bridge(1, 0, 1, 1);
+        Bridge a1 = new Bridge(0, bsp_6x6.get(0), bsp_6x6.get(1), 1);
+        Bridge a2 = new Bridge(1, bsp_6x6.get(3), bsp_6x6.get(4), 1);
+        Bridge b1 = new Bridge(0, bsp_6x6.get(0), bsp_6x6.get(3), 1);
+        Bridge b2 = new Bridge(1, bsp_6x6.get(1), bsp_6x6.get(4), 1);
+        Bridge c1 = new Bridge(0, bsp_6x6.get(0), bsp_6x6.get(3), 1);
+        Bridge c2 = new Bridge(1, bsp_6x6.get(0), bsp_6x6.get(1), 1);
 
         // partially invalid
-        Bridge d1 = new Bridge(0, 9, 10, 1);
-        Bridge d2 = new Bridge(1, 6, 12, 1);
-        Bridge d3 = new Bridge(2, 0, 1, 1);
+        Bridge d1 = new Bridge(0, bsp_6x6.get(9), bsp_6x6.get(10), 1);
+        Bridge d2 = new Bridge(1, bsp_6x6.get(6), bsp_6x6.get(12), 1);
+        Bridge d3 = new Bridge(2, bsp_6x6.get(0), bsp_6x6.get(1), 1);
 
-        Bridge e1 = new Bridge(0, 4, 10, 1);
-        Bridge e2 = new Bridge(1, 6, 7, 1);
-        Bridge e3 = new Bridge(2, 9, 10, 1);
+        Bridge e1 = new Bridge(0, bsp_6x6.get(4), bsp_6x6.get(10), 1);
+        Bridge e2 = new Bridge(1, bsp_6x6.get(6), bsp_6x6.get(7), 1);
+        Bridge e3 = new Bridge(2, bsp_6x6.get(9), bsp_6x6.get(10), 1);
 
-        Bridge f1 = new Bridge(0, 5, 11, 1);
-        Bridge f2 = new Bridge(1, 7, 8, 1);
+        Bridge f1 = new Bridge(0, bsp_6x6.get(5), bsp_6x6.get(11), 1);
+        Bridge f2 = new Bridge(1, bsp_6x6.get(7), bsp_6x6.get(8), 1);
 
         // all valid
-        Bridge g1 = new Bridge(0, 9, 10, 0);
-        Bridge g2 = new Bridge(1, 6, 12, 1);
-        Bridge g3 = new Bridge(2, 0, 1, 1);
+        Bridge g1 = new Bridge(0, bsp_6x6.get(9), bsp_6x6.get(10), 0);
+        Bridge g2 = new Bridge(1, bsp_6x6.get(6), bsp_6x6.get(12), 1);
+        Bridge g3 = new Bridge(2, bsp_6x6.get(0), bsp_6x6.get(1), 1);
 
-        Bridge h1 = new Bridge(0, 4, 10, 1);
-        Bridge h2 = new Bridge(1, 6, 7, 0);
-        Bridge h3 = new Bridge(2, 9, 10, 1);
+        Bridge h1 = new Bridge(0, bsp_6x6.get(4), bsp_6x6.get(10), 1);
+        Bridge h2 = new Bridge(1, bsp_6x6.get(6), bsp_6x6.get(7), 0);
+        Bridge h3 = new Bridge(2, bsp_6x6.get(9), bsp_6x6.get(10), 1);
 
-        Bridge i1 = new Bridge(0, 5, 11, 0);
-        Bridge i2 = new Bridge(1, 7, 8, 1);
+        Bridge i1 = new Bridge(0, bsp_6x6.get(5), bsp_6x6.get(11), 0);
+        Bridge i2 = new Bridge(1, bsp_6x6.get(7), bsp_6x6.get(8), 1);
 
         return Arrays.asList(new Object[][]{
                 {new BridgesPuzzle(bsp_6x6, Arrays.asList(a1, a2), 6, 6), Arrays.asList(a1, a2), Collections.emptyList()},

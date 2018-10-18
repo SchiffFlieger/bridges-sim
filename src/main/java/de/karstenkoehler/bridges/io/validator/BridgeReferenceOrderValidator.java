@@ -12,7 +12,7 @@ public class BridgeReferenceOrderValidator implements Validator {
     @Override
     public void validate(BridgesPuzzle puzzle) throws ValidateException {
         for (Bridge bridge : puzzle.getBridges()) {
-            if (bridge.getStartIsland() > bridge.getEndIsland()) {
+            if (bridge.getStartIsland().getId() > bridge.getEndIsland().getId()) {
                 throw new ValidateException("");
             }
         }

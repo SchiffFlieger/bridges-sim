@@ -22,8 +22,8 @@ public class BridgesDoNotCrossIslandValidator implements Validator {
     }
 
     private boolean bridgeCrossesIsland(Bridge bridge, List<Island> islands) {
-        Island startIsland = islands.get(bridge.getStartIsland());
-        Island endIsland = islands.get(bridge.getEndIsland());
+        Island startIsland = bridge.getStartIsland();
+        Island endIsland = bridge.getEndIsland();
 
         int x = startIsland.getX();
         int y = startIsland.getY();

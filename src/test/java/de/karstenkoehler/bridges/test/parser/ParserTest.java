@@ -1,12 +1,12 @@
 package de.karstenkoehler.bridges.test.parser;
 
-import de.karstenkoehler.bridges.model.Bridge;
-import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.io.parser.ParseException;
 import de.karstenkoehler.bridges.io.parser.Parser;
 import de.karstenkoehler.bridges.io.parser.TokenConsumingParser;
 import de.karstenkoehler.bridges.io.parser.token.Token;
 import de.karstenkoehler.bridges.io.parser.token.Tokenizer;
+import de.karstenkoehler.bridges.model.Bridge;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.Island;
 import org.junit.Rule;
 import org.junit.Test;
@@ -21,8 +21,8 @@ import static org.junit.Assert.assertEquals;
 @RunWith(Parameterized.class)
 public class ParserTest {
 
-    private static final List<Token> bsp_5x5 = Arrays.asList(new Token("FIELD", Token.Type.FIELD_SECTION), new Token("5", Token.Type.NUMBER), new Token("x", Token.Type.X), new Token("5", Token.Type.NUMBER), new Token("|", Token.Type.PIPE), new Token("1", Token.Type.NUMBER), new Token("ISLANDS", Token.Type.ISLAND_SECTION), new Token("(", Token.Type.OPEN_PARENTHESIS), new Token("0", Token.Type.NUMBER), new Token(",", Token.Type.COMMA), new Token("0", Token.Type.NUMBER), new Token("|", Token.Type.PIPE), new Token("3", Token.Type.NUMBER), new Token(")", Token.Type.CLOSE_PARENTHESIS), new Token("", Token.Type.EOF));
-    private static final List<Token> bsp_5x5_sol = Arrays.asList(new Token("FIELD", Token.Type.FIELD_SECTION), new Token("5", Token.Type.NUMBER), new Token("x", Token.Type.X), new Token("5", Token.Type.NUMBER), new Token("|", Token.Type.PIPE), new Token("1", Token.Type.NUMBER), new Token("ISLANDS", Token.Type.ISLAND_SECTION), new Token("(", Token.Type.OPEN_PARENTHESIS), new Token("0", Token.Type.NUMBER), new Token(",", Token.Type.COMMA), new Token("0", Token.Type.NUMBER), new Token("|", Token.Type.PIPE), new Token("3", Token.Type.NUMBER), new Token(")", Token.Type.CLOSE_PARENTHESIS), new Token("BRIDGES", Token.Type.BRIDGES_SECTION), new Token("(", Token.Type.OPEN_PARENTHESIS), new Token("0", Token.Type.NUMBER), new Token(",", Token.Type.COMMA), new Token("1", Token.Type.NUMBER), new Token("|", Token.Type.PIPE), new Token("true", Token.Type.BOOL), new Token(")", Token.Type.CLOSE_PARENTHESIS), new Token("", Token.Type.EOF));
+    private static final List<Token> bsp_5x5 = Arrays.asList(new Token("FIELD", Token.Type.FIELD_SECTION), new Token("5", Token.Type.NUMBER), new Token("x", Token.Type.X), new Token("5", Token.Type.NUMBER), new Token("|", Token.Type.PIPE), new Token("2", Token.Type.NUMBER), new Token("ISLANDS", Token.Type.ISLAND_SECTION), new Token("(", Token.Type.OPEN_PARENTHESIS), new Token("0", Token.Type.NUMBER), new Token(",", Token.Type.COMMA), new Token("0", Token.Type.NUMBER), new Token("|", Token.Type.PIPE), new Token("2", Token.Type.NUMBER), new Token(")", Token.Type.CLOSE_PARENTHESIS), new Token("(", Token.Type.OPEN_PARENTHESIS), new Token("3", Token.Type.NUMBER), new Token(",", Token.Type.COMMA), new Token("0", Token.Type.NUMBER), new Token("|", Token.Type.PIPE), new Token("2", Token.Type.NUMBER), new Token(")", Token.Type.CLOSE_PARENTHESIS), new Token("", Token.Type.EOF));
+    private static final List<Token> bsp_5x5_sol = Arrays.asList(new Token("FIELD", Token.Type.FIELD_SECTION), new Token("5", Token.Type.NUMBER), new Token("x", Token.Type.X), new Token("5", Token.Type.NUMBER), new Token("|", Token.Type.PIPE), new Token("2", Token.Type.NUMBER), new Token("ISLANDS", Token.Type.ISLAND_SECTION), new Token("(", Token.Type.OPEN_PARENTHESIS), new Token("0", Token.Type.NUMBER), new Token(",", Token.Type.COMMA), new Token("0", Token.Type.NUMBER), new Token("|", Token.Type.PIPE), new Token("2", Token.Type.NUMBER), new Token(")", Token.Type.CLOSE_PARENTHESIS), new Token("(", Token.Type.OPEN_PARENTHESIS), new Token("3", Token.Type.NUMBER), new Token(",", Token.Type.COMMA), new Token("0", Token.Type.NUMBER), new Token("|", Token.Type.PIPE), new Token("2", Token.Type.NUMBER), new Token(")", Token.Type.CLOSE_PARENTHESIS), new Token("BRIDGES", Token.Type.BRIDGES_SECTION), new Token("(", Token.Type.OPEN_PARENTHESIS), new Token("0", Token.Type.NUMBER), new Token(",", Token.Type.COMMA), new Token("1", Token.Type.NUMBER), new Token("|", Token.Type.PIPE), new Token("true", Token.Type.BOOL), new Token(")", Token.Type.CLOSE_PARENTHESIS), new Token("", Token.Type.EOF));
 
     // field section error
     private static final List<Token> bsp_5x5_missingFieldSection = Arrays.asList(new Token("5", Token.Type.NUMBER), new Token("x", Token.Type.X), new Token("5", Token.Type.NUMBER), new Token("|", Token.Type.PIPE), new Token("1", Token.Type.NUMBER), new Token("ISLANDS", Token.Type.ISLAND_SECTION), new Token("(", Token.Type.OPEN_PARENTHESIS), new Token("0", Token.Type.NUMBER), new Token(",", Token.Type.COMMA), new Token("0", Token.Type.NUMBER), new Token("|", Token.Type.PIPE), new Token("3", Token.Type.NUMBER), new Token(")", Token.Type.CLOSE_PARENTHESIS), new Token("BRIDGES", Token.Type.BRIDGES_SECTION), new Token("(", Token.Type.OPEN_PARENTHESIS), new Token("0", Token.Type.NUMBER), new Token(",", Token.Type.COMMA), new Token("1", Token.Type.NUMBER), new Token("|", Token.Type.PIPE), new Token("true", Token.Type.BOOL), new Token(")", Token.Type.CLOSE_PARENTHESIS), new Token("", Token.Type.EOF));
@@ -51,8 +51,14 @@ public class ParserTest {
 
     @Parameterized.Parameters(name = "{index} - {0}")
     public static Collection<Object[]> data() {
-        Map<Integer, Island> islands = Collections.singletonMap(0, new Island(0, 0, 0, 3));
-        List<Bridge> bridges = Collections.singletonList(new Bridge(0, 0, 1, 2));
+        Island island0 = new Island(0, 0, 0, 2);
+        Island island1 = new Island(1, 3, 0, 2);
+
+        Map<Integer, Island> islands = new HashMap<>();
+        islands.put(0, island0);
+        islands.put(1, island1);
+
+        List<Bridge> bridges = Collections.singletonList(new Bridge(0, island0, island1, 2));
 
         BridgesPuzzle bsp_5x5_parsed = new BridgesPuzzle(islands, new ArrayList<>(), 5, 5);
         BridgesPuzzle bsp_5x5_parsed_sol = new BridgesPuzzle(islands, bridges, 5, 5);

@@ -12,9 +12,7 @@ public class BridgesNotDiagonalValidator implements Validator {
     @Override
     public void validate(BridgesPuzzle puzzle) throws ValidateException {
         for (Bridge bridge : puzzle.getBridges()) {
-            Island a = puzzle.getIslands().get(bridge.getStartIsland());
-            Island b = puzzle.getIslands().get(bridge.getEndIsland());
-            if (isDiagonal(a, b)) {
+            if (isDiagonal(bridge.getStartIsland(), bridge.getEndIsland())) {
                 throw new ValidateException(String.format("bridge %d is neither horizontal or vertical.", bridge.getId()));
             }
         }

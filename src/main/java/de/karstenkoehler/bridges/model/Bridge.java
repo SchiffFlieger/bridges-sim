@@ -7,15 +7,16 @@ import java.util.Objects;
 public class Bridge {
     private final int id;
     private int bridgeCount;
-    private final int startIsland, endIsland; // TODO maybe use Island type?
+    private final Island startIsland;
+    private final Island endIsland;
     private boolean valid;
     private boolean emphasized;
 
-    public Bridge (int id, int startIsland, int endIsland) {
+    public Bridge(int id, Island startIsland, Island endIsland) {
         this(id, startIsland, endIsland, 0);
     }
 
-    public Bridge (int id, int startIsland, int endIsland, int bridgeCount) {
+    public Bridge(int id, Island startIsland, Island endIsland, int bridgeCount) {
         this.id = id;
         this.bridgeCount = bridgeCount;
         this.startIsland = startIsland;
@@ -28,11 +29,11 @@ public class Bridge {
         return id;
     }
 
-    public int getStartIsland() {
+    public Island getStartIsland() {
         return startIsland;
     }
 
-    public int getEndIsland() {
+    public Island getEndIsland() {
         return endIsland;
     }
 
@@ -55,13 +56,25 @@ public class Bridge {
         Bridge bridge = (Bridge) o;
         return id == bridge.id &&
                 bridgeCount == bridge.bridgeCount &&
-                startIsland == bridge.startIsland &&
-                endIsland == bridge.endIsland;
+                Objects.equals(startIsland, bridge.startIsland) &&
+                Objects.equals(endIsland, bridge.endIsland);
     }
 
     @Override
     public int hashCode() {
         return Objects.hash(id, bridgeCount, startIsland, endIsland);
+    }
+
+    @Override
+    public String toString() {
+        return "Bridge{" +
+                "id=" + id +
+                ", bridgeCount=" + bridgeCount +
+                ", startIsland=" + startIsland +
+                ", endIsland=" + endIsland +
+                ", valid=" + valid +
+                ", emphasized=" + emphasized +
+                '}';
     }
 
     public void addBridges(int count) throws InvalidBridgeCountException {
@@ -76,11 +89,11 @@ public class Bridge {
         this.bridgeCount += count;
     }
 
-    public boolean isEmphasized () {
+    public boolean isEmphasized() {
         return emphasized;
     }
 
-    public void setEmphasized (boolean emphasized) {
+    public void setEmphasized(boolean emphasized) {
         this.emphasized = emphasized;
     }
 }

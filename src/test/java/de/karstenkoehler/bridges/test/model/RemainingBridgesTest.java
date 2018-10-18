@@ -1,7 +1,7 @@
 package de.karstenkoehler.bridges.test.model;
 
-import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.Bridge;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.Island;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -50,27 +50,27 @@ public class RemainingBridgesTest {
 
         List<Bridge> bridges = Arrays.asList(
                 // vertical
-                new Bridge(0, 0, 1, 0),
-                new Bridge(1, 1, 2, 1),
-                new Bridge(2, 3, 4, 2),
-                new Bridge(3, 4, 5, 0),
-                new Bridge(4, 6, 7, 0),
-                new Bridge(5, 7, 8, 0),
-                new Bridge(6, 9, 10, 0),
-                new Bridge(7, 10, 11, 0),
-                new Bridge(8, 12, 13, 0),
-                new Bridge(9, 13, 14, 1),
+                new Bridge(0, bsp_6x6.get(0), bsp_6x6.get(1), 0),
+                new Bridge(1, bsp_6x6.get(1), bsp_6x6.get(2), 1),
+                new Bridge(2, bsp_6x6.get(3), bsp_6x6.get(4), 2),
+                new Bridge(3, bsp_6x6.get(4), bsp_6x6.get(5), 0),
+                new Bridge(4, bsp_6x6.get(6), bsp_6x6.get(7), 0),
+                new Bridge(5, bsp_6x6.get(7), bsp_6x6.get(8), 0),
+                new Bridge(6, bsp_6x6.get(9), bsp_6x6.get(10), 0),
+                new Bridge(7, bsp_6x6.get(10), bsp_6x6.get(11), 0),
+                new Bridge(8, bsp_6x6.get(12), bsp_6x6.get(13), 0),
+                new Bridge(9, bsp_6x6.get(13), bsp_6x6.get(14), 1),
 
                 // horizontal
-                new Bridge(10, 0, 3, 1),
-                new Bridge(11, 3, 9, 0),
-                new Bridge(12, 6, 12, 0),
-                new Bridge(13, 1, 4, 0),
-                new Bridge(14, 4, 10, 1),
-                new Bridge(15, 7, 13, 2),
-                new Bridge(16, 5, 11, 1),
-                new Bridge(17, 2, 8, 0),
-                new Bridge(18, 8, 14, 0)
+                new Bridge(10, bsp_6x6.get(0), bsp_6x6.get(3), 1),
+                new Bridge(11, bsp_6x6.get(3), bsp_6x6.get(9), 0),
+                new Bridge(12, bsp_6x6.get(6), bsp_6x6.get(12), 0),
+                new Bridge(13, bsp_6x6.get(1), bsp_6x6.get(4), 0),
+                new Bridge(14, bsp_6x6.get(4), bsp_6x6.get(10), 1),
+                new Bridge(15, bsp_6x6.get(7), bsp_6x6.get(13), 2),
+                new Bridge(16, bsp_6x6.get(5), bsp_6x6.get(11), 1),
+                new Bridge(17, bsp_6x6.get(2), bsp_6x6.get(8), 0),
+                new Bridge(18, bsp_6x6.get(8), bsp_6x6.get(14), 0)
         );
 
         BridgesPuzzle puzzle = new BridgesPuzzle(bsp_6x6, bridges, 6, 6);

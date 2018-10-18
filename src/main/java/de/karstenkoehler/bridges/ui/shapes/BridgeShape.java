@@ -38,10 +38,10 @@ public class BridgeShape {
     }
 
     private void drawBridge (final double offset) {
-        final double x0 = params.coordinate(this.islands.get(this.bridge.getStartIsland()).getX());
-        final double y0 = params.coordinate(this.islands.get(this.bridge.getStartIsland()).getY());
-        final double x1 = params.coordinate(this.islands.get(this.bridge.getEndIsland()).getX());
-        final double y1 = params.coordinate(this.islands.get(this.bridge.getEndIsland()).getY());
+        final double x0 = params.coordinate(this.bridge.getStartIsland().getX());
+        final double y0 = params.coordinate(this.bridge.getStartIsland().getY());
+        final double x1 = params.coordinate(this.bridge.getEndIsland().getX());
+        final double y1 = params.coordinate(this.bridge.getEndIsland().getY());
 
         if (puzzle.isVertical(bridge)) {
             createLine(x0 + offset, y0, x1 + offset, y1);

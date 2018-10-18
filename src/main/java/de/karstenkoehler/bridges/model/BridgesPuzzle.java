@@ -54,11 +54,11 @@ public class BridgesPuzzle {
     }
 
     public boolean isVertical(Bridge bridge) {
-        return islands.get(bridge.getStartIsland()).getX() == islands.get(bridge.getEndIsland()).getX();
+        return bridge.getStartIsland().getX() == bridge.getEndIsland().getX();
     }
 
     public boolean isHorizontal(Bridge bridge) {
-        return islands.get(bridge.getStartIsland()).getY() == islands.get(bridge.getEndIsland()).getY();
+        return bridge.getStartIsland().getY() == bridge.getEndIsland().getY();
     }
 
     public Bridge getConnectedBridge(Island island, Orientation orientation) {
@@ -98,13 +98,13 @@ public class BridgesPuzzle {
     }
 
     private void areBridgesCrossing(Bridge bridge, Bridge other) {
-        int y1 = this.islands.get(bridge.getStartIsland()).getY();
-        int x2 = this.islands.get(other.getEndIsland()).getX();
+        int y1 = bridge.getStartIsland().getY();
+        int x2 = other.getEndIsland().getX();
 
-        int x1a = this.islands.get(bridge.getStartIsland()).getX();
-        int x1e = this.islands.get(bridge.getEndIsland()).getX();
-        int y2a = this.islands.get(other.getStartIsland()).getY();
-        int y2e = this.islands.get(other.getEndIsland()).getY();
+        int x1a = bridge.getStartIsland().getX();
+        int x1e = bridge.getEndIsland().getX();
+        int y2a = other.getStartIsland().getY();
+        int y2e = other.getEndIsland().getY();
         if (x1a < x2 && x2 < x1e && y2a < y1 && y1 < y2e) {
             bridge.setValid(false);
             other.setValid(false);
@@ -123,7 +123,7 @@ public class BridgesPuzzle {
 
         int min = Math.min(island.getId(), north.getId());
         int max = Math.max(island.getId(), north.getId());
-        Bridge bridge = new Bridge(this.bridges.size(), min, max);
+        Bridge bridge = new Bridge(this.bridges.size(), islands.get(min), islands.get(max));
         this.bridges.add(bridge);
         return bridge;
     }
@@ -133,7 +133,7 @@ public class BridgesPuzzle {
         int b = Math.max(island.getId(), other.getId());
 
         for (Bridge bridge : this.bridges) {
-            if (bridge.getStartIsland() == a && bridge.getEndIsland() == b) {
+            if (bridge.getStartIsland().getId() == a && bridge.getEndIsland().getId() == b) {
                 return bridge;
             }
         }

@@ -44,4 +44,14 @@ public class Island {
     public int hashCode () {
         return Objects.hash(id, x, y, requiredBridges);
     }
+
+    @Override
+    public String toString() {
+        return "Island{" +
+                "id=" + id +
+                ", x=" + x +
+                ", y=" + y +
+                ", requiredBridges=" + requiredBridges +
+                '}';
+    }
 }

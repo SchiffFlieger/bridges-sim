@@ -1,10 +1,10 @@
 package de.karstenkoehler.bridges.test.validators;
 
-import de.karstenkoehler.bridges.model.Bridge;
-import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.io.validator.MaxOneBridgePerIslandPairValidator;
 import de.karstenkoehler.bridges.io.validator.ValidateException;
 import de.karstenkoehler.bridges.io.validator.Validator;
+import de.karstenkoehler.bridges.model.Bridge;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.Island;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -34,12 +34,12 @@ public class MaxOneBridgePerIslandPairTest {
         islands.put(5, new Island(5, 6, 0, 2));
         islands.put(6, new Island(6, 6, 2, 2));
 
-        final Bridge bridge1a = new Bridge(0, 0, 5);
-        final Bridge bridge1b = new Bridge(1, 0, 5);
-        final Bridge bridge2a = new Bridge(2, 2, 3);
-        final Bridge bridge2b = new Bridge(3, 2, 3);
-        final Bridge bridge3a = new Bridge(4, 1, 6);
-        final Bridge bridge3b = new Bridge(5, 6, 1);
+        final Bridge bridge1a = new Bridge(0, islands.get(0), islands.get(5));
+        final Bridge bridge1b = new Bridge(1, islands.get(0), islands.get(5));
+        final Bridge bridge2a = new Bridge(2, islands.get(2), islands.get(3));
+        final Bridge bridge2b = new Bridge(3, islands.get(2), islands.get(3));
+        final Bridge bridge3a = new Bridge(4, islands.get(1), islands.get(6));
+        final Bridge bridge3b = new Bridge(5, islands.get(6), islands.get(1));
 
         return Arrays.asList(new Object[][]{
                 {null, new BridgesPuzzle(islands, Arrays.asList(bridge1a, bridge2a, bridge3a), FIELD_SIZE, FIELD_SIZE)},

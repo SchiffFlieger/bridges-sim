@@ -1,9 +1,9 @@
 package de.karstenkoehler.bridges.io.parser;
 
-import de.karstenkoehler.bridges.model.Bridge;
-import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.io.parser.token.Token;
 import de.karstenkoehler.bridges.io.parser.token.Tokenizer;
+import de.karstenkoehler.bridges.model.Bridge;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.Island;
 
 import java.util.ArrayList;
@@ -89,7 +89,7 @@ public class TokenConsumingParser extends AbstractTokenParser implements Parser 
         int bridges = readBoolToken() ? 2 : 1; // double or single bridge
 
         int id = this.bridges.size();
-        this.bridges.add(new Bridge(id, node1, node2, bridges));
+        this.bridges.add(new Bridge(id, islands.get(node1), islands.get(node2), bridges));
 
         consume(Token.Type.CLOSE_PARENTHESIS);
     }
