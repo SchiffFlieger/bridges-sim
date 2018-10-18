@@ -2,25 +2,20 @@ package de.karstenkoehler.bridges.ui.shapes;
 
 import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
-import de.karstenkoehler.bridges.model.Island;
 import de.karstenkoehler.bridges.ui.ParameterObject;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-
-import java.util.List;
 
 public class BridgeShape {
 
     private final Bridge bridge;
     private final GraphicsContext cg;
-    private final List<Island> islands;
     private final ParameterObject params;
     private final BridgesPuzzle puzzle;
 
-    public BridgeShape (Bridge bridge, GraphicsContext cg, List<Island> islands, ParameterObject params, BridgesPuzzle puzzle) {
+    public BridgeShape(Bridge bridge, GraphicsContext cg, ParameterObject params, BridgesPuzzle puzzle) {
         this.bridge = bridge;
         this.cg = cg;
-        this.islands = islands;
         this.params = params;
         this.puzzle = puzzle;
         drawBridge(0);

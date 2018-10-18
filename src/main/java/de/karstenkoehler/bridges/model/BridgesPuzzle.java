@@ -35,7 +35,7 @@ public class BridgesPuzzle {
 
     public void fillMissingBridges () {
         for (Island island : this.islands.values()) {
-            Map<Orientation, Bridge> connections = new HashMap<>();
+            Map<Orientation, Bridge> connections = new EnumMap<>(Orientation.class);
 
             connections.put(Orientation.NORTH, fillBridgeInDirection(island, 0, -1));
             connections.put(Orientation.EAST, fillBridgeInDirection(island, 1, 0));

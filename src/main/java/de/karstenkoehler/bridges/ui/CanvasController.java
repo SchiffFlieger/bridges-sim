@@ -1,10 +1,10 @@
 package de.karstenkoehler.bridges.ui;
 
 import de.karstenkoehler.bridges.io.BridgesFileReader;
-import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.io.parser.ParseException;
 import de.karstenkoehler.bridges.io.validator.ValidateException;
 import de.karstenkoehler.bridges.model.Bridge;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.Island;
 import de.karstenkoehler.bridges.ui.shapes.BridgeShape;
 import de.karstenkoehler.bridges.ui.shapes.IslandShape;
@@ -59,11 +59,11 @@ public class CanvasController {
 
         drawCanvasBorder(gc);
         drawGrid(gc);
-        for (int i = 0; i < this.bridges.size(); i++) {
-            this.bridges.get(i).draw();
+        for (BridgeShape bridge : this.bridges) {
+            bridge.draw();
         }
-        for (int i = 0; i < this.islands.size(); i++) {
-            this.islands.get(i).draw(this.clickAreaVisible);
+        for (IslandShape island : this.islands) {
+            island.draw(this.clickAreaVisible);
         }
     }
 
@@ -131,7 +131,7 @@ public class CanvasController {
             this.islands.add(new IslandShape(this.canvas, island, controlPane, gc, params, puzzle));
         }
         for (Bridge bridge : puzzle.getBridges()) {
-            this.bridges.add(new BridgeShape(bridge, canvas.getGraphicsContext2D(), puzzle.getIslands(), params, puzzle));
+            this.bridges.add(new BridgeShape(bridge, canvas.getGraphicsContext2D(), params, puzzle));
         }
         drawThings();
     }
