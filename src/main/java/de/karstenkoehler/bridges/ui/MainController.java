@@ -96,7 +96,13 @@ public class MainController {
 
     @FXML
     private void onSaveAs (ActionEvent actionEvent) {
-        System.out.println("save as");
+        FileChooser chooser = new FileChooser();
+        chooser.setTitle("save bridge file");
+        chooser.setInitialDirectory(new File("src\\main\\resources\\data"));
+        File file = chooser.showSaveDialog(stage);
+        if (file != null) {
+            this.canvasController.saveToFile(file);
+        }
     }
 
     @FXML

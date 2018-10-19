@@ -1,6 +1,7 @@
 package de.karstenkoehler.bridges.ui;
 
 import de.karstenkoehler.bridges.io.BridgesFileReader;
+import de.karstenkoehler.bridges.io.BridgesFileWriter;
 import de.karstenkoehler.bridges.io.parser.ParseException;
 import de.karstenkoehler.bridges.io.validator.ValidateException;
 import de.karstenkoehler.bridges.model.Bridge;
@@ -156,6 +157,15 @@ public class CanvasController {
     public void setNumberDisplay (NumberDisplay display) {
         for (IslandShape island : this.islands) {
             island.setNumberDisplay(display);
+        }
+    }
+
+    public void saveToFile(File file) {
+        try {
+            new BridgesFileWriter().writeFile(file, this.puzzle);
+        } catch (IOException e) {
+            Alert error = new Alert(Alert.AlertType.ERROR, "could not write file:\n" + e.getMessage());
+            error.showAndWait();
         }
     }
 }
