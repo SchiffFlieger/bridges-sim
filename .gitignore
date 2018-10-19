@@ -2,4 +2,4 @@
 docs/
 target/
 bridges-sim.iml
-data/temp/
+/src/main/resources/data/temp/

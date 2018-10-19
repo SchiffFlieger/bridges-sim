@@ -17,8 +17,8 @@ public class BridgesFileWriter {
     }
 
     public void writeFile(File file, BridgesPuzzle puzzle) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-        writer.write(serializer.serialize(puzzle));
-        writer.close();
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(serializer.serialize(puzzle));
+        }
     }
 }
