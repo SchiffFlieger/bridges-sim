@@ -12,7 +12,7 @@ public class SerializerImpl implements Serializer {
         addField(puzzle, builder);
         addIslands(puzzle, builder);
 
-        if (puzzle.getBridges().size() > 0) {
+        if (!hasBridges(puzzle)) {
             builder.append(System.lineSeparator());
             addBridges(puzzle, builder);
         }
@@ -41,4 +41,9 @@ public class SerializerImpl implements Serializer {
             }
         }
     }
+
+    private boolean hasBridges(BridgesPuzzle puzzle) {
+        return puzzle.getBridges().stream().mapToInt(Bridge::getBridgeCount).sum() == 0;
+    }
+
 }
