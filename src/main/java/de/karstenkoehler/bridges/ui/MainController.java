@@ -1,5 +1,6 @@
 package de.karstenkoehler.bridges.ui;
 
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -107,7 +108,7 @@ public class MainController {
 
     @FXML
     private void onClose (ActionEvent actionEvent) {
-        System.out.println("close");
+        Platform.exit();
     }
 
     @FXML
