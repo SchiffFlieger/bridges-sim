@@ -168,4 +168,9 @@ public class CanvasController {
             error.showAndWait();
         }
     }
+
+    public void restartPuzzle() {
+        this.puzzle.restart();
+        this.drawThings();
+    }
 }

@@ -97,6 +97,10 @@ public class BridgesPuzzle {
         }
     }
 
+    public void restart() {
+        this.bridges.forEach(bridge -> bridge.setBridgeCount(0));
+    }
+
     private void areBridgesCrossing(Bridge bridge, Bridge other) {
         int y1 = bridge.getStartIsland().getY();
         int x2 = other.getEndIsland().getX();

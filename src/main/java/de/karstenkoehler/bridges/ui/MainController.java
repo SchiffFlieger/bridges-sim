@@ -79,7 +79,7 @@ public class MainController {
 
     @FXML
     private void onRestartPuzzle (ActionEvent actionEvent) {
-        System.out.println("restart");
+        this.canvasController.restartPuzzle();
     }
 
     @FXML

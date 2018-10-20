@@ -37,6 +37,10 @@ public class Bridge {
         return endIsland;
     }
 
+    public void setBridgeCount(int count) {
+        this.bridgeCount = count;
+    }
+
     public int getBridgeCount() {
         return bridgeCount;
     }
