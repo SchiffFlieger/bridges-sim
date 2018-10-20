@@ -13,7 +13,6 @@ import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.Window;
@@ -37,6 +36,12 @@ public class MainController {
 
     private Window stage;
     private CanvasController canvasController;
+
+    private final RetentionFileChooser chooser;
+
+    public MainController() {
+        chooser = new RetentionFileChooser();
+    }
 
     @FXML
     private void initialize () {
@@ -79,11 +84,6 @@ public class MainController {
 
     @FXML
     private void onOpenPuzzle (ActionEvent actionEvent) {
-        FileChooser chooser = new FileChooser();
-        chooser.setTitle("choose bridge file");
-        // ToDo set meaningful default value and remember last directory
-        chooser.setInitialDirectory(new File("src\\main\\resources\\data"));
-        chooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("bridge file", "*.bgs"));
         File file = chooser.showOpenDialog(stage);
         if (file != null) {
             this.canvasController.openFile(file);
@@ -97,9 +97,6 @@ public class MainController {
 
     @FXML
     private void onSaveAs (ActionEvent actionEvent) {
-        FileChooser chooser = new FileChooser();
-        chooser.setTitle("save bridge file");
-        chooser.setInitialDirectory(new File("src\\main\\resources\\data"));
         File file = chooser.showSaveDialog(stage);
         if (file != null) {
             this.canvasController.saveToFile(file);
