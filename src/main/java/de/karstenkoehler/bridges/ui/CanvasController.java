@@ -16,6 +16,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +37,7 @@ public class CanvasController {
     private List<BridgeShape> bridges;
     private ParameterObject params;
     private BridgesPuzzle puzzle;
+    private Stage stage;
 
     public CanvasController(Canvas canvas, Pane controlPane) {
         this.canvas = canvas;
@@ -45,15 +47,13 @@ public class CanvasController {
 
         this.canvas.addEventHandler(REDRAW, event -> drawThings());
         this.canvas.addEventHandler(ERROR, event -> System.out.println("could not draw bridge"));
-
-
-        File file = new File("src\\main\\resources\\data\\bsp_5x5.bgs");
-        openAndShowFile(file);
     }
-
 
     public void drawThings() {
         this.puzzle.markInvalidBridges();
+        if (stage != null) {
+            this.stage.fireEvent(new Event(MainController.FILE_CHANGED));
+        }
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -154,7 +154,7 @@ public class CanvasController {
         return puzzle;
     }
 
-    public void setNumberDisplay (NumberDisplay display) {
+    public void setNumberDisplay(NumberDisplay display) {
         for (IslandShape island : this.islands) {
             island.setNumberDisplay(display);
         }
@@ -172,5 +172,9 @@ public class CanvasController {
     public void restartPuzzle() {
         this.puzzle.restart();
         this.drawThings();
+    }
+
+    public void setStage(Stage stage) {
+        this.stage = stage;
     }
 }
