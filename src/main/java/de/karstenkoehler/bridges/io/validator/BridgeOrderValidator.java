@@ -15,14 +15,14 @@ public class BridgeOrderValidator implements Validator {
 
         for (Bridge bridge : puzzle.getBridges()) {
             if (bridge.getStartIsland().getId() < prevN1) {
-                throw new ValidateException(String.format("bridge sort order not valid. check bridge %d.", bridge.getId()));
+                throw new ValidateException("bridge sort order not valid.");
             } else if (bridge.getStartIsland().getId() > prevN1) {
                 prevN1 = bridge.getStartIsland().getId();
                 prevN2 = -1;
             }
 
             if (bridge.getEndIsland().getId() < prevN2) {
-                throw new ValidateException(String.format("bridge sort order not valid. check bridge %d.", bridge.getId()));
+                throw new ValidateException("bridge sort order not valid.");
             } else {
                 prevN2 = bridge.getEndIsland().getId();
             }

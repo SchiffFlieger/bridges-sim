@@ -44,6 +44,15 @@ public class BridgesPuzzle {
 
             this.bridgeConnections.put(island.getId(), connections);
         }
+
+        this.bridges.sort((o1, o2) -> {
+            int diff = o1.getStartIsland().getId() - o2.getStartIsland().getId();
+            if (diff != 0) {
+                return diff;
+            }
+
+            return o1.getEndIsland().getId() - o2.getEndIsland().getId();
+        });
     }
 
     public void emphasizeBridge (Bridge bridge) {

@@ -13,7 +13,7 @@ public class BridgesNotDiagonalValidator implements Validator {
     public void validate(BridgesPuzzle puzzle) throws ValidateException {
         for (Bridge bridge : puzzle.getBridges()) {
             if (isDiagonal(bridge.getStartIsland(), bridge.getEndIsland())) {
-                throw new ValidateException(String.format("bridge %d is neither horizontal or vertical.", bridge.getId()));
+                throw new ValidateException("a bridge is neither horizontal or vertical.");
             }
         }
     }

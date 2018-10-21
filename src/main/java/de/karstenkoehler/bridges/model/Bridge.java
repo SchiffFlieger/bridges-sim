@@ -5,7 +5,6 @@ import de.karstenkoehler.bridges.InvalidBridgeCountException;
 import java.util.Objects;
 
 public class Bridge {
-    private final int id;
     private int bridgeCount;
     private final Island startIsland;
     private final Island endIsland;
@@ -17,16 +16,11 @@ public class Bridge {
     }
 
     public Bridge(int id, Island startIsland, Island endIsland, int bridgeCount) {
-        this.id = id;
         this.bridgeCount = bridgeCount;
         this.startIsland = startIsland;
         this.endIsland = endIsland;
         this.valid = true;
         this.emphasized = false;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public Island getStartIsland() {
@@ -58,22 +52,20 @@ public class Bridge {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Bridge bridge = (Bridge) o;
-        return id == bridge.id &&
-                bridgeCount == bridge.bridgeCount &&
+        return bridgeCount == bridge.bridgeCount &&
                 Objects.equals(startIsland, bridge.startIsland) &&
                 Objects.equals(endIsland, bridge.endIsland);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, bridgeCount, startIsland, endIsland);
+        return Objects.hash(bridgeCount, startIsland, endIsland);
     }
 
     @Override
     public String toString() {
         return "Bridge{" +
-                "id=" + id +
-                ", bridgeCount=" + bridgeCount +
+                "bridgeCount=" + bridgeCount +
                 ", startIsland=" + startIsland +
                 ", endIsland=" + endIsland +
                 ", valid=" + valid +

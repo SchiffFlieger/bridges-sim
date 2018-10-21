@@ -19,6 +19,7 @@ public class StringSerializationTest {
     private static final String withBridges = "FIELD\r\n5 x 5 | 9\r\n\r\nISLANDS\r\n( 0, 0 | 3 )\r\n( 0, 2 | 4 )\r\n( 0, 4 | 2 )\r\n( 2, 0 | 3 )\r\n( 2, 3 | 2 )\r\n( 3, 2 | 1 )\r\n( 3, 4 | 1 )\r\n( 4, 0 | 3 )\r\n( 4, 3 | 3 )\r\n\r\nBRIDGES\r\n( 0, 1 | true )\r\n( 0, 3 | false )\r\n( 1, 2 | false )\r\n( 1, 5 | false )\r\n( 2, 6 | false )\r\n( 3, 7 | true )\r\n( 4, 8 | true )\r\n( 7, 8 | false )\r\n";
     private static final String withoutBridges = "FIELD\r\n5 x 5 | 9\r\n\r\nISLANDS\r\n( 0, 0 | 3 )\r\n( 0, 2 | 4 )\r\n( 0, 4 | 2 )\r\n( 2, 0 | 3 )\r\n( 2, 3 | 2 )\r\n( 3, 2 | 1 )\r\n( 3, 4 | 1 )\r\n( 4, 0 | 3 )\r\n( 4, 3 | 3 )\r\n";
     private static final String withEmptyBridges = "FIELD\r\n5 x 5 | 9\r\n\r\nISLANDS\r\n( 0, 0 | 3 )\r\n( 0, 2 | 4 )\r\n( 0, 4 | 2 )\r\n( 2, 0 | 3 )\r\n( 2, 3 | 2 )\r\n( 3, 2 | 1 )\r\n( 3, 4 | 1 )\r\n( 4, 0 | 3 )\r\n( 4, 3 | 3 )\r\n";
+    private static final String withPartialBridges = "FIELD\r\n5 x 5 | 9\r\n\r\nISLANDS\r\n( 0, 0 | 3 )\r\n( 0, 2 | 4 )\r\n( 0, 4 | 2 )\r\n( 2, 0 | 3 )\r\n( 2, 3 | 2 )\r\n( 3, 2 | 1 )\r\n( 3, 4 | 1 )\r\n( 4, 0 | 3 )\r\n( 4, 3 | 3 )\r\n\r\nBRIDGES\r\n( 0, 1 | true )\r\n( 1, 2 | false )\r\n( 2, 6 | false )\r\n( 4, 8 | true )\r\n";
 
     @Parameterized.Parameters()
     public static Collection<Object[]> data() {
@@ -56,6 +57,7 @@ public class StringSerializationTest {
                 {new BridgesPuzzle(islands, Arrays.asList(bridge1, bridge2, bridge3, bridge4, bridge5, bridge6, bridge7, bridge8), 5, 5), withBridges},
                 {new BridgesPuzzle(islands, new ArrayList<>(), 5, 5), withoutBridges},
                 {new BridgesPuzzle(islands, Arrays.asList(emptyBridge1, emptyBridge2, emptyBridge3, emptyBridge4, emptyBridge5, emptyBridge6, emptyBridge7, emptyBridge8), 5, 5), withEmptyBridges},
+                {new BridgesPuzzle(islands, Arrays.asList(bridge1, emptyBridge2, bridge3, emptyBridge4, bridge5, emptyBridge6, bridge7, emptyBridge8), 5, 5), withPartialBridges},
         });
     }
 

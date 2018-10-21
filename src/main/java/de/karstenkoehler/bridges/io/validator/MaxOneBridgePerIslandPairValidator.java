@@ -13,8 +13,7 @@ public class MaxOneBridgePerIslandPairValidator implements Validator {
         for (Bridge bridge : puzzle.getBridges()) {
             for (Bridge other : puzzle.getBridges()) {
                 if (bridge != other && (sameDirection(bridge, other) || oppositeDirection(bridge, other))) {
-                    throw new ValidateException(String.format("bridges %d and %d connect the same islands.",
-                            bridge.getId(), other.getId()));
+                    throw new ValidateException("two bridges connect the same islands.");
                 }
             }
         }

@@ -15,15 +15,14 @@ public class BridgeReferenceToIslandValidator implements Validator {
     public void validate(BridgesPuzzle puzzle) throws ValidateException {
         final int MAX_ISLAND_ID = puzzle.getIslands().size() - 1;
         for (Bridge bridge : puzzle.getBridges()) {
-            checkIslandsExist(bridge.getStartIsland().getId(), bridge.getId(), MAX_ISLAND_ID);
-            checkIslandsExist(bridge.getEndIsland().getId(), bridge.getId(), MAX_ISLAND_ID);
+            checkIslandsExist(bridge.getStartIsland().getId(), MAX_ISLAND_ID);
+            checkIslandsExist(bridge.getEndIsland().getId(), MAX_ISLAND_ID);
         }
     }
 
-    private void checkIslandsExist(int value, int bridgeId, int maxIslands) throws ValidateException {
+    private void checkIslandsExist(int value, int maxIslands) throws ValidateException {
         if (value < MIN_ISLAND_ID || value > maxIslands) {
-            throw new ValidateException(String.format("bridge %d connects to non-existing island %d.",
-                    bridgeId, value));
+            throw new ValidateException(String.format("a bridge connects to non-existing island %d.", value));
         }
     }
 }

@@ -1,5 +1,6 @@
 package de.karstenkoehler.bridges.test.model;
 
+import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.Island;
 import org.junit.Test;
@@ -9,6 +10,7 @@ import org.junit.runners.Parameterized;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 @RunWith(Parameterized.class)
 public class FillBridgesTest {
@@ -60,5 +62,20 @@ public class FillBridgesTest {
         this.input.fillMissingBridges();
 
         assertEquals(bridgeCount, input.getBridges().size());
+
+        int prevN1 = -1;
+        int prevN2 = -1;
+        for (Bridge bridge : input.getBridges()) {
+            assertFalse(bridge.getStartIsland().getId() < prevN1);
+            if (bridge.getStartIsland().getId() > prevN1) {
+                prevN1 = bridge.getStartIsland().getId();
+                prevN2 = -1;
+            }
+
+            assertFalse(bridge.getEndIsland().getId() < prevN2);
+            if (bridge.getEndIsland().getId() >= prevN2) {
+                prevN2 = bridge.getEndIsland().getId();
+            }
+        }
     }
 }
