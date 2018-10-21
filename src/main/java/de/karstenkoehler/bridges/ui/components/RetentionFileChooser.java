@@ -1,4 +1,4 @@
-package de.karstenkoehler.bridges.ui;
+package de.karstenkoehler.bridges.ui.components;
 
 import javafx.stage.FileChooser;
 import javafx.stage.Window;

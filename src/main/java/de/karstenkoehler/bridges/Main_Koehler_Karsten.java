@@ -19,7 +19,6 @@ public class Main_Koehler_Karsten extends Application {
         Parent root = createRootPane(stage);
         Scene scene = new Scene(root);
 
-        stage.setTitle("Bridges Simulator - Karsten Köhler - 8690570");
         stage.setScene(scene);
         stage.show();
     }
