@@ -1,5 +1,6 @@
 package de.karstenkoehler.bridges.ui;
 
+import de.karstenkoehler.bridges.model.PuzzleSpecification;
 import de.karstenkoehler.bridges.ui.components.RetentionFileChooser;
 import de.karstenkoehler.bridges.ui.components.SaveAction;
 import de.karstenkoehler.bridges.ui.components.SaveRequestAlert;
@@ -84,14 +85,22 @@ public class MainController {
         }
 
         try {
-            Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("ui/new.fxml"));
             Stage stage = new Stage();
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/new.fxml"));
+            Parent root = loader.load();
+            NewPuzzleController controller = loader.getController();
+            controller.setStage(stage);
             stage.setTitle("Create new puzzle");
             stage.setScene(new Scene(root));
 
             stage.initOwner(this.stage);
             stage.initModality(Modality.WINDOW_MODAL);
             stage.showAndWait();
+
+            PuzzleSpecification specs = controller.getSpecs();
+            if (specs != null) {
+                System.out.println(String.format("w: %d, h: %d, i: %d", specs.getWidth(), specs.getHeight(), specs.getIslandCount()));
+            }
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "could not open file ui/new.fxml");
             alert.showAndWait();
