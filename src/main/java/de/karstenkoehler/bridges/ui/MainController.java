@@ -1,6 +1,10 @@
 package de.karstenkoehler.bridges.ui;
 
+import de.karstenkoehler.bridges.io.validator.DefaultValidator;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.PuzzleSpecification;
+import de.karstenkoehler.bridges.model.generator.Generator;
+import de.karstenkoehler.bridges.model.generator.GeneratorImpl;
 import de.karstenkoehler.bridges.ui.components.RetentionFileChooser;
 import de.karstenkoehler.bridges.ui.components.SaveAction;
 import de.karstenkoehler.bridges.ui.components.SaveRequestAlert;
@@ -46,12 +50,14 @@ public class MainController {
 
     private final RetentionFileChooser chooser;
     private final SaveRequestAlert saveRequest;
+    private final Generator puzzleGenerator;
     private File currentFile;
 
     // TODO pass dependencies as constructor parameters
     public MainController() {
         this.chooser = new RetentionFileChooser();
         this.saveRequest = new SaveRequestAlert();
+        this.puzzleGenerator = new GeneratorImpl(new DefaultValidator());
     }
 
     @FXML
@@ -99,7 +105,8 @@ public class MainController {
 
             PuzzleSpecification specs = controller.getSpecs();
             if (specs != null) {
-                System.out.println(String.format("w: %d, h: %d, i: %d", specs.getWidth(), specs.getHeight(), specs.getIslandCount()));
+                BridgesPuzzle puzzle = this.puzzleGenerator.generate(specs);
+                this.canvasController.setPuzzle(puzzle);
             }
         } catch (IOException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR, "could not open file ui/new.fxml");

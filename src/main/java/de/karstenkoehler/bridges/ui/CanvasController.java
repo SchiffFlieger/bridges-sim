@@ -115,6 +115,7 @@ public class CanvasController {
     }
 
     public void openFile(File file) {
+        // TODO this should not be a thing here. just use setPuzzle-method.
         clearEverything();
         openAndShowFile(file);
     }
@@ -176,5 +177,19 @@ public class CanvasController {
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    public void setPuzzle(BridgesPuzzle puzzle) {
+        clearEverything();
+        this.params = new ParameterObject(Math.max(puzzle.getWidth(), puzzle.getHeight()), this.canvas.getWidth());
+
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        for (Island island : puzzle.getIslands()) {
+            this.islands.add(new IslandShape(this.canvas, island, controlPane, gc, params, puzzle));
+        }
+        for (Bridge bridge : puzzle.getBridges()) {
+            this.bridges.add(new BridgeShape(bridge, canvas.getGraphicsContext2D(), params, puzzle));
+        }
+        drawThings();
     }
 }
