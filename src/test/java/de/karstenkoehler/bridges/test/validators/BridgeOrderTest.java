@@ -32,21 +32,21 @@ public class BridgeOrderTest {
         islands.put(6, new Island(6, 3, 4, 2));
 
         final List<Bridge> valid = Arrays.asList(
-                new Bridge(0, islands.get(0), islands.get(1), 2),
-                new Bridge(1, islands.get(0), islands.get(6), 2),
-                new Bridge(2, islands.get(3), islands.get(4), 2)
+                new Bridge(islands.get(0), islands.get(1), 2),
+                new Bridge(islands.get(0), islands.get(6), 2),
+                new Bridge(islands.get(3), islands.get(4), 2)
         );
 
         final List<Bridge> invalidNode1 = Arrays.asList(
-                new Bridge(0, islands.get(0), islands.get(1), 2),
-                new Bridge(1, islands.get(3), islands.get(1), 2),
-                new Bridge(2, islands.get(0), islands.get(6), 2)
+                new Bridge(islands.get(0), islands.get(1), 2),
+                new Bridge(islands.get(3), islands.get(1), 2),
+                new Bridge(islands.get(0), islands.get(6), 2)
         );
 
         final List<Bridge> invalidNode2 = Arrays.asList(
-                new Bridge(0, islands.get(0), islands.get(6), 2),
-                new Bridge(1, islands.get(0), islands.get(1), 2),
-                new Bridge(2, islands.get(3), islands.get(4), 2)
+                new Bridge(islands.get(0), islands.get(6), 2),
+                new Bridge(islands.get(0), islands.get(1), 2),
+                new Bridge(islands.get(3), islands.get(4), 2)
         );
 
         return Arrays.asList(new Object[][]{

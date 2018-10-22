@@ -34,12 +34,12 @@ public class MaxOneBridgePerIslandPairTest {
         islands.put(5, new Island(5, 6, 0, 2));
         islands.put(6, new Island(6, 6, 2, 2));
 
-        final Bridge bridge1a = new Bridge(0, islands.get(0), islands.get(5));
-        final Bridge bridge1b = new Bridge(1, islands.get(0), islands.get(5));
-        final Bridge bridge2a = new Bridge(2, islands.get(2), islands.get(3));
-        final Bridge bridge2b = new Bridge(3, islands.get(2), islands.get(3));
-        final Bridge bridge3a = new Bridge(4, islands.get(1), islands.get(6));
-        final Bridge bridge3b = new Bridge(5, islands.get(6), islands.get(1));
+        final Bridge bridge1a = new Bridge(islands.get(0), islands.get(5));
+        final Bridge bridge1b = new Bridge(islands.get(0), islands.get(5));
+        final Bridge bridge2a = new Bridge(islands.get(2), islands.get(3));
+        final Bridge bridge2b = new Bridge(islands.get(2), islands.get(3));
+        final Bridge bridge3a = new Bridge(islands.get(1), islands.get(6));
+        final Bridge bridge3b = new Bridge(islands.get(6), islands.get(1));
 
         return Arrays.asList(new Object[][]{
                 {null, new BridgesPuzzle(islands, Arrays.asList(bridge1a, bridge2a, bridge3a), FIELD_SIZE, FIELD_SIZE)},

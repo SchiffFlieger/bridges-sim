@@ -22,17 +22,17 @@ public class AddBridgeTest {
         Island island2 = new Island(1, 0, 2, 4);
 
         return Arrays.asList(new Object[][]{
-                {new Bridge(0, island1, island2, 0), 1, 1, null},
-                {new Bridge(0, island1, island2, 1), 1, 2, null},
-                {new Bridge(0, island1, island2, 2), -1, 1, null},
-                {new Bridge(0, island1, island2, 1), -1, 0, null},
+                {new Bridge(island1, island2, 0), 1, 1, null},
+                {new Bridge(island1, island2, 1), 1, 2, null},
+                {new Bridge(island1, island2, 2), -1, 1, null},
+                {new Bridge(island1, island2, 1), -1, 0, null},
 
-                {new Bridge(0, island1, island2, 1), 0, 0, IllegalArgumentException.class},
-                {new Bridge(0, island1, island2, 1), 2, 0, IllegalArgumentException.class},
-                {new Bridge(0, island1, island2, 1), -2, 0, IllegalArgumentException.class},
+                {new Bridge(island1, island2, 1), 0, 0, IllegalArgumentException.class},
+                {new Bridge(island1, island2, 1), 2, 0, IllegalArgumentException.class},
+                {new Bridge(island1, island2, 1), -2, 0, IllegalArgumentException.class},
 
-                {new Bridge(0, island1, island2, 0), -1, 0, InvalidBridgeCountException.class},
-                {new Bridge(0, island1, island2, 2), 1, 0, InvalidBridgeCountException.class},
+                {new Bridge(island1, island2, 0), -1, 0, InvalidBridgeCountException.class},
+                {new Bridge(island1, island2, 2), 1, 0, InvalidBridgeCountException.class},
         });
     }
 

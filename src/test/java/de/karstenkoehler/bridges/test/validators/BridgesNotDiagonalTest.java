@@ -31,16 +31,16 @@ public class BridgesNotDiagonalTest {
         islands.put(5, new Island(5, 6, 0, 2));
         islands.put(6, new Island(6, 6, 2, 2));
 
-        final Bridge valid1 = new Bridge(0, islands.get(0), islands.get(5));
-        final Bridge valid2 = new Bridge(1, islands.get(2), islands.get(3));
-        final Bridge valid3 = new Bridge(2, islands.get(0), islands.get(5));
+        final Bridge valid1 = new Bridge(islands.get(0), islands.get(5));
+        final Bridge valid2 = new Bridge(islands.get(2), islands.get(3));
+        final Bridge valid3 = new Bridge(islands.get(0), islands.get(5));
 
-        final Bridge invalid1 = new Bridge(3, islands.get(0), islands.get(1));
-        final Bridge invalid2 = new Bridge(4, islands.get(0), islands.get(2));
-        final Bridge invalid3 = new Bridge(5, islands.get(1), islands.get(3));
-        final Bridge invalid4 = new Bridge(6, islands.get(3), islands.get(4));
-        final Bridge invalid5 = new Bridge(7, islands.get(2), islands.get(5));
-        final Bridge invalid6 = new Bridge(8, islands.get(2), islands.get(6));
+        final Bridge invalid1 = new Bridge(islands.get(0), islands.get(1));
+        final Bridge invalid2 = new Bridge(islands.get(0), islands.get(2));
+        final Bridge invalid3 = new Bridge(islands.get(1), islands.get(3));
+        final Bridge invalid4 = new Bridge(islands.get(3), islands.get(4));
+        final Bridge invalid5 = new Bridge(islands.get(2), islands.get(5));
+        final Bridge invalid6 = new Bridge(islands.get(2), islands.get(6));
 
         return Arrays.asList(new Object[][]{
                 {null, new BridgesPuzzle(islands, Arrays.asList(valid1, valid2, valid3), FIELD_SIZE, FIELD_SIZE)},

@@ -88,8 +88,7 @@ public class TokenConsumingParser extends AbstractTokenParser implements Parser 
         consume(Token.Type.PIPE);
         int bridges = readBoolToken() ? 2 : 1; // double or single bridge
 
-        int id = this.bridges.size();
-        this.bridges.add(new Bridge(id, islands.get(node1), islands.get(node2), bridges));
+        this.bridges.add(new Bridge(islands.get(node1), islands.get(node2), bridges));
 
         consume(Token.Type.CLOSE_PARENTHESIS);
     }

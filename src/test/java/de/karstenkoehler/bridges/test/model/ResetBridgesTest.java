@@ -34,27 +34,27 @@ public class ResetBridgesTest {
 
         List<Bridge> bridges = Arrays.asList(
                 // vertical
-                new Bridge(0, islands.get(0), islands.get(1), 0),
-                new Bridge(1, islands.get(1), islands.get(2), 1),
-                new Bridge(2, islands.get(3), islands.get(4), 2),
-                new Bridge(3, islands.get(4), islands.get(5), 0),
-                new Bridge(4, islands.get(6), islands.get(7), 0),
-                new Bridge(5, islands.get(7), islands.get(8), 0),
-                new Bridge(6, islands.get(9), islands.get(10), 0),
-                new Bridge(7, islands.get(10), islands.get(11), 0),
-                new Bridge(8, islands.get(12), islands.get(13), 0),
-                new Bridge(9, islands.get(13), islands.get(14), 1),
+                new Bridge(islands.get(0), islands.get(1), 0),
+                new Bridge(islands.get(1), islands.get(2), 1),
+                new Bridge(islands.get(3), islands.get(4), 2),
+                new Bridge(islands.get(4), islands.get(5), 0),
+                new Bridge(islands.get(6), islands.get(7), 0),
+                new Bridge(islands.get(7), islands.get(8), 0),
+                new Bridge(islands.get(9), islands.get(10), 0),
+                new Bridge(islands.get(10), islands.get(11), 0),
+                new Bridge(islands.get(12), islands.get(13), 0),
+                new Bridge(islands.get(13), islands.get(14), 1),
 
                 // horizontal
-                new Bridge(10, islands.get(0), islands.get(3), 1),
-                new Bridge(11, islands.get(3), islands.get(9), 0),
-                new Bridge(12, islands.get(6), islands.get(12), 0),
-                new Bridge(13, islands.get(1), islands.get(4), 0),
-                new Bridge(14, islands.get(4), islands.get(10), 1),
-                new Bridge(15, islands.get(7), islands.get(13), 2),
-                new Bridge(16, islands.get(5), islands.get(11), 1),
-                new Bridge(17, islands.get(2), islands.get(8), 0),
-                new Bridge(18, islands.get(8), islands.get(14), 0)
+                new Bridge(islands.get(0), islands.get(3), 1),
+                new Bridge(islands.get(3), islands.get(9), 0),
+                new Bridge(islands.get(6), islands.get(12), 0),
+                new Bridge(islands.get(1), islands.get(4), 0),
+                new Bridge(islands.get(4), islands.get(10), 1),
+                new Bridge(islands.get(7), islands.get(13), 2),
+                new Bridge(islands.get(5), islands.get(11), 1),
+                new Bridge(islands.get(2), islands.get(8), 0),
+                new Bridge(islands.get(8), islands.get(14), 0)
         );
 
         BridgesPuzzle puzzle = new BridgesPuzzle(islands, bridges, 6, 6);

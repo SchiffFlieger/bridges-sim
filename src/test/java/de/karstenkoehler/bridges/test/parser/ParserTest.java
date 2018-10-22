@@ -58,7 +58,7 @@ public class ParserTest {
         islands.put(0, island0);
         islands.put(1, island1);
 
-        List<Bridge> bridges = Collections.singletonList(new Bridge(0, island0, island1, 2));
+        List<Bridge> bridges = Collections.singletonList(new Bridge(island0, island1, 2));
 
         BridgesPuzzle bsp_5x5_parsed = new BridgesPuzzle(islands, new ArrayList<>(), 5, 5);
         BridgesPuzzle bsp_5x5_parsed_sol = new BridgesPuzzle(islands, bridges, 5, 5);

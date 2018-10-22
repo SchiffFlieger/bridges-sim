@@ -136,7 +136,7 @@ public class BridgesPuzzle {
 
         int min = Math.min(island.getId(), north.getId());
         int max = Math.max(island.getId(), north.getId());
-        Bridge bridge = new Bridge(this.bridges.size(), islands.get(min), islands.get(max));
+        Bridge bridge = new Bridge(islands.get(min), islands.get(max));
         this.bridges.add(bridge);
         return bridge;
     }

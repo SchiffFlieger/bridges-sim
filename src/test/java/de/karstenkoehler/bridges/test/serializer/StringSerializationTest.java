@@ -34,23 +34,23 @@ public class StringSerializationTest {
         islands.put(7, new Island(7, 4, 0, 3));
         islands.put(8, new Island(8, 4, 3, 3));
 
-        Bridge bridge1 = new Bridge(0, islands.get(0), islands.get(1), 2);
-        Bridge bridge2 = new Bridge(1, islands.get(0), islands.get(3), 1);
-        Bridge bridge3 = new Bridge(2, islands.get(1), islands.get(2), 1);
-        Bridge bridge4 = new Bridge(3, islands.get(1), islands.get(5), 1);
-        Bridge bridge5 = new Bridge(4, islands.get(2), islands.get(6), 1);
-        Bridge bridge6 = new Bridge(5, islands.get(3), islands.get(7), 2);
-        Bridge bridge7 = new Bridge(6, islands.get(4), islands.get(8), 2);
-        Bridge bridge8 = new Bridge(7, islands.get(7), islands.get(8), 1);
+        Bridge bridge1 = new Bridge(islands.get(0), islands.get(1), 2);
+        Bridge bridge2 = new Bridge(islands.get(0), islands.get(3), 1);
+        Bridge bridge3 = new Bridge(islands.get(1), islands.get(2), 1);
+        Bridge bridge4 = new Bridge(islands.get(1), islands.get(5), 1);
+        Bridge bridge5 = new Bridge(islands.get(2), islands.get(6), 1);
+        Bridge bridge6 = new Bridge(islands.get(3), islands.get(7), 2);
+        Bridge bridge7 = new Bridge(islands.get(4), islands.get(8), 2);
+        Bridge bridge8 = new Bridge(islands.get(7), islands.get(8), 1);
 
-        Bridge emptyBridge1 = new Bridge(0, islands.get(0), islands.get(1), 0);
-        Bridge emptyBridge2 = new Bridge(1, islands.get(0), islands.get(3), 0);
-        Bridge emptyBridge3 = new Bridge(2, islands.get(1), islands.get(2), 0);
-        Bridge emptyBridge4 = new Bridge(3, islands.get(1), islands.get(5), 0);
-        Bridge emptyBridge5 = new Bridge(4, islands.get(2), islands.get(6), 0);
-        Bridge emptyBridge6 = new Bridge(5, islands.get(3), islands.get(7), 0);
-        Bridge emptyBridge7 = new Bridge(6, islands.get(4), islands.get(8), 0);
-        Bridge emptyBridge8 = new Bridge(7, islands.get(7), islands.get(8), 0);
+        Bridge emptyBridge1 = new Bridge(islands.get(0), islands.get(1), 0);
+        Bridge emptyBridge2 = new Bridge(islands.get(0), islands.get(3), 0);
+        Bridge emptyBridge3 = new Bridge(islands.get(1), islands.get(2), 0);
+        Bridge emptyBridge4 = new Bridge(islands.get(1), islands.get(5), 0);
+        Bridge emptyBridge5 = new Bridge(islands.get(2), islands.get(6), 0);
+        Bridge emptyBridge6 = new Bridge(islands.get(3), islands.get(7), 0);
+        Bridge emptyBridge7 = new Bridge(islands.get(4), islands.get(8), 0);
+        Bridge emptyBridge8 = new Bridge(islands.get(7), islands.get(8), 0);
 
 
         return Arrays.asList(new Object[][]{

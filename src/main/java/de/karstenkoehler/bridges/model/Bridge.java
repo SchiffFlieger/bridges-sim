@@ -11,11 +11,11 @@ public class Bridge {
     private boolean valid;
     private boolean emphasized;
 
-    public Bridge(int id, Island startIsland, Island endIsland) {
-        this(id, startIsland, endIsland, 0);
+    public Bridge(Island startIsland, Island endIsland) {
+        this(startIsland, endIsland, 0);
     }
 
-    public Bridge(int id, Island startIsland, Island endIsland, int bridgeCount) {
+    public Bridge(Island startIsland, Island endIsland, int bridgeCount) {
         this.bridgeCount = bridgeCount;
         this.startIsland = startIsland;
         this.endIsland = endIsland;
