@@ -18,12 +18,20 @@ public class DefaultValidator implements Validator {
     public DefaultValidator() {
         // ToDo maybe replace this with reflection?
         this.validators = new HashSet<>(Arrays.asList(
-                new BridgeReferenceToIslandValidator(), new BridgesConnectDifferentIslandsValidator(),
-                new BridgesNotDiagonalValidator(), new FieldSizeValidator(), new IslandOnUniqueFieldsValidator(),
-                new IslandsOnFieldValidator(), new NoIslandsOnAdjacentFieldsValidator(), new RequiredBridgesCountValidator(),
-                new MaxOneBridgePerIslandPairValidator(), new IslandOrderValidator(), new BridgeReferenceOrderValidator(),
-                new BridgeOrderValidator()
-        ));
+                new BridgeOrderValidator(),
+                new BridgeReferenceOrderValidator(),
+                new BridgeReferenceToIslandValidator(),
+                new BridgesConnectDifferentIslandsValidator(),
+                new BridgesDoNotCrossIslandValidator(),
+                new BridgesNotDiagonalValidator(),
+                new FieldSizeValidator(),
+                new IslandOnUniqueFieldsValidator(),
+                new IslandOrderValidator(),
+                new IslandsOnFieldValidator(),
+                new MaxOneBridgePerIslandPairValidator(),
+                new NoIslandsOnAdjacentFieldsValidator(),
+                new RequiredBridgesCountValidator()));
+        System.out.println("validators: " + validators.size());
     }
 
     @Override
