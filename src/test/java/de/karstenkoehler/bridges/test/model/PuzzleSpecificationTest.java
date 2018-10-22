@@ -1,0 +1,63 @@
+package de.karstenkoehler.bridges.test.model;
+
+import de.karstenkoehler.bridges.model.PuzzleSpecification;
+import org.junit.Test;
+
+import static org.junit.Assert.assertTrue;
+
+public class PuzzleSpecificationTest {
+    /**
+     * Since there is randomness involved, some tests may fail only under certain conditions. Therefore we
+     * repeat those test cases several times in order to spot errors inflicted by randomness. Still there
+     * is no guarantee to catch these errors.
+     */
+    private static final int ITERATIONS = 10000;
+
+    @Test
+    public void allRandom() {
+        for (int i = 0; i < ITERATIONS; i++) {
+            PuzzleSpecification spec = PuzzleSpecification.random();
+            assertTrue(spec.getWidth() >= 4);
+            assertTrue(spec.getWidth() <= 25);
+            assertTrue(spec.getHeight() >= 4);
+            assertTrue(spec.getHeight() <= 25);
+            assertTrue(spec.getIslandCount() >= 2);
+            assertTrue(spec.getIslandCount() <= (int) Math.ceil(spec.getWidth() * spec.getHeight() / 5.0));
+        }
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void widthTooLow() {
+        PuzzleSpecification.withSpecs(3, 5, 2);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void widthTooHigh() {
+        PuzzleSpecification.withSpecs(26, 5, 2);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void heightTooLow() {
+        PuzzleSpecification.withSpecs(5, 3, 2);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void heightTooHigh() {
+        PuzzleSpecification.withSpecs(5, 26, 2);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void tooFewIslands() {
+        PuzzleSpecification.withSpecs(5, 5, 1);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void tooManyIslands() {
+        PuzzleSpecification.withSpecs(5, 5, 6);
+    }
+
+    @Test
+    public void specsOk() {
+        PuzzleSpecification.withSpecs(5, 5, 3);
+    }
+}
