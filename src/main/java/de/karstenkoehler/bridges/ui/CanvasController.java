@@ -114,59 +114,9 @@ public class CanvasController {
         this.bridges.clear();
     }
 
-    public void openFile(File file) {
-        // TODO this should not be a thing here. just use setPuzzle-method.
-        clearEverything();
-        openAndShowFile(file);
-    }
-
-    private void openAndShowFile(File file) {
-        this.puzzle = tryReadFile(file);
-        if (puzzle == null) {
-            return;
-        }
-
-        this.params = new ParameterObject(Math.max(puzzle.getWidth(), puzzle.getHeight()), this.canvas.getWidth());
-
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        for (Island island : puzzle.getIslands()) {
-            this.islands.add(new IslandShape(this.canvas, island, controlPane, gc, params, puzzle));
-        }
-        for (Bridge bridge : puzzle.getBridges()) {
-            this.bridges.add(new BridgeShape(bridge, canvas.getGraphicsContext2D(), params, puzzle));
-        }
-        drawThings();
-    }
-
-    private BridgesPuzzle tryReadFile(File file) {
-        BridgesPuzzle puzzle = null;
-        try {
-            puzzle = new BridgesFileReader().readFile(file);
-        } catch (ParseException e) {
-            Alert error = new Alert(Alert.AlertType.ERROR, "syntactic error in file:\n" + e.getMessage());
-            error.showAndWait();
-        } catch (ValidateException e) {
-            Alert error = new Alert(Alert.AlertType.ERROR, "semantic error in file:\n" + e.getMessage());
-            error.showAndWait();
-        } catch (IOException e) {
-            Alert error = new Alert(Alert.AlertType.ERROR, "could not read file:\n" + e.getMessage());
-            error.showAndWait();
-        }
-        return puzzle;
-    }
-
     public void setNumberDisplay(NumberDisplay display) {
         for (IslandShape island : this.islands) {
             island.setNumberDisplay(display);
-        }
-    }
-
-    public void saveToFile(File file) {
-        try {
-            new BridgesFileWriter().writeFile(file, this.puzzle);
-        } catch (IOException e) {
-            Alert error = new Alert(Alert.AlertType.ERROR, "could not write file:\n" + e.getMessage());
-            error.showAndWait();
         }
     }
 
@@ -180,6 +130,8 @@ public class CanvasController {
     }
 
     public void setPuzzle(BridgesPuzzle puzzle) {
+        this.puzzle = puzzle;
+
         clearEverything();
         this.params = new ParameterObject(Math.max(puzzle.getWidth(), puzzle.getHeight()), this.canvas.getWidth());
 
@@ -191,5 +143,9 @@ public class CanvasController {
             this.bridges.add(new BridgeShape(bridge, canvas.getGraphicsContext2D(), params, puzzle));
         }
         drawThings();
+    }
+
+    public BridgesPuzzle getPuzzle() {
+        return this.puzzle;
     }
 }

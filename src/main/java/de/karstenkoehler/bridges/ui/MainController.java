@@ -5,10 +5,8 @@ import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.PuzzleSpecification;
 import de.karstenkoehler.bridges.model.generator.Generator;
 import de.karstenkoehler.bridges.model.generator.GeneratorImpl;
-import de.karstenkoehler.bridges.ui.components.RetentionFileChooser;
-import de.karstenkoehler.bridges.ui.components.SaveAction;
-import de.karstenkoehler.bridges.ui.components.SaveRequestAlert;
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -28,6 +26,7 @@ import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Optional;
 
 public class MainController {
     public static final EventType<Event> FILE_CHANGED = new EventType<>("FILE_CHANGED");
@@ -48,16 +47,12 @@ public class MainController {
     private Stage stage;
     private CanvasController canvasController;
 
-    private final RetentionFileChooser chooser;
-    private final SaveRequestAlert saveRequest;
     private final Generator puzzleGenerator;
-    private File currentFile;
+    private final FileHelper fileHelper;
 
-    // TODO pass dependencies as constructor parameters
     public MainController() {
-        this.chooser = new RetentionFileChooser();
-        this.saveRequest = new SaveRequestAlert();
         this.puzzleGenerator = new GeneratorImpl(new DefaultValidator());
+        this.fileHelper = new FileHelper();
     }
 
     @FXML
@@ -72,23 +67,27 @@ public class MainController {
             this.canvasController.drawThings();
         });
 
-
-        this.currentFile = new File("src\\main\\resources\\data\\bsp_5x5.bgs");
-        this.canvasController.openFile(this.currentFile);
+        Optional<BridgesPuzzle> puzzle = this.fileHelper.openInitialFile(new File("src\\main\\resources\\data\\bsp_5x5.bgs"));
+        puzzle.ifPresent(bridgesPuzzle -> this.canvasController.setPuzzle(bridgesPuzzle));
     }
 
     public void setStage(Stage stage) {
         this.stage = stage;
-        this.stage.addEventHandler(FILE_CHANGED, event -> this.fileChanged());
+        this.stage.addEventHandler(FILE_CHANGED, event -> {
+            System.out.println("FILE CHANGED");
+            this.fileHelper.fileModified();
+        });
         this.canvasController.setStage(stage);
-        this.setFile(this.currentFile);
+        this.fileHelper.setStage(stage);
+        this.stage.titleProperty().bind(Bindings.concat(
+                "Bridges Simulator - Karsten Köhler - 8690570 - ",
+                this.fileHelper.filenameProperty()
+        ));
     }
 
     @FXML
     private void onNewPuzzle(ActionEvent actionEvent) {
-        if (hasUnsavedChanges()) {
-            if (doSaveRequest()) return;
-        }
+        this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
 
         try {
             Stage stage = new Stage();
@@ -116,38 +115,30 @@ public class MainController {
 
     @FXML
     private void onRestartPuzzle(ActionEvent actionEvent) {
-        if (hasUnsavedChanges()) {
-            if (doSaveRequest()) return;
-        }
-
+        this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
         this.canvasController.restartPuzzle();
     }
 
     @FXML
     private void onOpenPuzzle(ActionEvent actionEvent) {
-        if (hasUnsavedChanges()) {
-            if (doSaveRequest()) return;
-        }
-
-        File file = chooser.showOpenDialog(stage);
-        if (file != null) {
-            this.canvasController.openFile(file);
-            this.setFile(file);
-        }
+        this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
+        Optional<BridgesPuzzle> puzzle = this.fileHelper.openFile();
+        puzzle.ifPresent(bridgesPuzzle -> this.canvasController.setPuzzle(bridgesPuzzle));
     }
 
     @FXML
     private void onSavePuzzle(ActionEvent actionEvent) {
-        saveToCurrentFile();
+        this.fileHelper.saveToCurrentFile(this.canvasController.getPuzzle());
     }
 
     @FXML
     private void onSaveAs(ActionEvent actionEvent) {
-        saveToNewFile();
+        this.fileHelper.saveToNewFile(this.canvasController.getPuzzle());
     }
 
     @FXML
     private void onClose(ActionEvent actionEvent) {
+        this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
         Platform.exit();
     }
 
@@ -174,68 +165,4 @@ public class MainController {
         return (observable, old, selected) -> canvasController.setClickAreaVisible(selected);
     }
 
-    /**
-     * Asks if the current state of the puzzle should be saved. Also handles all the save dialogs, if
-     * the user wants to save the puzzle.
-     *
-     * @return true if cancelled, false otherwise
-     */
-    private boolean doSaveRequest() {
-        // TODO find better name or change return value behavior
-        String filename = getCurrentFileName();
-        SaveAction action = this.saveRequest.showAndWait(filename);
-        if (action == SaveAction.Cancel) {
-            return true;
-        } else if (action == SaveAction.Save) {
-            saveToCurrentFile();
-        } else if (action == SaveAction.SaveAs) {
-            saveToNewFile();
-        }
-        return false;
-    }
-
-    /**
-     * Asks for a file location and then saves the puzzle to that file.
-     */
-    private void saveToNewFile() {
-        File file = chooser.showSaveDialog(stage);
-        if (file != null) {
-            this.canvasController.saveToFile(file);
-            this.setFile(file);
-        }
-    }
-
-    /**
-     * Saves the puzzle to its original location. If the puzzle was newly generated or the
-     * location is not known, a dialog will be shown.
-     */
-    private void saveToCurrentFile() {
-        if (this.currentFile == null) {
-            this.currentFile = chooser.showSaveDialog(this.stage);
-        }
-        if (this.currentFile != null) {
-            this.canvasController.saveToFile(currentFile);
-            this.setFile(currentFile);
-        }
-    }
-
-    private String getCurrentFileName() {
-        return this.currentFile != null ? this.currentFile.getName() : "New file";
-    }
-
-    private void setFile(File file) {
-        this.currentFile = file;
-        this.stage.setTitle("Bridges Simulator - Karsten Köhler - 8690570 - " + file.getName());
-    }
-
-    private void fileChanged() {
-        String title = this.stage.getTitle();
-        if (!title.endsWith("*")) {
-            this.stage.setTitle(title + "*");
-        }
-    }
-
-    private boolean hasUnsavedChanges() {
-        return this.stage.getTitle().endsWith("*");
-    }
 }

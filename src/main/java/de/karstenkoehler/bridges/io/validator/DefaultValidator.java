@@ -31,7 +31,6 @@ public class DefaultValidator implements Validator {
                 new MaxOneBridgePerIslandPairValidator(),
                 new NoIslandsOnAdjacentFieldsValidator(),
                 new RequiredBridgesCountValidator()));
-        System.out.println("validators: " + validators.size());
     }
 
     @Override
