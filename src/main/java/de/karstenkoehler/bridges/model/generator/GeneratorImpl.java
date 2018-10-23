@@ -115,7 +115,8 @@ public class GeneratorImpl implements Generator {
     private boolean isValid(BridgesPuzzle puzzle) {
         try {
             this.validator.validate(puzzle);
-            return true;
+            puzzle.markInvalidBridges();
+            return puzzle.getBridges().stream().allMatch(Bridge::isValid);
         } catch (ValidateException e) {
             System.out.println(e.getMessage());
             return false;
