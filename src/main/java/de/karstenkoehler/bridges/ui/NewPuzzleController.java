@@ -16,6 +16,8 @@ public class NewPuzzleController {
     @FXML
     private CheckBox cbxChooseNumOfIslands;
     @FXML
+    private CheckBox cbxGenerateSolution;
+    @FXML
     private TextField txtWidth;
     @FXML
     private TextField txtHeight;
@@ -42,8 +44,10 @@ public class NewPuzzleController {
 
     @FXML
     private void onOk(ActionEvent actionEvent) {
+        boolean solution = this.cbxGenerateSolution.isSelected();
+
         if (rbtnUseRandom.isSelected()) {
-            this.specs = PuzzleSpecification.random();
+            this.specs = PuzzleSpecification.random(solution);
             this.stage.close();
             return;
         }
@@ -53,13 +57,13 @@ public class NewPuzzleController {
             int height = Integer.parseInt(txtHeight.getText());
 
             if (!cbxChooseNumOfIslands.isSelected()) {
-                this.specs = PuzzleSpecification.withBounds(width, height);
+                this.specs = PuzzleSpecification.withBounds(solution, width, height);
                 this.stage.close();
                 return;
             }
 
             int islands = Integer.parseInt(txtIslands.getText());
-            this.specs = PuzzleSpecification.withSpecs(width, height, islands);
+            this.specs = PuzzleSpecification.withSpecs(solution, width, height, islands);
             this.stage.close();
         } catch (IllegalArgumentException e) {
             Alert alert = new Alert(Alert.AlertType.ERROR);

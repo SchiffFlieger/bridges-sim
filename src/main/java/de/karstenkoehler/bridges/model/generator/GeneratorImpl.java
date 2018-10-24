@@ -57,6 +57,9 @@ public class GeneratorImpl implements Generator {
         }
 
         puzzle.fillMissingBridges();
+        if (!spec.generateSolution()) {
+            puzzle.restart();
+        }
         return puzzle;
     }
 

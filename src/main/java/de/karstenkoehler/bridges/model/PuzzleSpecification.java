@@ -6,17 +6,18 @@ public class PuzzleSpecification {
     private static final int MIN_SIZE = 4;
     private static final int MAX_SIZE = 25;
 
+    private final boolean solution;
     private final int width;
     private final int height;
     private final int islandCount;
 
     private static final Random random = new Random(System.nanoTime());
 
-    public static PuzzleSpecification random() {
-        return PuzzleSpecification.withBounds(intBetween(MIN_SIZE, MAX_SIZE), intBetween(MIN_SIZE, MAX_SIZE));
+    public static PuzzleSpecification random(boolean solution) {
+        return PuzzleSpecification.withBounds(solution, intBetween(MIN_SIZE, MAX_SIZE), intBetween(MIN_SIZE, MAX_SIZE));
     }
 
-    public static PuzzleSpecification withBounds(int width, int height) {
+    public static PuzzleSpecification withBounds(boolean solution, int width, int height) {
         int min = Math.min(width, height);
         int max = maxIslandCount(width, height);
 
@@ -24,10 +25,10 @@ public class PuzzleSpecification {
             min = 3;
             max = 4;
         }
-        return PuzzleSpecification.withSpecs(width, height, intBetween(min, max));
+        return PuzzleSpecification.withSpecs(solution, width, height, intBetween(min, max));
     }
 
-    public static PuzzleSpecification withSpecs(int width, int height, int islandCount) {
+    public static PuzzleSpecification withSpecs(boolean solution, int width, int height, int islandCount) {
         if (width < MIN_SIZE || width > MAX_SIZE) {
             throw new IllegalArgumentException("width must be in range [4, 25].");
         }
@@ -38,13 +39,18 @@ public class PuzzleSpecification {
             throw new IllegalArgumentException("island count must be in range [2, width*height/5].");
         }
 
-        return new PuzzleSpecification(width, height, islandCount);
+        return new PuzzleSpecification(solution, width, height, islandCount);
     }
 
-    private PuzzleSpecification(int width, int height, int islandCount) {
+    private PuzzleSpecification(boolean solution, int width, int height, int islandCount) {
+        this.solution = solution;
         this.width = width;
         this.height = height;
         this.islandCount = islandCount;
+    }
+
+    public boolean generateSolution() {
+        return this.solution;
     }
 
     public int getWidth() {

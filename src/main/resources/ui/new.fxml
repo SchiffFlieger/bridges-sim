@@ -2,7 +2,7 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.AnchorPane?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="240.0"
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="263.0"
             prefWidth="412.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="de.karstenkoehler.bridges.ui.NewPuzzleController">
     <RadioButton fx:id="rbtnUseRandom" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" selected="true"
@@ -20,7 +20,9 @@
     <TextField fx:id="txtWidth" disable="true" layoutX="92.0" layoutY="68.0"/>
     <TextField fx:id="txtHeight" disable="true" layoutX="92.0" layoutY="99.0"/>
     <TextField fx:id="txtIslands" disable="true" layoutX="92.0" layoutY="163.0"/>
-    <Button layoutX="241.0" layoutY="204.0" mnemonicParsing="false" onAction="#onOk" prefWidth="75.0" text="OK"/>
-    <Button layoutX="325.0" layoutY="204.0" mnemonicParsing="false" onAction="#onCancel" prefWidth="75.0"
+    <Button layoutX="239.0" layoutY="224.0" mnemonicParsing="false" onAction="#onOk" prefWidth="75.0" text="OK"/>
+    <Button layoutX="323.0" layoutY="224.0" mnemonicParsing="false" onAction="#onCancel" prefWidth="75.0"
             text="Cancel"/>
+    <CheckBox fx:id="cbxGenerateSolution" layoutX="14.0" layoutY="199.0" mnemonicParsing="false"
+              text="generate solution"/>
 </AnchorPane>
