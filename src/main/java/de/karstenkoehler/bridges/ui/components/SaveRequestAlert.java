@@ -32,13 +32,13 @@ public class SaveRequestAlert {
         if (result.isPresent()) {
             ButtonType buttonType = result.get();
             if (buttonType.equals(saveButton)) {
-                return SaveAction.Save;
+                return SaveAction.SAVE;
             } else if (buttonType.equals(saveAsButton)) {
-                return SaveAction.SaveAs;
+                return SaveAction.SAVE_AS;
             } else if (buttonType.equals(dontSaveButton)) {
-                return SaveAction.DontSave;
+                return SaveAction.DONT_SAVE;
             } else if (buttonType.equals(cancelButton)) {
-                return SaveAction.Cancel;
+                return SaveAction.CANCEL;
             }
         }
         throw new RuntimeException("fatal error: unexpected dialog result");

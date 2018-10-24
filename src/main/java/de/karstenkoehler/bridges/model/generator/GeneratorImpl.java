@@ -82,28 +82,28 @@ public class GeneratorImpl implements Generator {
             return o1.getY() - o2.getY();
         });
 
-        Map<Integer, Island> map = new HashMap<>();
+        Map<Integer, Island> result = new HashMap<>();
         for (int i = 0; i < islands.size(); i++) {
             islands.get(i).setId(i);
-            map.put(i, islands.get(i));
+            result.put(i, islands.get(i));
         }
-        return map;
+        return result;
     }
 
     private List<Bridge> getBridgeList() {
-        List<Bridge> bridges = new ArrayList<>(this.bridges.size());
+        List<Bridge> result = new ArrayList<>(this.bridges.size());
 
         for (Bridge bridge : this.bridges) {
             Island a = bridge.getStartIsland();
             Island b = bridge.getEndIsland();
             if (a.getId() > b.getId()) {
-                bridges.add(new Bridge(b, a, bridge.getBridgeCount()));
+                result.add(new Bridge(b, a, bridge.getBridgeCount()));
             } else {
-                bridges.add(new Bridge(a, b, bridge.getBridgeCount()));
+                result.add(new Bridge(a, b, bridge.getBridgeCount()));
             }
         }
 
-        bridges.sort((o1, o2) -> {
+        result.sort((o1, o2) -> {
             int diff = o1.getStartIsland().getId() - o2.getStartIsland().getId();
             if (diff != 0) {
                 return diff;
@@ -112,7 +112,7 @@ public class GeneratorImpl implements Generator {
             return o1.getEndIsland().getId() - o2.getEndIsland().getId();
         });
 
-        return bridges;
+        return result;
     }
 
     private boolean isValid(BridgesPuzzle puzzle) {

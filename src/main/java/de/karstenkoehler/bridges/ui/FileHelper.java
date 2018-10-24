@@ -23,7 +23,7 @@ public class FileHelper {
     private final SaveRequestAlert saveRequest;
     private final StringProperty titleFilename;
     private final StringProperty filename;
-    private final ObjectProperty<File> current;
+    private final ObjectProperty<File> file;
     private final BooleanProperty modified;
 
 
@@ -36,7 +36,7 @@ public class FileHelper {
     public FileHelper() {
         this.chooser = new RetentionFileChooser();
         this.saveRequest = new SaveRequestAlert();
-        this.current = new SimpleObjectProperty<>();
+        this.file = new SimpleObjectProperty<>();
 
         this.error = new ErrorAlert();
         this.reader = new BridgesFileReader();
@@ -45,28 +45,10 @@ public class FileHelper {
         this.modified = new SimpleBooleanProperty(false);
 
         this.filename = new SimpleStringProperty();
-        this.filename.bind(new StringBinding() {
-            {
-                super.bind(current);
-            }
-
-            @Override
-            protected String computeValue() {
-                return current.get() != null ? current.asString().get() : "New file";
-            }
-        });
+        this.filename.bind(new FilenameBinding(this.file));
 
         this.titleFilename = new SimpleStringProperty();
-        this.titleFilename.bind(Bindings.concat(filename, new StringBinding() {
-            {
-                super.bind(modified);
-            }
-
-            @Override
-            protected String computeValue() {
-                return modified.get() ? "*" : "";
-            }
-        }));
+        this.titleFilename.bind(Bindings.concat(filename, new FileChangedIndicator(modified)));
     }
 
     /**
@@ -90,9 +72,9 @@ public class FileHelper {
      * @param puzzle the puzzle to save
      */
     public void saveToNewFile(BridgesPuzzle puzzle) {
-        this.current.setValue(chooser.showSaveDialog(this.stage));
-        if (this.current.isNotNull().get()) {
-            saveToFile(puzzle, current.get());
+        this.file.setValue(chooser.showSaveDialog(this.stage));
+        if (this.file.isNotNull().get()) {
+            saveToFile(puzzle, file.get());
         }
     }
 
@@ -103,16 +85,16 @@ public class FileHelper {
      * @param puzzle the puzzle to save
      */
     public void saveToCurrentFile(BridgesPuzzle puzzle) {
-        if (this.current.isNull().get()) {
-            this.current.setValue(chooser.showSaveDialog(this.stage));
+        if (this.file.isNull().get()) {
+            this.file.setValue(chooser.showSaveDialog(this.stage));
         }
-        if (this.current.isNotNull().get()) {
-            saveToFile(puzzle, current.get());
+        if (this.file.isNotNull().get()) {
+            saveToFile(puzzle, file.get());
         }
     }
 
     /**
-     * If the current puzzle has unsaved changes, this method shows a save request to the user. If requested
+     * If the file puzzle has unsaved changes, this method shows a save request to the user. If requested
      * the puzzle is saved to the desired location.
      *
      * @param puzzle the puzzle to save
@@ -120,9 +102,9 @@ public class FileHelper {
     public void saveIfNecessary(BridgesPuzzle puzzle) {
         if (this.modified.get()) {
             SaveAction action = this.saveRequest.showAndWait(this.filename.get());
-            if (action == SaveAction.Save) {
+            if (action == SaveAction.SAVE) {
                 saveToCurrentFile(puzzle);
-            } else if (action == SaveAction.SaveAs) {
+            } else if (action == SaveAction.SAVE_AS) {
                 saveToNewFile(puzzle);
             }
         }
@@ -138,7 +120,7 @@ public class FileHelper {
     private Optional<BridgesPuzzle> tryReadFile(File file) {
         try {
             BridgesPuzzle puzzle = reader.readFile(file);
-            this.current.setValue(file);
+            this.file.setValue(file);
             this.modified.setValue(false);
             return Optional.ofNullable(puzzle);
         } catch (ParseException e) {
@@ -179,7 +161,7 @@ public class FileHelper {
     }
 
     public void resetFile() {
-        this.current.setValue(null);
+        this.file.setValue(null);
     }
 
     // TODO allow empty puzzle in canvas controller, then remove this method
@@ -188,5 +170,31 @@ public class FileHelper {
             return tryReadFile(toLoad);
         }
         return Optional.empty();
+    }
+
+    private class FileChangedIndicator extends StringBinding {
+        private final BooleanProperty modified;
+
+        FileChangedIndicator(BooleanProperty modified) {
+            this.modified = modified;
+        }
+
+        @Override
+        protected String computeValue() {
+            return modified.get() ? "*" : "";
+        }
+    }
+
+    private class FilenameBinding extends StringBinding {
+        private final ObjectProperty<File> current;
+
+        FilenameBinding(ObjectProperty<File> current) {
+            this.current = current;
+        }
+
+        @Override
+        protected String computeValue() {
+            return current.get() != null ? current.asString().get() : "New file";
+        }
     }
 }

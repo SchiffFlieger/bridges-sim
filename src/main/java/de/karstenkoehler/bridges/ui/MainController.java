@@ -40,7 +40,6 @@ public class MainController {
     @FXML
     private Canvas canvas;
 
-    private Stage mainStage;
     private CanvasController canvasController;
 
     private final Generator puzzleGenerator;
@@ -69,18 +68,17 @@ public class MainController {
     }
 
     public void setMainStage(Stage mainStage) throws IOException {
-        this.mainStage = mainStage;
-        this.mainStage.addEventHandler(FILE_CHANGED, event -> {
+        mainStage.addEventHandler(FILE_CHANGED, event -> {
             System.out.println("FILE CHANGED");
             this.fileHelper.fileModified();
         });
         this.canvasController.setStage(mainStage);
         this.fileHelper.setStage(mainStage);
-        this.mainStage.titleProperty().bind(Bindings.concat(
+        mainStage.titleProperty().bind(Bindings.concat(
                 "Bridges Simulator - Karsten Köhler - 8690570 - ",
                 this.fileHelper.titleFilenameProperty()
         ));
-        this.newPuzzleStage = new NewPuzzleStage(this.mainStage);
+        this.newPuzzleStage = new NewPuzzleStage(mainStage);
         this.newPuzzleStage.init();
     }
 

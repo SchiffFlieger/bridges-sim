@@ -1,5 +1,5 @@
 package de.karstenkoehler.bridges.ui.components;
 
 public enum SaveAction {
-    Save, SaveAs, DontSave, Cancel
+    SAVE, SAVE_AS, DONT_SAVE, CANCEL
 }
