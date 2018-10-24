@@ -77,11 +77,13 @@ public class NewPuzzleController {
 
     @FXML
     private void onCancel(ActionEvent actionEvent) {
+        this.specs = null;
         stage.close();
     }
 
     public void setStage(Stage stage) {
         this.stage = stage;
+        this.stage.setOnCloseRequest(event -> this.specs = null);
     }
 
     public PuzzleSpecification getSpecs() {

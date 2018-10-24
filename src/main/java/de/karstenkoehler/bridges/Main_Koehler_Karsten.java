@@ -27,7 +27,7 @@ public class Main_Koehler_Karsten extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/main.fxml"));
         Parent root = loader.load();
         MainController controller = loader.getController();
-        controller.setStage(stage);
+        controller.setMainStage(stage);
         return root;
     }
 }

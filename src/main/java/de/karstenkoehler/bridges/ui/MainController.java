@@ -5,6 +5,7 @@ import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.PuzzleSpecification;
 import de.karstenkoehler.bridges.model.generator.Generator;
 import de.karstenkoehler.bridges.model.generator.GeneratorImpl;
+import de.karstenkoehler.bridges.ui.components.NewPuzzleStage;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
@@ -12,16 +13,11 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.Alert;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -44,11 +40,12 @@ public class MainController {
     @FXML
     private Canvas canvas;
 
-    private Stage stage;
+    private Stage mainStage;
     private CanvasController canvasController;
 
     private final Generator puzzleGenerator;
     private final FileHelper fileHelper;
+    private NewPuzzleStage newPuzzleStage;
 
     public MainController() {
         this.puzzleGenerator = new GeneratorImpl(new DefaultValidator());
@@ -71,46 +68,32 @@ public class MainController {
         puzzle.ifPresent(bridgesPuzzle -> this.canvasController.setPuzzle(bridgesPuzzle));
     }
 
-    public void setStage(Stage stage) {
-        this.stage = stage;
-        this.stage.addEventHandler(FILE_CHANGED, event -> {
+    public void setMainStage(Stage mainStage) throws IOException {
+        this.mainStage = mainStage;
+        this.mainStage.addEventHandler(FILE_CHANGED, event -> {
             System.out.println("FILE CHANGED");
             this.fileHelper.fileModified();
         });
-        this.canvasController.setStage(stage);
-        this.fileHelper.setStage(stage);
-        this.stage.titleProperty().bind(Bindings.concat(
+        this.canvasController.setStage(mainStage);
+        this.fileHelper.setStage(mainStage);
+        this.mainStage.titleProperty().bind(Bindings.concat(
                 "Bridges Simulator - Karsten Köhler - 8690570 - ",
                 this.fileHelper.filenameProperty()
         ));
+        this.newPuzzleStage = new NewPuzzleStage(this.mainStage);
+        this.newPuzzleStage.init();
     }
 
     @FXML
     private void onNewPuzzle(ActionEvent actionEvent) {
         this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
 
-        try {
-            Stage stage = new Stage();
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/new.fxml"));
-            Parent root = loader.load();
-            NewPuzzleController controller = loader.getController();
-            controller.setStage(stage);
-            stage.setTitle("Create new puzzle");
-            stage.setScene(new Scene(root));
+        Optional<PuzzleSpecification> specs = newPuzzleStage.showAndWait();
 
-            stage.initOwner(this.stage);
-            stage.initModality(Modality.WINDOW_MODAL);
-            stage.showAndWait();
-
-            PuzzleSpecification specs = controller.getSpecs();
-            if (specs != null) {
-                BridgesPuzzle puzzle = this.puzzleGenerator.generate(specs);
-                this.canvasController.setPuzzle(puzzle);
-            }
-        } catch (IOException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "could not open file ui/new.fxml");
-            alert.showAndWait();
-        }
+        specs.ifPresent(puzzleSpecification -> {
+            BridgesPuzzle puzzle = this.puzzleGenerator.generate(specs.get());
+            this.canvasController.setPuzzle(puzzle);
+        });
     }
 
     @FXML
