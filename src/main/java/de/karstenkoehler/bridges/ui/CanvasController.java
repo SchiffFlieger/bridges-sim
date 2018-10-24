@@ -1,9 +1,5 @@
 package de.karstenkoehler.bridges.ui;
 
-import de.karstenkoehler.bridges.io.BridgesFileReader;
-import de.karstenkoehler.bridges.io.BridgesFileWriter;
-import de.karstenkoehler.bridges.io.parser.ParseException;
-import de.karstenkoehler.bridges.io.validator.ValidateException;
 import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.Island;
@@ -13,13 +9,10 @@ import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 

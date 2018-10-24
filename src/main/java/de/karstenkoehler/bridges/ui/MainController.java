@@ -78,7 +78,7 @@ public class MainController {
         this.fileHelper.setStage(mainStage);
         this.mainStage.titleProperty().bind(Bindings.concat(
                 "Bridges Simulator - Karsten Köhler - 8690570 - ",
-                this.fileHelper.filenameProperty()
+                this.fileHelper.titleFilenameProperty()
         ));
         this.newPuzzleStage = new NewPuzzleStage(this.mainStage);
         this.newPuzzleStage.init();
@@ -93,6 +93,7 @@ public class MainController {
         specs.ifPresent(puzzleSpecification -> {
             BridgesPuzzle puzzle = this.puzzleGenerator.generate(specs.get());
             this.canvasController.setPuzzle(puzzle);
+            this.fileHelper.resetFile();
         });
     }
 

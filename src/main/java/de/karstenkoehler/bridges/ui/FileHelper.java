@@ -9,10 +9,9 @@ import de.karstenkoehler.bridges.ui.components.ErrorAlert;
 import de.karstenkoehler.bridges.ui.components.RetentionFileChooser;
 import de.karstenkoehler.bridges.ui.components.SaveAction;
 import de.karstenkoehler.bridges.ui.components.SaveRequestAlert;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
+import javafx.beans.property.*;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -22,34 +21,58 @@ import java.util.Optional;
 public class FileHelper {
     private final RetentionFileChooser chooser;
     private final SaveRequestAlert saveRequest;
+    private final StringProperty titleFilename;
     private final StringProperty filename;
     private final ObjectProperty<File> current;
+    private final BooleanProperty modified;
+
 
     private final ErrorAlert error;
     private final BridgesFileReader reader;
     private final BridgesFileWriter writer;
 
     private Stage stage;
-    private boolean modified;
 
     public FileHelper() {
         this.chooser = new RetentionFileChooser();
         this.saveRequest = new SaveRequestAlert();
-        this.filename = new SimpleStringProperty();
         this.current = new SimpleObjectProperty<>();
 
         this.error = new ErrorAlert();
         this.reader = new BridgesFileReader();
         this.writer = new BridgesFileWriter();
 
-        this.modified = false;
+        this.modified = new SimpleBooleanProperty(false);
 
-        filename.bind(current.asString());
+        this.filename = new SimpleStringProperty();
+        this.filename.bind(new StringBinding() {
+            {
+                super.bind(current);
+            }
+
+            @Override
+            protected String computeValue() {
+                return current.get() != null ? current.asString().get() : "New file";
+            }
+        });
+
+        this.titleFilename = new SimpleStringProperty();
+        this.titleFilename.bind(Bindings.concat(filename, new StringBinding() {
+            {
+                super.bind(modified);
+            }
+
+            @Override
+            protected String computeValue() {
+                return modified.get() ? "*" : "";
+            }
+        }));
     }
 
     /**
      * Shows a file open dialog and then tries to read the chosen file. If there are any errors opening the file
      * or the user cancelled the dialog, this method returns an empty optional.
+     *
      * @return the loaded puzzle
      */
     public Optional<BridgesPuzzle> openFile() {
@@ -63,6 +86,7 @@ public class FileHelper {
     /**
      * Asks for a file location and then saves the puzzle to that file. If the user cancels the file save dialog,
      * the puzzle does not get saved.
+     *
      * @param puzzle the puzzle to save
      */
     public void saveToNewFile(BridgesPuzzle puzzle) {
@@ -75,6 +99,7 @@ public class FileHelper {
     /**
      * Saves the puzzle to its original location. If the puzzle was newly generated or the
      * location is not known, a dialog will be shown.
+     *
      * @param puzzle the puzzle to save
      */
     public void saveToCurrentFile(BridgesPuzzle puzzle) {
@@ -89,12 +114,12 @@ public class FileHelper {
     /**
      * If the current puzzle has unsaved changes, this method shows a save request to the user. If requested
      * the puzzle is saved to the desired location.
+     *
      * @param puzzle the puzzle to save
      */
     public void saveIfNecessary(BridgesPuzzle puzzle) {
-        if (this.modified) {
-            String filename = getFilename();
-            SaveAction action = this.saveRequest.showAndWait(filename);
+        if (this.modified.get()) {
+            SaveAction action = this.saveRequest.showAndWait(this.filename.get());
             if (action == SaveAction.Save) {
                 saveToCurrentFile(puzzle);
             } else if (action == SaveAction.SaveAs) {
@@ -106,6 +131,7 @@ public class FileHelper {
     /**
      * Attempts to read the given file. Catches several errors and shows them to the user. If there are
      * any errors, an empty optional is returned.
+     *
      * @param file the file to read
      * @return the loaded puzzle
      */
@@ -113,7 +139,7 @@ public class FileHelper {
         try {
             BridgesPuzzle puzzle = reader.readFile(file);
             this.current.setValue(file);
-            this.modified = false;
+            this.modified.setValue(false);
             return Optional.ofNullable(puzzle);
         } catch (ParseException e) {
             this.error.showAndWait("syntactic error in file:\n" + e.getMessage());
@@ -127,41 +153,33 @@ public class FileHelper {
 
     /**
      * Saves the puzzle to the given file location. If any errors occur, they are shown to the user.
+     *
      * @param puzzle the puzzle to save
-     * @param file the location to save to
+     * @param file   the location to save to
      */
     private void saveToFile(BridgesPuzzle puzzle, File file) {
         try {
             writer.writeFile(file, puzzle);
-            this.modified = false;
+            this.modified.setValue(false);
         } catch (IOException e) {
             this.error.showAndWait("could not write file:\n" + e.getMessage());
         }
     }
 
-    /**
-     * Returns the name of the currently opened puzzle. The name of the puzzle corresponds to the file
-     * the puzzle is saved to. If the puzzle was newly created or the file name is not known, this method
-     * returns 'New file' instead.
-     * @return the name of the puzzle
-     */
-    private String getFilename() {
-        if (this.current.isNull().get()) {
-            return "New file";
-        }
-        return this.current.get().getName();
-    }
-
     public void fileModified() {
-        this.modified = true;
+        this.modified.setValue(true);
     }
 
-    public StringProperty filenameProperty() {
-        return filename;
+    public StringProperty titleFilenameProperty() {
+        return titleFilename;
     }
 
     public void setStage(Stage stage) {
         this.stage = stage;
+    }
+
+    public void resetFile() {
+        this.current.setValue(null);
     }
 
     // TODO allow empty puzzle in canvas controller, then remove this method
