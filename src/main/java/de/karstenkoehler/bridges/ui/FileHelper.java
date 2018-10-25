@@ -172,11 +172,12 @@ public class FileHelper {
         return Optional.empty();
     }
 
-    private class FileChangedIndicator extends StringBinding {
+    private static class FileChangedIndicator extends StringBinding {
         private final BooleanProperty modified;
 
         FileChangedIndicator(BooleanProperty modified) {
             this.modified = modified;
+            this.bind(modified);
         }
 
         @Override
@@ -185,16 +186,17 @@ public class FileHelper {
         }
     }
 
-    private class FilenameBinding extends StringBinding {
-        private final ObjectProperty<File> current;
+    private static class FilenameBinding extends StringBinding {
+        private final ObjectProperty<File> file;
 
-        FilenameBinding(ObjectProperty<File> current) {
-            this.current = current;
+        FilenameBinding(ObjectProperty<File> file) {
+            this.file = file;
+            this.bind(file);
         }
 
         @Override
         protected String computeValue() {
-            return current.get() != null ? current.asString().get() : "New file";
+            return file.get() != null ? file.asString().get() : "New file";
         }
     }
 }
