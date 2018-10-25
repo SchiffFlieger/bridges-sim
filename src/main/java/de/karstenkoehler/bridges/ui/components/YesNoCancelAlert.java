@@ -6,24 +6,22 @@ import javafx.scene.control.ButtonType;
 
 import java.util.Optional;
 
-public class SaveRequestAlert {
+public class YesNoCancelAlert {
     private final Alert alert;
-    private final ButtonType saveButton;
-    private final ButtonType saveAsButton;
-    private final ButtonType dontSaveButton;
+    private final ButtonType yesButton;
+    private final ButtonType noButton;
     private final ButtonType cancelButton;
 
-    public SaveRequestAlert() {
-        saveButton = new ButtonType("Save", ButtonBar.ButtonData.YES);
-        saveAsButton = new ButtonType("Save As...", ButtonBar.ButtonData.YES);
-        dontSaveButton = new ButtonType("No", ButtonBar.ButtonData.NO);
+    public YesNoCancelAlert() {
+        yesButton = new ButtonType("Yes", ButtonBar.ButtonData.YES);
+        noButton = new ButtonType("No", ButtonBar.ButtonData.NO);
         cancelButton = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 
         alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.setTitle("Save Changes?");
         alert.setHeaderText(null);
         alert.setGraphic(null);
-        alert.getButtonTypes().setAll(saveButton, saveAsButton, dontSaveButton, cancelButton);
+        alert.getButtonTypes().setAll(yesButton, noButton, cancelButton);
     }
 
     public SaveAction showAndWait(String filename) {
@@ -31,16 +29,14 @@ public class SaveRequestAlert {
         Optional<ButtonType> result = alert.showAndWait();
         if (result.isPresent()) {
             ButtonType buttonType = result.get();
-            if (buttonType.equals(saveButton)) {
+            if (buttonType.equals(yesButton)) {
                 return SaveAction.SAVE;
-            } else if (buttonType.equals(saveAsButton)) {
-                return SaveAction.SAVE_AS;
-            } else if (buttonType.equals(dontSaveButton)) {
+            } else if (buttonType.equals(noButton)) {
                 return SaveAction.DONT_SAVE;
             } else if (buttonType.equals(cancelButton)) {
                 return SaveAction.CANCEL;
             }
         }
-        throw new RuntimeException("fatal error: unexpected dialog result");
+        return null;
     }
 }

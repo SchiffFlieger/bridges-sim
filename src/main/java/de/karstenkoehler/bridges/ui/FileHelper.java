@@ -8,7 +8,7 @@ import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.ui.components.ErrorAlert;
 import de.karstenkoehler.bridges.ui.components.RetentionFileChooser;
 import de.karstenkoehler.bridges.ui.components.SaveAction;
-import de.karstenkoehler.bridges.ui.components.SaveRequestAlert;
+import de.karstenkoehler.bridges.ui.components.YesNoCancelAlert;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.*;
@@ -20,7 +20,7 @@ import java.util.Optional;
 
 public class FileHelper {
     private final RetentionFileChooser chooser;
-    private final SaveRequestAlert saveRequest;
+    private final YesNoCancelAlert saveRequest;
     private final StringProperty titleFilename;
     private final StringProperty filename;
     private final ObjectProperty<File> file;
@@ -35,7 +35,7 @@ public class FileHelper {
 
     public FileHelper() {
         this.chooser = new RetentionFileChooser();
-        this.saveRequest = new SaveRequestAlert();
+        this.saveRequest = new YesNoCancelAlert();
         this.file = new SimpleObjectProperty<>();
 
         this.error = new ErrorAlert();
@@ -99,15 +99,16 @@ public class FileHelper {
      *
      * @param puzzle the puzzle to save
      */
-    public void saveIfNecessary(BridgesPuzzle puzzle) {
+    public SaveAction saveIfNecessary(BridgesPuzzle puzzle) {
         if (this.modified.get()) {
             SaveAction action = this.saveRequest.showAndWait(this.filename.get());
             if (action == SaveAction.SAVE) {
                 saveToCurrentFile(puzzle);
-            } else if (action == SaveAction.SAVE_AS) {
-                saveToNewFile(puzzle);
+            } else if (action == SaveAction.CANCEL) {
+                return action;
             }
         }
+        return null;
     }
 
     /**

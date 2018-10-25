@@ -6,6 +6,7 @@ import de.karstenkoehler.bridges.model.PuzzleSpecification;
 import de.karstenkoehler.bridges.model.generator.Generator;
 import de.karstenkoehler.bridges.model.generator.GeneratorImpl;
 import de.karstenkoehler.bridges.ui.components.NewPuzzleStage;
+import de.karstenkoehler.bridges.ui.components.SaveAction;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
@@ -81,7 +82,10 @@ public class MainController {
 
     @FXML
     private void onNewPuzzle(ActionEvent actionEvent) {
-        this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
+        SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
+        if (action == SaveAction.CANCEL) {
+            return;
+        }
 
         Optional<PuzzleSpecification> specs = newPuzzleStage.showAndWait();
 
@@ -94,13 +98,21 @@ public class MainController {
 
     @FXML
     private void onRestartPuzzle(ActionEvent actionEvent) {
-        this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
+        SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
+        if (action == SaveAction.CANCEL) {
+            return;
+        }
+
         this.canvasController.restartPuzzle();
     }
 
     @FXML
     private void onOpenPuzzle(ActionEvent actionEvent) {
-        this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
+        SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
+        if (action == SaveAction.CANCEL) {
+            return;
+        }
+
         Optional<BridgesPuzzle> puzzle = this.fileHelper.openFile();
         puzzle.ifPresent(bridgesPuzzle -> this.canvasController.setPuzzle(bridgesPuzzle));
     }
@@ -117,7 +129,11 @@ public class MainController {
 
     @FXML
     private void onClose(ActionEvent actionEvent) {
-        this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
+        SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
+        if (action == SaveAction.CANCEL) {
+            return;
+        }
+
         Platform.exit();
     }
 
