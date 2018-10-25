@@ -162,6 +162,7 @@ public class FileHelper {
 
     public void resetFile() {
         this.file.setValue(null);
+        this.modified.setValue(true);
     }
 
     // TODO allow empty puzzle in canvas controller, then remove this method

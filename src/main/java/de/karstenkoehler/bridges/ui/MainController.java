@@ -63,16 +63,13 @@ public class MainController {
             this.canvasController.drawThings();
         });
 
+        canvas.addEventHandler(FILE_CHANGED, event -> this.fileHelper.fileModified());
+
         Optional<BridgesPuzzle> puzzle = this.fileHelper.openInitialFile(new File("src\\main\\resources\\data\\bsp_5x5.bgs"));
         puzzle.ifPresent(bridgesPuzzle -> this.canvasController.setPuzzle(bridgesPuzzle));
     }
 
     public void setMainStage(Stage mainStage) throws IOException {
-        mainStage.addEventHandler(FILE_CHANGED, event -> {
-            System.out.println("FILE CHANGED");
-            this.fileHelper.fileModified();
-        });
-        this.canvasController.setStage(mainStage);
         this.fileHelper.setStage(mainStage);
         mainStage.titleProperty().bind(Bindings.concat(
                 "Bridges Simulator - Karsten Köhler - 8690570 - ",

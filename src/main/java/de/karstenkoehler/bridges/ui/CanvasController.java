@@ -11,7 +11,6 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +29,6 @@ public class CanvasController {
     private List<BridgeShape> bridges;
     private ParameterObject params;
     private BridgesPuzzle puzzle;
-    private Stage stage;
 
     public CanvasController(Canvas canvas, Pane controlPane) {
         this.canvas = canvas;
@@ -44,9 +42,6 @@ public class CanvasController {
 
     public void drawThings() {
         this.puzzle.markInvalidBridges();
-        if (stage != null) {
-            this.stage.fireEvent(new Event(MainController.FILE_CHANGED));
-        }
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -116,10 +111,6 @@ public class CanvasController {
     public void restartPuzzle() {
         this.puzzle.restart();
         this.drawThings();
-    }
-
-    public void setStage(Stage stage) {
-        this.stage = stage;
     }
 
     public void setPuzzle(BridgesPuzzle puzzle) {

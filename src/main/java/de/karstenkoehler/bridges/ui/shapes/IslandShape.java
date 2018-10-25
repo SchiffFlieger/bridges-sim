@@ -5,6 +5,7 @@ import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.Island;
 import de.karstenkoehler.bridges.model.Orientation;
 import de.karstenkoehler.bridges.ui.CanvasController;
+import de.karstenkoehler.bridges.ui.MainController;
 import de.karstenkoehler.bridges.ui.NumberDisplay;
 import de.karstenkoehler.bridges.ui.ParameterObject;
 import javafx.event.Event;
@@ -96,7 +97,7 @@ public class IslandShape {
         poly.setOnMouseEntered(event -> poly.setFill(FILL_COLOR));
         poly.setOnMouseExited(event -> poly.setFill(Color.TRANSPARENT));
         poly.setOnMouseClicked(event -> {
-            System.out.println(id + " " + orientation);
+            canvas.fireEvent(new Event(MainController.FILE_CHANGED));
             int count = event.getButton().equals(MouseButton.PRIMARY) ? 1 : -1;
             onClick(orientation, count);
         });
