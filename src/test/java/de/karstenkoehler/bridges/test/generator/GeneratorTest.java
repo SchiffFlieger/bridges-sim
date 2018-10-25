@@ -8,111 +8,59 @@ import de.karstenkoehler.bridges.model.PuzzleSpecification;
 import de.karstenkoehler.bridges.model.generator.Generator;
 import de.karstenkoehler.bridges.model.generator.GeneratorImpl;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
+@RunWith(Parameterized.class)
 public class GeneratorTest {
-    @Test
-    public void simpleSmallWithoutSolution() {
-        PuzzleSpecification spec = PuzzleSpecification.withSpecs(false, 5, 5, 2);
-        Generator generator = new GeneratorImpl(new DefaultValidator());
-        BridgesPuzzle puzzle = generator.generate(spec);
 
-        assertEquals(spec.getWidth(), puzzle.getWidth());
-        assertEquals(spec.getHeight(), puzzle.getHeight());
-        assertEquals(spec.getIslandCount(), puzzle.getIslands().size());
+    @Parameterized.Parameters
+    public static Collection<Object[]> data() {
+        return Arrays.asList(new Object[][]{
+                {PuzzleSpecification.withSpecs(false, 5, 5, 2)},
+                {PuzzleSpecification.withSpecs(false, 5, 5, 3)},
+                {PuzzleSpecification.withSpecs(false, 5, 5, 5)},
+                {PuzzleSpecification.withSpecs(false, 25, 25, 5)},
+                {PuzzleSpecification.withSpecs(false, 25, 25, 20)},
+                {PuzzleSpecification.withSpecs(false, 25, 25, 50)},
 
-        int bridgeSum = puzzle.getBridges().stream().mapToInt(Bridge::getBridgeCount).sum();
-        assertEquals(0, bridgeSum);
+                {PuzzleSpecification.withSpecs(true, 5, 5, 2)},
+                {PuzzleSpecification.withSpecs(true, 5, 5, 3)},
+                {PuzzleSpecification.withSpecs(true, 5, 5, 5)},
+                {PuzzleSpecification.withSpecs(true, 25, 25, 5)},
+                {PuzzleSpecification.withSpecs(true, 25, 25, 20)},
+                {PuzzleSpecification.withSpecs(true, 25, 25, 50)},
+        });
     }
 
+    @Parameterized.Parameter
+    public PuzzleSpecification spec;
+
+    private static Generator generator = new GeneratorImpl(new DefaultValidator());
+
     @Test
-    public void simpleSmall() {
-        PuzzleSpecification spec = PuzzleSpecification.withSpecs(true, 5, 5, 2);
-        Generator generator = new GeneratorImpl(new DefaultValidator());
+    public void test() {
         BridgesPuzzle puzzle = generator.generate(spec);
 
         assertEquals(spec.getWidth(), puzzle.getWidth());
         assertEquals(spec.getHeight(), puzzle.getHeight());
         assertEquals(spec.getIslandCount(), puzzle.getIslands().size());
 
-        int islandSum = puzzle.getIslands().stream().mapToInt(Island::getRequiredBridges).sum();
-        int bridgeSum = puzzle.getBridges().stream().mapToInt(Bridge::getBridgeCount).sum();
-        assertEquals(islandSum, bridgeSum * 2);
-    }
+        if (spec.generateSolution()) {
+            int islandSum = puzzle.getIslands().stream().mapToInt(Island::getRequiredBridges).sum();
+            int bridgeSum = puzzle.getBridges().stream().mapToInt(Bridge::getBridgeCount).sum();
+            assertEquals(islandSum, bridgeSum * 2);
+        } else {
+            int bridgeSum = puzzle.getBridges().stream().mapToInt(Bridge::getBridgeCount).sum();
+            assertEquals(0, bridgeSum);
+        }
 
-    @Test
-    public void mediumSmall() {
-        PuzzleSpecification spec = PuzzleSpecification.withSpecs(true, 5, 5, 3);
-        Generator generator = new GeneratorImpl(new DefaultValidator());
-        BridgesPuzzle puzzle = generator.generate(spec);
-
-        assertEquals(spec.getWidth(), puzzle.getWidth());
-        assertEquals(spec.getHeight(), puzzle.getHeight());
-        assertEquals(spec.getIslandCount(), puzzle.getIslands().size());
-
-        int islandSum = puzzle.getIslands().stream().mapToInt(Island::getRequiredBridges).sum();
-        int bridgeSum = puzzle.getBridges().stream().mapToInt(Bridge::getBridgeCount).sum();
-        assertEquals(islandSum, bridgeSum * 2);
-    }
-
-    @Test
-    public void hardSmall() {
-        PuzzleSpecification spec = PuzzleSpecification.withSpecs(true, 5, 5, 5);
-        Generator generator = new GeneratorImpl(new DefaultValidator());
-        BridgesPuzzle puzzle = generator.generate(spec);
-
-        assertEquals(spec.getWidth(), puzzle.getWidth());
-        assertEquals(spec.getHeight(), puzzle.getHeight());
-        assertEquals(spec.getIslandCount(), puzzle.getIslands().size());
-
-        int islandSum = puzzle.getIslands().stream().mapToInt(Island::getRequiredBridges).sum();
-        int bridgeSum = puzzle.getBridges().stream().mapToInt(Bridge::getBridgeCount).sum();
-        assertEquals(islandSum, bridgeSum * 2);
-    }
-
-    @Test
-    public void simpleBig() {
-        PuzzleSpecification spec = PuzzleSpecification.withSpecs(true, 25, 25, 5);
-        Generator generator = new GeneratorImpl(new DefaultValidator());
-        BridgesPuzzle puzzle = generator.generate(spec);
-
-        assertEquals(spec.getWidth(), puzzle.getWidth());
-        assertEquals(spec.getHeight(), puzzle.getHeight());
-        assertEquals(spec.getIslandCount(), puzzle.getIslands().size());
-
-        int islandSum = puzzle.getIslands().stream().mapToInt(Island::getRequiredBridges).sum();
-        int bridgeSum = puzzle.getBridges().stream().mapToInt(Bridge::getBridgeCount).sum();
-        assertEquals(islandSum, bridgeSum * 2);
-    }
-
-    @Test
-    public void mediumBig() {
-        PuzzleSpecification spec = PuzzleSpecification.withSpecs(true, 25, 25, 20);
-        Generator generator = new GeneratorImpl(new DefaultValidator());
-        BridgesPuzzle puzzle = generator.generate(spec);
-
-        assertEquals(spec.getWidth(), puzzle.getWidth());
-        assertEquals(spec.getHeight(), puzzle.getHeight());
-        assertEquals(spec.getIslandCount(), puzzle.getIslands().size());
-
-        int islandSum = puzzle.getIslands().stream().mapToInt(Island::getRequiredBridges).sum();
-        int bridgeSum = puzzle.getBridges().stream().mapToInt(Bridge::getBridgeCount).sum();
-        assertEquals(islandSum, bridgeSum * 2);
-    }
-
-    @Test
-    public void hardBig() {
-        PuzzleSpecification spec = PuzzleSpecification.withSpecs(true, 25, 25, 50);
-        Generator generator = new GeneratorImpl(new DefaultValidator());
-        BridgesPuzzle puzzle = generator.generate(spec);
-
-        assertEquals(spec.getWidth(), puzzle.getWidth());
-        assertEquals(spec.getHeight(), puzzle.getHeight());
-        assertEquals(spec.getIslandCount(), puzzle.getIslands().size());
-
-        int islandSum = puzzle.getIslands().stream().mapToInt(Island::getRequiredBridges).sum();
-        int bridgeSum = puzzle.getBridges().stream().mapToInt(Bridge::getBridgeCount).sum();
-        assertEquals(islandSum, bridgeSum * 2);
+        puzzle.getIslands().forEach(island -> assertNotEquals(0, island.getRequiredBridges()));
     }
 }

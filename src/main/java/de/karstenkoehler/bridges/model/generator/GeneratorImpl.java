@@ -26,14 +26,14 @@ public class GeneratorImpl implements Generator {
 
     @Override
     public BridgesPuzzle generate(PuzzleSpecification spec) {
+        this.resetGenerator();
+
         BridgesPuzzle puzzle = new BridgesPuzzle(getIslandMap(), this.bridges, spec.getWidth(), spec.getHeight());
         this.islands.add(newRandomIsland(spec.getWidth(), spec.getHeight()));
 
         while (this.islands.size() < spec.getIslandCount()) {
             if (resetCounter > TRIES_BEFORE_RESET) {
-                this.resetCounter = 0;
-                this.islands.clear();
-                this.bridges.clear();
+                resetGenerator();
                 this.islands.add(newRandomIsland(spec.getWidth(), spec.getHeight()));
             }
 
@@ -61,6 +61,12 @@ public class GeneratorImpl implements Generator {
             puzzle.restart();
         }
         return puzzle;
+    }
+
+    private void resetGenerator() {
+        this.resetCounter = 0;
+        this.islands.clear();
+        this.bridges.clear();
     }
 
     private void setRequiredBridgesForAllIslands() {
