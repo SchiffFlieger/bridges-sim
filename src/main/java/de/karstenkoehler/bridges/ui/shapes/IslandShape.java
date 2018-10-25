@@ -97,7 +97,6 @@ public class IslandShape {
         poly.setOnMouseEntered(event -> poly.setFill(FILL_COLOR));
         poly.setOnMouseExited(event -> poly.setFill(Color.TRANSPARENT));
         poly.setOnMouseClicked(event -> {
-            canvas.fireEvent(new Event(MainController.FILE_CHANGED));
             int count = event.getButton().equals(MouseButton.PRIMARY) ? 1 : -1;
             onClick(orientation, count);
         });
@@ -108,6 +107,7 @@ public class IslandShape {
         try {
             this.puzzle.getConnectedBridge(this.island, orientation).addBridges(count);
             this.puzzle.emphasizeBridge(this.puzzle.getConnectedBridge(this.island, orientation));
+            canvas.fireEvent(new Event(MainController.FILE_CHANGED));
             canvas.fireEvent(new Event(CanvasController.REDRAW));
         } catch (NullPointerException | InvalidBridgeCountException e) {
             canvas.fireEvent(new Event(CanvasController.ERROR));
