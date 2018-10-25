@@ -39,7 +39,7 @@ public class IslandShape {
         this.puzzle = puzzle;
         this.display = NumberDisplay.SHOW_REQUIRED;
 
-        initControls(params.coordinate(island.getX()), params.coordinate(island.getY()), island.getId());
+        initControls(params.coordinate(island.getX()), params.coordinate(island.getY()));
     }
 
     public void draw(boolean drawClickArea) {
@@ -78,19 +78,19 @@ public class IslandShape {
         throw new RuntimeException("IslandShape#getDisplayNumber: found invalid enum value");
     }
 
-    private void initControls(double x, double y, int id) {
+    private void initControls(double x, double y) {
         final double x0 = x - params.getClickAreaSize();
         final double x1 = x + params.getClickAreaSize();
         final double y0 = y - params.getClickAreaSize();
         final double y1 = y + params.getClickAreaSize();
 
-        createTriangle(Orientation.NORTH, x, y, x1, y0, x0, y0, id);
-        createTriangle(Orientation.EAST, x, y, x1, y0, x1, y1, id);
-        createTriangle(Orientation.SOUTH, x, y, x1, y1, x0, y1, id);
-        createTriangle(Orientation.WEST, x, y, x0, y1, x0, y0, id);
+        createTriangle(Orientation.NORTH, x, y, x1, y0, x0, y0);
+        createTriangle(Orientation.EAST, x, y, x1, y0, x1, y1);
+        createTriangle(Orientation.SOUTH, x, y, x1, y1, x0, y1);
+        createTriangle(Orientation.WEST, x, y, x0, y1, x0, y0);
     }
 
-    private void createTriangle(Orientation orientation, double x0, double y0, double x1, double y1, double x2, double y2, int id) {
+    private void createTriangle(Orientation orientation, double x0, double y0, double x1, double y1, double x2, double y2) {
         Polygon poly = new Polygon(x0, y0, x1, y1, x2, y2);
         poly.setStroke(Color.TRANSPARENT);
         poly.setFill(Color.TRANSPARENT);
