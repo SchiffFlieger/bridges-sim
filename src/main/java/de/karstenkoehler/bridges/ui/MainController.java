@@ -71,6 +71,12 @@ public class MainController {
     }
 
     public void setMainStage(Stage mainStage) throws IOException {
+        mainStage.setOnCloseRequest(event -> {
+            SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
+            if (action == SaveAction.CANCEL) {
+                event.consume();
+            }
+        });
         this.fileHelper.setStage(mainStage);
         mainStage.titleProperty().bind(Bindings.concat(
                 "Bridges Simulator - Karsten Köhler - 8690570 - ",
