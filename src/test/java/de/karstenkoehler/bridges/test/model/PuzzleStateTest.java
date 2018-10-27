@@ -18,8 +18,6 @@ public class PuzzleStateTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        // TODO add tests for isolation puzzles (no longer solvable state)
-
         Map<Integer, Island> bsp_5x5 = new HashMap<>();
         bsp_5x5.put(0, new Island(0, 0, 0, 3));
         bsp_5x5.put(1, new Island(1, 0, 2, 4));
@@ -47,24 +45,49 @@ public class PuzzleStateTest {
         Bridge bridge9 = new Bridge(bsp_5x5.get(3), bsp_5x5.get(4), 1);
         Bridge bridge10 = new Bridge(bsp_5x5.get(5), bsp_5x5.get(6), 1);
 
+        Map<Integer, Island> bsp_isolation_3 = new HashMap<>();
+        bsp_isolation_3.put(0, new Island(0, 0, 0, 1));
+        bsp_isolation_3.put(1, new Island(1, 0, 3, 1));
+        bsp_isolation_3.put(2, new Island(2, 3, 0, 2));
+        bsp_isolation_3.put(3, new Island(3, 3, 3, 2));
+
+        // bridges required to solve the puzzle
+        Bridge isoBridge1 = new Bridge(bsp_isolation_3.get(0), bsp_isolation_3.get(2), 1);
+        Bridge isoBridge2 = new Bridge(bsp_isolation_3.get(1), bsp_isolation_3.get(3), 1);
+        Bridge isoBridge3 = new Bridge(bsp_isolation_3.get(2), bsp_isolation_3.get(3), 1);
+
+        // other bridges
+        Bridge isoBridge3b = new Bridge(bsp_isolation_3.get(2), bsp_isolation_3.get(3), 2);
+        Bridge isoBridge4 = new Bridge(bsp_isolation_3.get(0), bsp_isolation_3.get(1), 1);
+
+
         return Arrays.asList(new Object[][]{
                 // not solved
                 {new BridgesPuzzle(bsp_5x5, new ArrayList<>(), SIZE, SIZE), PuzzleState.NOT_SOLVED},
                 {new BridgesPuzzle(bsp_5x5, new ArrayList<>(Arrays.asList(bridge1, bridge2, bridge3)), SIZE, SIZE), PuzzleState.NOT_SOLVED},
                 {new BridgesPuzzle(bsp_5x5, new ArrayList<>(Arrays.asList(bridge4, bridge5, bridge6)), SIZE, SIZE), PuzzleState.NOT_SOLVED},
                 {new BridgesPuzzle(bsp_5x5, new ArrayList<>(Arrays.asList(bridge4, bridge5, bridge6)), SIZE, SIZE), PuzzleState.NOT_SOLVED},
+                {new BridgesPuzzle(bsp_isolation_3, new ArrayList<>(Arrays.asList(isoBridge1, isoBridge2)), SIZE, SIZE), PuzzleState.NOT_SOLVED},
+                {new BridgesPuzzle(bsp_isolation_3, new ArrayList<>(Arrays.asList(isoBridge2, isoBridge3)), SIZE, SIZE), PuzzleState.NOT_SOLVED},
+                {new BridgesPuzzle(bsp_isolation_3, new ArrayList<>(Collections.singletonList(isoBridge4)), SIZE, SIZE), PuzzleState.NOT_SOLVED},
 
                 // solved
                 {new BridgesPuzzle(bsp_5x5, new ArrayList<>(Arrays.asList(bridge1, bridge2, bridge3, bridge4, bridge5, bridge6, bridge7, bridge8)), SIZE, SIZE), PuzzleState.SOLVED},
+                {new BridgesPuzzle(bsp_isolation_3, new ArrayList<>(Arrays.asList(isoBridge1, isoBridge2, isoBridge3)), SIZE, SIZE), PuzzleState.SOLVED},
 
                 // island has too many bridges
                 {new BridgesPuzzle(bsp_5x5, new ArrayList<>(Collections.singletonList(bridge5b)), SIZE, SIZE), PuzzleState.ERROR},
                 {new BridgesPuzzle(bsp_5x5, new ArrayList<>(Arrays.asList(bridge8b, bridge6, bridge7)), SIZE, SIZE), PuzzleState.ERROR},
                 {new BridgesPuzzle(bsp_5x5, new ArrayList<>(Arrays.asList(bridge2, bridge6, bridge9)), SIZE, SIZE), PuzzleState.ERROR},
+                {new BridgesPuzzle(bsp_isolation_3, new ArrayList<>(Arrays.asList(isoBridge1, isoBridge4)), SIZE, SIZE), PuzzleState.ERROR},
 
                 // bridges are crossing
                 {new BridgesPuzzle(bsp_5x5, new ArrayList<>(Arrays.asList(bridge7, bridge10)), SIZE, SIZE), PuzzleState.ERROR},
                 {new BridgesPuzzle(bsp_5x5, new ArrayList<>(Arrays.asList(bridge4, bridge9)), SIZE, SIZE), PuzzleState.ERROR},
+
+                // solved, but not connected
+                {new BridgesPuzzle(bsp_isolation_3, new ArrayList<>(Arrays.asList(isoBridge4, isoBridge3b)), SIZE, SIZE), PuzzleState.NO_LONGER_SOLVABLE},
+
         });
     }
 

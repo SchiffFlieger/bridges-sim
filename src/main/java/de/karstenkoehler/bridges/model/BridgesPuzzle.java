@@ -95,13 +95,18 @@ public class BridgesPuzzle {
                 }
 
                 if (isHorizontal(bridge) && isVertical(other)) {
-                    areBridgesCrossing(bridge, other);
+                    if (areBridgesCrossing(bridge, other)) {
+                        bridge.setValid(false);
+                        other.setValid(false);
+                    }
                 }
 
                 if (isVertical(bridge) && isHorizontal(other)) {
-                    areBridgesCrossing(other, bridge);
+                    if (areBridgesCrossing(other, bridge)) {
+                        bridge.setValid(false);
+                        other.setValid(false);
+                    }
                 }
-
             }
         }
     }
@@ -119,7 +124,51 @@ public class BridgesPuzzle {
             return PuzzleState.SOLVED;
         }
 
+        if (!hasPossibleMoves()) {
+            return PuzzleState.NO_LONGER_SOLVABLE;
+        }
+
         return PuzzleState.NOT_SOLVED;
+    }
+
+    private boolean hasPossibleMoves() {
+        return this.bridges.stream().anyMatch(this::hasPossibleMoves);
+    }
+
+    private boolean hasPossibleMoves(Bridge bridge) {
+        if (getRemainingBridgeCount(bridge.getStartIsland()) <= 0 || getRemainingBridgeCount(bridge.getEndIsland()) <= 0) {
+            return false;
+        }
+
+        if (bridge.getBridgeCount() == 1) {
+            return true;
+        }
+        if (bridge.getBridgeCount() == 2) {
+            return false;
+        }
+
+        return !causesCrossing(bridge);
+    }
+
+    private boolean causesCrossing(Bridge bridge) {
+        for (Bridge other : this.bridges) {
+            if (bridge == other || other.getBridgeCount() == 0) {
+                continue;
+            }
+
+            if (isHorizontal(bridge) && isVertical(other)) {
+                if (areBridgesCrossing(bridge, other)) {
+                    return true;
+                }
+            }
+
+            if (isVertical(bridge) && isHorizontal(other)) {
+                if (areBridgesCrossing(other, bridge)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private boolean isSolved() {
@@ -152,13 +201,13 @@ public class BridgesPuzzle {
 
     private Island getConnectedIsland(Island island, Orientation orientation) {
         Bridge bridge = getConnectedBridge(island, orientation);
-        if (bridge == null) {
+        if (bridge == null || bridge.getBridgeCount() == 0) {
             return null;
         }
         if (bridge.getStartIsland() == island) {
             return bridge.getEndIsland();
         }
-        return bridge.getEndIsland();
+        return bridge.getStartIsland();
     }
 
     private boolean everyIslandSatisfied() {
@@ -174,7 +223,7 @@ public class BridgesPuzzle {
         return this.islands.values().stream().anyMatch(island -> getRemainingBridgeCount(island) < 0);
     }
 
-    private void areBridgesCrossing(Bridge bridge, Bridge other) {
+    private boolean areBridgesCrossing(Bridge bridge, Bridge other) {
         int y1 = bridge.getStartIsland().getY();
         int x2 = other.getEndIsland().getX();
 
@@ -182,10 +231,7 @@ public class BridgesPuzzle {
         int x1e = bridge.getEndIsland().getX();
         int y2a = other.getStartIsland().getY();
         int y2e = other.getEndIsland().getY();
-        if (x1a < x2 && x2 < x1e && y2a < y1 && y1 < y2e) {
-            bridge.setValid(false);
-            other.setValid(false);
-        }
+        return x1a < x2 && x2 < x1e && y2a < y1 && y1 < y2e;
     }
 
     private Bridge fillBridgeInDirection(Island island, int dx, int dy) {
