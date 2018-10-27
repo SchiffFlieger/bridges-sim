@@ -9,7 +9,7 @@ public class BridgesPuzzle {
     private final int width;
     private final int height;
 
-    public BridgesPuzzle (Map<Integer, Island> islands, List<Bridge> bridges, int width, int height) {
+    public BridgesPuzzle(Map<Integer, Island> islands, List<Bridge> bridges, int width, int height) {
         this.islands = islands;
         this.bridges = bridges;
         this.width = width;
@@ -21,19 +21,19 @@ public class BridgesPuzzle {
         return Collections.unmodifiableList(new ArrayList<>(this.islands.values()));
     }
 
-    public List<Bridge> getBridges () {
+    public List<Bridge> getBridges() {
         return Collections.unmodifiableList(this.bridges);
     }
 
-    public int getWidth () {
+    public int getWidth() {
         return width;
     }
 
-    public int getHeight () {
+    public int getHeight() {
         return height;
     }
 
-    public void fillMissingBridges () {
+    public void fillMissingBridges() {
         for (Island island : this.islands.values()) {
             Map<Orientation, Bridge> connections = new EnumMap<>(Orientation.class);
 
@@ -55,7 +55,7 @@ public class BridgesPuzzle {
         });
     }
 
-    public void emphasizeBridge (Bridge bridge) {
+    public void emphasizeBridge(Bridge bridge) {
         this.bridges.forEach(b -> b.setEmphasized(false));
         if (bridge != null) {
             bridge.setEmphasized(true);
@@ -110,6 +110,70 @@ public class BridgesPuzzle {
         this.bridges.forEach(bridge -> bridge.setBridgeCount(0));
     }
 
+    public PuzzleState getState() {
+        if (anyBridgesCrossing() || anyIslandsTooManyBridges()) {
+            return PuzzleState.ERROR;
+        }
+
+        if (isSolved()) {
+            return PuzzleState.SOLVED;
+        }
+
+        return PuzzleState.NOT_SOLVED;
+    }
+
+    private boolean isSolved() {
+        return everyIslandSatisfied() && everyIslandConnected();
+    }
+
+    private boolean everyIslandConnected() {
+        Set<Island> visited = new HashSet<>();
+        visitAllNodes(this.islands.get(0), visited);
+
+        return visited.size() == this.islands.size();
+    }
+
+    private void visitAllNodes(Island start, Set<Island> visited) {
+        if (visited.contains(start)) {
+            return;
+        }
+        visited.add(start);
+
+        final List<Orientation> orientations = Arrays.asList(Orientation.NORTH, Orientation.EAST, Orientation.SOUTH, Orientation.WEST);
+
+        for (Orientation orientation : orientations) {
+            Island other = getConnectedIsland(start, orientation);
+            if (other == null) {
+                continue;
+            }
+            visitAllNodes(other, visited);
+        }
+    }
+
+    private Island getConnectedIsland(Island island, Orientation orientation) {
+        Bridge bridge = getConnectedBridge(island, orientation);
+        if (bridge == null) {
+            return null;
+        }
+        if (bridge.getStartIsland() == island) {
+            return bridge.getEndIsland();
+        }
+        return bridge.getEndIsland();
+    }
+
+    private boolean everyIslandSatisfied() {
+        return this.islands.values().stream().allMatch(island -> getRemainingBridgeCount(island) == 0);
+    }
+
+    private boolean anyBridgesCrossing() {
+        markInvalidBridges();
+        return this.bridges.stream().anyMatch(bridge -> !bridge.isValid());
+    }
+
+    private boolean anyIslandsTooManyBridges() {
+        return this.islands.values().stream().anyMatch(island -> getRemainingBridgeCount(island) < 0);
+    }
+
     private void areBridgesCrossing(Bridge bridge, Bridge other) {
         int y1 = bridge.getStartIsland().getY();
         int x2 = other.getEndIsland().getX();
@@ -124,7 +188,7 @@ public class BridgesPuzzle {
         }
     }
 
-    private Bridge fillBridgeInDirection (Island island, int dx, int dy) {
+    private Bridge fillBridgeInDirection(Island island, int dx, int dy) {
         Island north = findNextInDirection(island.getX(), island.getY(), dx, dy);
         if (north == null) {
             return null;
@@ -141,7 +205,7 @@ public class BridgesPuzzle {
         return bridge;
     }
 
-    private Bridge getExistingBridge (Island island, Island other) {
+    private Bridge getExistingBridge(Island island, Island other) {
         int a = Math.min(island.getId(), other.getId());
         int b = Math.max(island.getId(), other.getId());
 
@@ -153,7 +217,7 @@ public class BridgesPuzzle {
         return null;
     }
 
-    private Island findNextInDirection (int x, int y, int dx, int dy) {
+    private Island findNextInDirection(int x, int y, int dx, int dy) {
         x += dx;
         y += dy;
         while (x >= 0 && y >= 0 && x < this.width && y < this.height) {
