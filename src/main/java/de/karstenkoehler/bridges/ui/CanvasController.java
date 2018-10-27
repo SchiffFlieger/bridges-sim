@@ -35,9 +35,6 @@ public class CanvasController {
         this.controlPane = controlPane;
         this.islands = new ArrayList<>();
         this.bridges = new ArrayList<>();
-
-        this.canvas.addEventHandler(REDRAW, event -> drawThings());
-        this.canvas.addEventHandler(ERROR, event -> System.out.println("could not draw bridge"));
     }
 
     public void drawThings() {
@@ -121,7 +118,7 @@ public class CanvasController {
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
         for (Island island : puzzle.getIslands()) {
-            this.islands.add(new IslandShape(this.canvas, island, controlPane, gc, params, puzzle));
+            this.islands.add(new IslandShape(island, controlPane, gc, params, puzzle));
         }
         for (Bridge bridge : puzzle.getBridges()) {
             this.bridges.add(new BridgeShape(bridge, canvas.getGraphicsContext2D(), params, puzzle));

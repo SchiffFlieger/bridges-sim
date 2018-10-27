@@ -10,7 +10,6 @@ import de.karstenkoehler.bridges.ui.NumberDisplay;
 import de.karstenkoehler.bridges.ui.ParameterObject;
 import javafx.event.Event;
 import javafx.geometry.VPos;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
@@ -22,7 +21,6 @@ import javafx.scene.text.TextAlignment;
 public class IslandShape {
     private static final Color FILL_COLOR = Color.BLACK;
 
-    private final Canvas canvas;
     private final Island island;
     private final Pane controlPane;
     private final GraphicsContext gc;
@@ -30,8 +28,7 @@ public class IslandShape {
     private final BridgesPuzzle puzzle;
     private NumberDisplay display;
 
-    public IslandShape (Canvas canvas, Island island, Pane controlPane, GraphicsContext gc, ParameterObject params, BridgesPuzzle puzzle) {
-        this.canvas = canvas;
+    public IslandShape(Island island, Pane controlPane, GraphicsContext gc, ParameterObject params, BridgesPuzzle puzzle) {
         this.island = island;
         this.controlPane = controlPane;
         this.gc = gc;
@@ -98,19 +95,19 @@ public class IslandShape {
         poly.setOnMouseExited(event -> poly.setFill(Color.TRANSPARENT));
         poly.setOnMouseClicked(event -> {
             int count = event.getButton().equals(MouseButton.PRIMARY) ? 1 : -1;
-            onClick(orientation, count);
+            onClick(poly, orientation, count);
         });
         this.controlPane.getChildren().add(0, poly);
     }
 
-    private void onClick(Orientation orientation, int count) {
+    private void onClick(Polygon poly, Orientation orientation, int count) {
         try {
             this.puzzle.getConnectedBridge(this.island, orientation).addBridges(count);
             this.puzzle.emphasizeBridge(this.puzzle.getConnectedBridge(this.island, orientation));
-            canvas.fireEvent(new Event(MainController.FILE_CHANGED));
-            canvas.fireEvent(new Event(CanvasController.REDRAW));
+            poly.fireEvent(new Event(MainController.FILE_CHANGED));
+            poly.fireEvent(new Event(CanvasController.REDRAW));
         } catch (NullPointerException | InvalidBridgeCountException e) {
-            canvas.fireEvent(new Event(CanvasController.ERROR));
+            poly.fireEvent(new Event(CanvasController.ERROR));
         }
     }
 
