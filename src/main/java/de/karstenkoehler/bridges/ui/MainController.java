@@ -3,6 +3,7 @@ package de.karstenkoehler.bridges.ui;
 import de.karstenkoehler.bridges.io.validator.DefaultValidator;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.PuzzleSpecification;
+import de.karstenkoehler.bridges.model.PuzzleState;
 import de.karstenkoehler.bridges.model.generator.Generator;
 import de.karstenkoehler.bridges.model.generator.GeneratorImpl;
 import de.karstenkoehler.bridges.ui.components.NewPuzzleStage;
@@ -40,7 +41,7 @@ public class MainController {
     @FXML
     private ChoiceBox<String> islandDisplayChoice;
     @FXML
-    private Label stateText;
+    private Label lblState;
     @FXML
     private Canvas canvas;
 
@@ -74,7 +75,12 @@ public class MainController {
 
     public void setMainStage(Stage mainStage) throws IOException {
         mainStage.addEventHandler(FILE_CHANGED, event -> this.fileHelper.fileModified());
-        mainStage.addEventHandler(REDRAW, event -> this.canvasController.drawThings());
+        mainStage.addEventHandler(REDRAW, event -> {
+            this.canvasController.drawThings();
+
+            PuzzleState state = this.canvasController.getPuzzle().getState();
+            lblState.setText(state.toString());
+        });
         mainStage.addEventHandler(ERROR, event -> System.out.println("could not draw bridge"));
 
         mainStage.setOnCloseRequest(event -> {
