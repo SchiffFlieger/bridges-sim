@@ -18,6 +18,8 @@ import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 
+import static de.karstenkoehler.bridges.ui.CanvasController.EVAL_STATE;
+
 public class IslandShape {
     private static final Color FILL_COLOR = Color.BLACK;
 
@@ -105,7 +107,9 @@ public class IslandShape {
             this.puzzle.getConnectedBridge(this.island, orientation).addBridges(count);
             this.puzzle.emphasizeBridge(this.puzzle.getConnectedBridge(this.island, orientation));
             poly.fireEvent(new Event(MainController.FILE_CHANGED));
+            poly.fireEvent(new Event(EVAL_STATE));
             poly.fireEvent(new Event(CanvasController.REDRAW));
+
         } catch (NullPointerException | InvalidBridgeCountException e) {
             poly.fireEvent(new Event(CanvasController.ERROR));
         }

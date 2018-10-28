@@ -18,6 +18,7 @@ import java.util.List;
 public class CanvasController {
     public static final EventType<Event> REDRAW = new EventType<>("REDRAW");
     public static final EventType<Event> ERROR = new EventType<>("ERROR");
+    public static final EventType<Event> EVAL_STATE = new EventType<>("EVAL_STATE");
 
     private final Canvas canvas;
     private final Pane controlPane;
@@ -124,6 +125,8 @@ public class CanvasController {
             this.bridges.add(new BridgeShape(bridge, canvas.getGraphicsContext2D(), params, puzzle));
         }
         drawThings();
+
+        this.canvas.fireEvent(new Event(EVAL_STATE));
     }
 
     public BridgesPuzzle getPuzzle() {
