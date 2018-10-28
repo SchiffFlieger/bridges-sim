@@ -46,7 +46,7 @@ public class IslandShape {
         double y = params.coordinate(island.getY());
 
         if (puzzle.getRemainingBridgeCount(island) > 0) {
-            gc.setFill(Color.BLUE);
+            gc.setFill(Color.GRAY);
         } else if (puzzle.getRemainingBridgeCount(island) == 0) {
             gc.setFill(Color.GREEN);
         } else {

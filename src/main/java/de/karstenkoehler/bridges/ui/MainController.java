@@ -19,6 +19,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.control.CheckMenuItem;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioMenuItem;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -30,6 +31,13 @@ import static de.karstenkoehler.bridges.ui.CanvasController.*;
 
 public class MainController {
     public static final EventType<Event> FILE_CHANGED = new EventType<>("FILE_CHANGED");
+
+    @FXML
+    private RadioMenuItem rbtnBridgeHintsAlways;
+    @FXML
+    private RadioMenuItem rbtnBridgeHintsPossible;
+    @FXML
+    private RadioMenuItem rbtnBridgeHintsNever;
 
     @FXML
     private Pane controlPane;
@@ -67,6 +75,27 @@ public class MainController {
             this.canvasController.drawThings();
         });
 
+        rbtnBridgeHintsAlways.selectedProperty().addListener((observable, oldValue, selected) -> {
+            if (selected) {
+                this.canvasController.setBridgeHintsVisible(BridgeHintsVisible.ALWAYS);
+                this.canvasController.drawThings();
+            }
+        });
+
+        rbtnBridgeHintsPossible.selectedProperty().addListener((observable, oldValue, selected) -> {
+            if (selected) {
+                this.canvasController.setBridgeHintsVisible(BridgeHintsVisible.IF_POSSIBLE);
+                this.canvasController.drawThings();
+            }
+        });
+
+        rbtnBridgeHintsNever.selectedProperty().addListener((observable, oldValue, selected) -> {
+            if (selected) {
+                this.canvasController.setBridgeHintsVisible(BridgeHintsVisible.NEVER);
+                this.canvasController.drawThings();
+            }
+        });
+        this.canvasController.setBridgeHintsVisible(BridgeHintsVisible.NEVER);
 
         Optional<BridgesPuzzle> puzzle = this.fileHelper.openInitialFile(new File("src\\main\\resources\\data\\bsp_5x5.bgs"));
         puzzle.ifPresent(bridgesPuzzle -> this.canvasController.setPuzzle(bridgesPuzzle));

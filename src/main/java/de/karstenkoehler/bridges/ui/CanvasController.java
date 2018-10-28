@@ -30,6 +30,7 @@ public class CanvasController {
     private List<BridgeShape> bridges;
     private ParameterObject params;
     private BridgesPuzzle puzzle;
+    private BridgeHintsVisible bridgeHintsVisible;
 
     public CanvasController(Canvas canvas, Pane controlPane) {
         this.canvas = canvas;
@@ -47,7 +48,7 @@ public class CanvasController {
         drawCanvasBorder(gc);
         drawGrid(gc);
         for (BridgeShape bridge : this.bridges) {
-            bridge.draw();
+            bridge.draw(this.bridgeHintsVisible);
         }
         for (IslandShape island : this.islands) {
             island.draw(this.clickAreaVisible);
@@ -131,5 +132,9 @@ public class CanvasController {
 
     public BridgesPuzzle getPuzzle() {
         return this.puzzle;
+    }
+
+    public void setBridgeHintsVisible(BridgeHintsVisible visible) {
+        this.bridgeHintsVisible = visible;
     }
 }

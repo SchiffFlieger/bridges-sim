@@ -22,6 +22,17 @@
             <Menu mnemonicParsing="false" text="View">
                 <CheckMenuItem fx:id="cbxShowGrid" mnemonicParsing="false" text="Show Grid"/>
                 <CheckMenuItem fx:id="cbxShowClickArea" mnemonicParsing="false" text="Show Click Area"/>
+                <Menu mnemonicParsing="false" text="Show Bridge Hints">
+                    <RadioMenuItem fx:id="rbtnBridgeHintsAlways" mnemonicParsing="false" text="Always">
+                        <toggleGroup>
+                            <ToggleGroup fx:id="bridgeHints"/>
+                        </toggleGroup>
+                    </RadioMenuItem>
+                    <RadioMenuItem fx:id="rbtnBridgeHintsPossible" mnemonicParsing="false" text="If Possible"
+                                   toggleGroup="$bridgeHints"/>
+                    <RadioMenuItem fx:id="rbtnBridgeHintsNever" mnemonicParsing="false" selected="true"
+                                   text="Never" toggleGroup="$bridgeHints"/>
+                </Menu>
             </Menu>
             <Menu mnemonicParsing="false" text="Help">
                 <MenuItem mnemonicParsing="false" onAction="#onAbout" text="About"/>
@@ -34,8 +45,7 @@
                 <StackPane>
                     <Canvas fx:id="canvas" height="625.0" width="625.0"/>
                     <Pane fx:id="controlPane" maxHeight="625.0" maxWidth="625.0" minHeight="625.0"
-                          minWidth="625.0"
-                          prefHeight="625.0" prefWidth="625.0"/>
+                          minWidth="625.0" prefHeight="625.0" prefWidth="625.0"/>
                 </StackPane>
             </HBox>
             <AnchorPane minHeight="0.0" minWidth="270.0">
@@ -50,8 +60,8 @@
                 </ChoiceBox>
                 <Button layoutX="14.0" layoutY="51.0" mnemonicParsing="false" onAction="#onNextBridge"
                         prefWidth="120.0" text="next bridge"/>
-                <Button layoutX="144.0" layoutY="51.0" mnemonicParsing="false" onAction="#onSolve"
-                        prefWidth="120.0" text="solve"/>
+                <Button layoutX="144.0" layoutY="51.0" mnemonicParsing="false" onAction="#onSolve" prefWidth="120.0"
+                        text="solve"/>
             </AnchorPane>
         </SplitPane>
     </center>

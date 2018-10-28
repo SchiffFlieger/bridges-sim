@@ -150,7 +150,7 @@ public class BridgesPuzzle {
         return !causesCrossing(bridge);
     }
 
-    private boolean causesCrossing(Bridge bridge) {
+    public boolean causesCrossing(Bridge bridge) {
         for (Bridge other : this.bridges) {
             if (bridge == other || other.getBridgeCount() == 0) {
                 continue;
