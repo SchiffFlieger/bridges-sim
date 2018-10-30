@@ -68,12 +68,14 @@ public class MainController {
         cbxShowGrid.selectedProperty().addListener(setGridVisibility());
         cbxShowClickArea.selectedProperty().addListener(setClickAreaVisibility());
 
-        this.canvasController = new CanvasController(this.canvas, this.controlPane);
         this.islandDisplayChoice.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
             NumberDisplay display = NumberDisplay.values()[newValue.intValue()];
             this.canvasController.setNumberDisplay(display);
             this.canvasController.drawThings();
         });
+
+        NumberDisplay currentDisplay = NumberDisplay.values()[islandDisplayChoice.getSelectionModel().getSelectedIndex()];
+        this.canvasController = new CanvasController(this.canvas, this.controlPane, currentDisplay);
 
         rbtnBridgeHintsAlways.selectedProperty().addListener((observable, oldValue, selected) -> {
             if (selected) {

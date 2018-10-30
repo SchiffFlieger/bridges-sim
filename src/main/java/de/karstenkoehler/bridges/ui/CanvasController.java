@@ -31,10 +31,12 @@ public class CanvasController {
     private ParameterObject params;
     private BridgesPuzzle puzzle;
     private BridgeHintsVisible bridgeHintsVisible;
+    private NumberDisplay numberDisplay;
 
-    public CanvasController(Canvas canvas, Pane controlPane) {
+    public CanvasController(Canvas canvas, Pane controlPane, NumberDisplay currentDisplay) {
         this.canvas = canvas;
         this.controlPane = controlPane;
+        this.numberDisplay = currentDisplay;
         this.islands = new ArrayList<>();
         this.bridges = new ArrayList<>();
     }
@@ -51,7 +53,7 @@ public class CanvasController {
             bridge.draw(this.bridgeHintsVisible);
         }
         for (IslandShape island : this.islands) {
-            island.draw(this.clickAreaVisible);
+            island.draw(this.numberDisplay, this.clickAreaVisible);
         }
     }
 
@@ -102,9 +104,7 @@ public class CanvasController {
     }
 
     public void setNumberDisplay(NumberDisplay display) {
-        for (IslandShape island : this.islands) {
-            island.setNumberDisplay(display);
-        }
+        this.numberDisplay = display;
     }
 
     public void restartPuzzle() {

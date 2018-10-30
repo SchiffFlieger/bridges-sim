@@ -28,7 +28,6 @@ public class IslandShape {
     private final GraphicsContext gc;
     private final ParameterObject params;
     private final BridgesPuzzle puzzle;
-    private NumberDisplay display;
 
     public IslandShape(Island island, Pane controlPane, GraphicsContext gc, ParameterObject params, BridgesPuzzle puzzle) {
         this.island = island;
@@ -36,12 +35,11 @@ public class IslandShape {
         this.gc = gc;
         this.params = params;
         this.puzzle = puzzle;
-        this.display = NumberDisplay.SHOW_REQUIRED;
 
         initControls(params.coordinate(island.getX()), params.coordinate(island.getY()));
     }
 
-    public void draw(boolean drawClickArea) {
+    public void draw(NumberDisplay numberDisplay, boolean drawClickArea) {
         double x = params.coordinate(island.getX());
         double y = params.coordinate(island.getY());
 
@@ -59,7 +57,7 @@ public class IslandShape {
         gc.setTextBaseline(VPos.CENTER);
         gc.setFont(Font.font(params.getFontSize()));
         gc.setFill(Color.BLACK);
-        gc.fillText(getDisplayNumber(), x, y);
+        gc.fillText(getDisplayNumber(numberDisplay), x, y);
 
         if (drawClickArea) {
             drawClickArea();
@@ -67,10 +65,10 @@ public class IslandShape {
 
     }
 
-    private String getDisplayNumber () {
-        if (this.display == NumberDisplay.SHOW_REQUIRED) {
+    private String getDisplayNumber (NumberDisplay display) {
+        if (display == NumberDisplay.SHOW_REQUIRED) {
             return String.valueOf(island.getRequiredBridges());
-        } else if (this.display == NumberDisplay.SHOW_REMAINING) {
+        } else if (display == NumberDisplay.SHOW_REMAINING) {
             return String.valueOf(puzzle.getRemainingBridgeCount(this.island));
         }
 
@@ -136,9 +134,5 @@ public class IslandShape {
         gc.strokeLine(x0, y0, x0, y1);
         gc.strokeLine(x0, y1, x1, y1);
         gc.strokeLine(x1, y1, x1, y0);
-    }
-
-    public void setNumberDisplay (NumberDisplay display) {
-        this.display = display;
     }
 }
