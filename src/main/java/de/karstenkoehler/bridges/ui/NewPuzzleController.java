@@ -5,6 +5,8 @@ import javafx.beans.value.ChangeListener;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class NewPuzzleController {
@@ -43,7 +45,7 @@ public class NewPuzzleController {
     }
 
     @FXML
-    private void onOk(ActionEvent actionEvent) {
+    private void onOk() {
         boolean solution = this.cbxGenerateSolution.isSelected();
 
         if (rbtnUseRandom.isSelected()) {
@@ -76,7 +78,7 @@ public class NewPuzzleController {
     }
 
     @FXML
-    private void onCancel(ActionEvent actionEvent) {
+    private void onCancel() {
         this.specs = null;
         stage.close();
     }
@@ -84,6 +86,13 @@ public class NewPuzzleController {
     public void setStage(Stage stage) {
         this.stage = stage;
         this.stage.setOnCloseRequest(event -> this.specs = null);
+
+
+        stage.addEventHandler(KeyEvent.KEY_PRESSED, ev -> {
+            if (ev.getCode() == KeyCode.ENTER) {
+                this.onOk();
+            }
+        });
     }
 
     public PuzzleSpecification getSpecs() {

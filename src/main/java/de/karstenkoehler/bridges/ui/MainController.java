@@ -131,7 +131,7 @@ public class MainController {
     }
 
     @FXML
-    private void onNewPuzzle(ActionEvent actionEvent) {
+    private void onNewPuzzle() {
         SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
         if (action == SaveAction.CANCEL) {
             return;
@@ -147,7 +147,7 @@ public class MainController {
     }
 
     @FXML
-    private void onRestartPuzzle(ActionEvent actionEvent) {
+    private void onRestartPuzzle() {
         SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
         if (action == SaveAction.CANCEL) {
             return;
@@ -157,7 +157,7 @@ public class MainController {
     }
 
     @FXML
-    private void onOpenPuzzle(ActionEvent actionEvent) {
+    private void onOpenPuzzle() {
         SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
         if (action == SaveAction.CANCEL) {
             return;
@@ -168,17 +168,17 @@ public class MainController {
     }
 
     @FXML
-    private void onSavePuzzle(ActionEvent actionEvent) {
+    private void onSavePuzzle() {
         this.fileHelper.saveToCurrentFile(this.canvasController.getPuzzle());
     }
 
     @FXML
-    private void onSaveAs(ActionEvent actionEvent) {
+    private void onSaveAs() {
         this.fileHelper.saveToNewFile(this.canvasController.getPuzzle());
     }
 
     @FXML
-    private void onClose(ActionEvent actionEvent) {
+    private void onClose() {
         SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
         if (action == SaveAction.CANCEL) {
             return;
@@ -188,17 +188,17 @@ public class MainController {
     }
 
     @FXML
-    private void onAbout(ActionEvent actionEvent) {
+    private void onAbout() {
         System.out.println("about");
     }
 
     @FXML
-    private void onNextBridge(ActionEvent actionEvent) {
+    private void onNextBridge() {
         System.out.println("next bridge");
     }
 
     @FXML
-    private void onSolve(ActionEvent actionEvent) {
+    private void onSolve() {
         System.out.println("solve");
     }
 
