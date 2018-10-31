@@ -11,20 +11,42 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * An implementation of the {@link Parser} interface based on a {@link Tokenizer}. It reads tokens from the tokenizer
+ * and uses the tokens as indicators for creating the puzzle.
+ * <p>
+ * This implementation makes use of the following EBNF-specification. All the private methods are basically derived
+ * from that specification. <p>
+ *
+ * <code>
+ * start   := field, islands, [ bridges ]; <br>
+ * field   := 'FIELD', number, 'x', number, '|', number; <br>
+ * islands := 'ISLANDS', { island }; <br>
+ * bridges := 'BRIDGES', { bridge }; <br>
+ * island  := '(', number, ',', number, '|', number, ')'; <br>
+ * bridge  := '(', number, ',', number, '|', ( 'true' | 'false' ), ')'; <br>
+ * </code>
+ */
 public class TokenConsumingParser extends AbstractTokenParser implements Parser {
 
     private final Map<Integer, Island> islands = new HashMap<>();
     private final List<Bridge> bridges = new ArrayList<>();
     private int width, height, islandCount;
 
+    /**
+     * @param tokenizer the tokenizer to read from
+     */
     public TokenConsumingParser(Tokenizer tokenizer) {
         super(tokenizer);
     }
 
+    /**
+     * @see Parser#parse()
+     */
     @Override
     public BridgesPuzzle parse() throws ParseException {
         start();
-        check(Token.Type.EOF);
+        consume(Token.Type.EOF);
         return new BridgesPuzzle(islands, bridges, width, height);
     }
 
@@ -43,7 +65,6 @@ public class TokenConsumingParser extends AbstractTokenParser implements Parser 
         consume(Token.Type.PIPE);
         this.islandCount = readNumberToken();
     }
-
 
     private void islands() throws ParseException {
         consume(Token.Type.ISLAND_SECTION);
@@ -69,12 +90,12 @@ public class TokenConsumingParser extends AbstractTokenParser implements Parser 
     }
 
     private void bridges() throws ParseException {
-        if (current.getType() != Token.Type.BRIDGES_SECTION) {
+        if (token().getType() != Token.Type.BRIDGES_SECTION) {
             return;
         }
 
         consume(Token.Type.BRIDGES_SECTION);
-        while (current.getType() == Token.Type.OPEN_PARENTHESIS) {
+        while (token().getType() == Token.Type.OPEN_PARENTHESIS) {
             bridge();
         }
     }
@@ -94,16 +115,14 @@ public class TokenConsumingParser extends AbstractTokenParser implements Parser 
     }
 
     private int readNumberToken() throws ParseException {
-        check(Token.Type.NUMBER);
-        int val = Integer.parseInt(token().getValue());
+        Token tk = token();
         consume(Token.Type.NUMBER);
-        return val;
+        return Integer.parseInt(tk.getValue());
     }
 
     private boolean readBoolToken() throws ParseException {
-        check(Token.Type.BOOL);
-        boolean val = Boolean.parseBoolean(token().getValue());
+        Token tk = token();
         consume(Token.Type.BOOL);
-        return val;
+        return Boolean.parseBoolean(tk.getValue());
     }
 }

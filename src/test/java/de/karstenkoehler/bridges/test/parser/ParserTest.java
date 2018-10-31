@@ -134,8 +134,12 @@ public class ParserTest {
 
         @Override
         public Token next() {
-            if (current >= tokens.size()) {
+            if (current > tokens.size()) {
                 throw new AssertionError("fetched too many elements from MockTokenizer");
+            }
+
+            if (current == tokens.size()) {
+                return null;
             }
 
             return tokens.get(current++);

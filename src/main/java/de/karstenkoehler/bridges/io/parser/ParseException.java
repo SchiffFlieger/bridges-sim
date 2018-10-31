@@ -1,18 +1,10 @@
 package de.karstenkoehler.bridges.io.parser;
 
+/**
+ * This exception indicates there was an issue while parsing an input string.
+ */
 public class ParseException extends Exception {
-    public ParseException() {
-    }
-
     public ParseException(String message) {
         super(message);
-    }
-
-    public ParseException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public ParseException(Throwable cause) {
-        super(cause);
     }
 }
