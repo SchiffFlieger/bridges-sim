@@ -3,7 +3,7 @@ package de.karstenkoehler.bridges.io.parser.token;
 import de.karstenkoehler.bridges.io.parser.ParseException;
 
 /**
- * A Tokenizer splits a given input string into its individual components (tokens).
+ * A tokenizer splits a given input string into its individual components (tokens).
  */
 public interface Tokenizer {
     /**
