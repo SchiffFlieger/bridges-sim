@@ -9,6 +9,9 @@ import de.karstenkoehler.bridges.model.Island;
  * deviate by one, they are diagonal adjacent, which is allowed.
  */
 public class NoIslandsOnAdjacentFieldsValidator implements Validator {
+    /**
+     * @see Validator#validate(BridgesPuzzle)
+     */
     @Override
     public void validate(BridgesPuzzle puzzle) throws ValidateException {
         for (Island island : puzzle.getIslands()) {

@@ -11,6 +11,9 @@ import de.karstenkoehler.bridges.model.Island;
 public class IslandsOnFieldValidator implements Validator {
     private static final int MIN_COORDINATE = 0;
 
+    /**
+     * @see Validator#validate(BridgesPuzzle)
+     */
     @Override
     public void validate(BridgesPuzzle puzzle) throws ValidateException {
         for (Island island : puzzle.getIslands()) {

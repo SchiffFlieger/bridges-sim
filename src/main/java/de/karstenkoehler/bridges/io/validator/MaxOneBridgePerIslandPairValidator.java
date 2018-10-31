@@ -8,6 +8,9 @@ import de.karstenkoehler.bridges.model.BridgesPuzzle;
  * bridges can be set in the corresponding edge.
  */
 public class MaxOneBridgePerIslandPairValidator implements Validator {
+    /**
+     * @see Validator#validate(BridgesPuzzle)
+     */
     @Override
     public void validate(BridgesPuzzle puzzle) throws ValidateException {
         for (Bridge bridge : puzzle.getBridges()) {

@@ -10,6 +10,9 @@ public class FieldSizeValidator implements Validator {
     private static final int MIN_FIELD_DIMENSION = 4;
     private static final int MAX_FIELD_DIMENSION = 25;
 
+    /**
+     * @see Validator#validate(BridgesPuzzle)
+     */
     @Override
     public void validate(BridgesPuzzle puzzle) throws ValidateException {
         checkValue("width", puzzle.getWidth());

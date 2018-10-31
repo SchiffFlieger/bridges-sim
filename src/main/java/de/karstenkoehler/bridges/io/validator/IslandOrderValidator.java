@@ -7,7 +7,9 @@ import de.karstenkoehler.bridges.model.Island;
  * Checks if islands are sorted correctly. They must first be sorted by x coordinate and then by y coordinate.
  */
 public class IslandOrderValidator implements Validator {
-
+    /**
+     * @see Validator#validate(BridgesPuzzle)
+     */
     @Override
     public void validate(BridgesPuzzle puzzle) throws ValidateException {
         int prevX = -1;
