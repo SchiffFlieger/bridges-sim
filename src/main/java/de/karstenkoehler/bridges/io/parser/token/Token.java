@@ -2,7 +2,13 @@ package de.karstenkoehler.bridges.io.parser.token;
 
 import java.util.Objects;
 
+/**
+ * Represents a single Token of a string. It consists of the type of the token and the actual value.
+ */
 public class Token {
+    /**
+     * This enum contains all types a token can assume.
+     */
     public enum Type {
         FIELD_SECTION, ISLAND_SECTION, BRIDGES_SECTION,
         OPEN_PARENTHESIS, CLOSE_PARENTHESIS, COMMA, PIPE, X,
