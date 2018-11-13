@@ -1,11 +1,14 @@
 package de.karstenkoehler.bridges.ui;
 
 import de.karstenkoehler.bridges.io.validator.DefaultValidator;
+import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.PuzzleSpecification;
 import de.karstenkoehler.bridges.model.PuzzleState;
 import de.karstenkoehler.bridges.model.generator.Generator;
 import de.karstenkoehler.bridges.model.generator.GeneratorImpl;
+import de.karstenkoehler.bridges.model.solver.Solver;
+import de.karstenkoehler.bridges.model.solver.SolverImpl;
 import de.karstenkoehler.bridges.ui.components.NewPuzzleStage;
 import de.karstenkoehler.bridges.ui.components.SaveAction;
 import javafx.application.Platform;
@@ -54,12 +57,14 @@ public class MainController {
     private CanvasController canvasController;
 
     private final Generator puzzleGenerator;
+    private final Solver puzzleSolver;
     private final FileHelper fileHelper;
     private NewPuzzleStage newPuzzleStage;
 
     public MainController() {
         this.puzzleGenerator = new GeneratorImpl(new DefaultValidator());
         this.fileHelper = new FileHelper();
+        this.puzzleSolver = new SolverImpl();
     }
 
     @FXML
@@ -195,7 +200,13 @@ public class MainController {
 
     @FXML
     private void onNextBridge() {
-        System.out.println("next bridge");
+        Bridge next = puzzleSolver.nextSafeBridge(canvasController.getPuzzle());
+        if (next == null) {
+            return;
+        }
+
+        next.setBridgeCount(next.getBridgeCount() + 1);
+        canvasController.drawThings();
     }
 
     @FXML
