@@ -47,6 +47,10 @@ public class Bridge {
         this.valid = valid;
     }
 
+    public int getLength() {
+        return Math.abs(startIsland.getX() - endIsland.getX()) + Math.abs(startIsland.getY() - endIsland.getY());
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -91,5 +95,13 @@ public class Bridge {
 
     public void setEmphasized(boolean emphasized) {
         this.emphasized = emphasized;
+    }
+
+    public boolean isVertical() {
+        return this.startIsland.getX() == this.endIsland.getX();
+    }
+
+    public boolean isHorizontal() {
+        return this.startIsland.getY() == this.endIsland.getY();
     }
 }

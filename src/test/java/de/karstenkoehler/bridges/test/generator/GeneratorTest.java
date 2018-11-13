@@ -23,19 +23,25 @@ public class GeneratorTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {PuzzleSpecification.withSpecs(false, 5, 5, 2)},
-                {PuzzleSpecification.withSpecs(false, 5, 5, 3)},
+                {PuzzleSpecification.withSpecs(false, 4, 4, 3)},
+                {PuzzleSpecification.withSpecs(false, 5, 4, 4)},
                 {PuzzleSpecification.withSpecs(false, 5, 5, 5)},
-                {PuzzleSpecification.withSpecs(false, 25, 25, 5)},
-                {PuzzleSpecification.withSpecs(false, 25, 25, 20)},
-                {PuzzleSpecification.withSpecs(false, 25, 25, 50)},
-
-                {PuzzleSpecification.withSpecs(true, 5, 5, 2)},
-                {PuzzleSpecification.withSpecs(true, 5, 5, 3)},
-                {PuzzleSpecification.withSpecs(true, 5, 5, 5)},
-                {PuzzleSpecification.withSpecs(true, 25, 25, 5)},
-                {PuzzleSpecification.withSpecs(true, 25, 25, 20)},
-                {PuzzleSpecification.withSpecs(true, 25, 25, 50)},
+                {PuzzleSpecification.withSpecs(false, 5, 25, 25)},
+                {PuzzleSpecification.withSpecs(false, 6, 4, 4)},
+                {PuzzleSpecification.withSpecs(false, 16, 24, 76)},
+                {PuzzleSpecification.withSpecs(false, 18, 20, 72)},
+                {PuzzleSpecification.withSpecs(false, 19, 25, 95)},
+                {PuzzleSpecification.withSpecs(false, 22, 25, 110)},
+                {PuzzleSpecification.withSpecs(false, 23, 4, 18)},
+                {PuzzleSpecification.withSpecs(false, 23, 11, 50)},
+                {PuzzleSpecification.withSpecs(false, 24, 9, 43)},
+                {PuzzleSpecification.withSpecs(false, 24, 12, 57)},
+                {PuzzleSpecification.withSpecs(false, 25, 4, 20)},
+                {PuzzleSpecification.withSpecs(false, 25, 5, 25)},
+                {PuzzleSpecification.withSpecs(false, 25, 8, 40)},
+                {PuzzleSpecification.withSpecs(false, 25, 14, 70)},
+                {PuzzleSpecification.withSpecs(false, 25, 23, 115)},
+                {PuzzleSpecification.withSpecs(false, 25, 25, 125)},
         });
     }
 

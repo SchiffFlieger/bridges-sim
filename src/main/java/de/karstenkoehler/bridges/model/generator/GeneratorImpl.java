@@ -11,62 +11,154 @@ import java.util.*;
 
 public class GeneratorImpl implements Generator {
     private static final Random random = new Random(System.nanoTime());
-    private static final int TRIES_BEFORE_RESET = 150;
 
     private final Validator validator;
     private final List<Island> islands;
     private final List<Bridge> bridges;
-    private int resetCounter;
+    private final Counter counter;
 
     public GeneratorImpl(Validator validator) {
+        // TODO replace validator with check of last added bridge/island
         this.validator = validator;
-        islands = new ArrayList<>();
-        bridges = new ArrayList<>();
+        this.islands = new ArrayList<>();
+        this.bridges = new ArrayList<>();
+        this.counter = new Counter();
     }
 
     @Override
     public BridgesPuzzle generate(PuzzleSpecification spec) {
-        this.resetGenerator();
+        while (true) {
+            try {
+                BridgesPuzzle puzzle = generateNewPuzzle(spec);
+                if (!isValid(puzzle)) {
+                    continue;
+                }
+                if (!spec.generateSolution()) {
+                    puzzle.restart();
+                }
+                return puzzle;
+            } catch (IndicatorException e) {
+//                System.out.println("Indicator");
+            }
+        }
+    }
 
-        BridgesPuzzle puzzle = new BridgesPuzzle(getIslandMap(), this.bridges, spec.getWidth(), spec.getHeight());
-        this.islands.add(newRandomIsland(spec.getWidth(), spec.getHeight()));
+    private BridgesPuzzle generateNewPuzzle(PuzzleSpecification spec) throws IndicatorException {
+        // TODO somewhere in here is a bug that allows the last bridge to cross other bridges
+
+        this.resetGenerator(spec);
+        BridgesPuzzle puzzle = new BridgesPuzzle(getIslandList(), getBridgeList(), spec.getWidth(), spec.getHeight());
 
         while (this.islands.size() < spec.getIslandCount()) {
-            if (resetCounter > TRIES_BEFORE_RESET) {
-                resetGenerator();
-                this.islands.add(newRandomIsland(spec.getWidth(), spec.getHeight()));
+            if (shouldReset()) {
+                resetGenerator(spec);
+            }
+            if (shouldSplit()) {
+                Bridge longest = getLongestBridge();
+                if (longest != null) {
+                    addIslandInExistingBridge(longest);
+                }
+
+                continue;
             }
 
-            Island start = selectRandomIsland();
-            Island end = generateAdjacentIsland(start, spec.getWidth(), spec.getHeight());
-            Bridge bridge = newRandomBridge(start, end);
-
-            this.islands.add(end);
-            this.bridges.add(bridge);
-
-            setRequiredBridgesForAllIslands();
-            puzzle = new BridgesPuzzle(getIslandMap(), getBridgeList(), spec.getWidth(), spec.getHeight());
-            puzzle.fillMissingBridges();
-            if (!isValid(puzzle)) {
-                this.islands.remove(end.getId());
-                this.bridges.remove(bridge);
-                this.resetCounter++;
-            } else {
-                this.resetCounter = 0;
-            }
+            puzzle = tryNextIsland(spec);
         }
 
         puzzle.fillMissingBridges();
-        if (!spec.generateSolution()) {
-            puzzle.restart();
+        return puzzle;
+    }
+
+    private BridgesPuzzle tryNextIsland(PuzzleSpecification spec) throws IndicatorException {
+        Island start = selectRandomIsland();
+        Island newIsland = generateAdjacentIsland(start, spec.getWidth(), spec.getHeight());
+        Bridge bridge = newRandomBridge(start, newIsland);
+
+        this.islands.add(newIsland);
+        this.bridges.add(bridge);
+
+        setRequiredBridgesForAllIslands();
+        BridgesPuzzle puzzle = new BridgesPuzzle(getIslandList(), getBridgeList(), spec.getWidth(), spec.getHeight());
+        puzzle.fillMissingBridges();
+
+        if (!isValid(puzzle)) {
+            this.islands.remove(newIsland);
+            this.bridges.remove(bridge);
+            incrementSplitCounter();
+        } else {
+            this.resetCounters();
         }
         return puzzle;
     }
 
-    private void resetGenerator() {
-        this.resetCounter = 0;
+    private Bridge getLongestBridge() {
+        Optional<Bridge> opt = bridges.stream().max(Comparator.comparingInt(Bridge::getLength));
+        if (!opt.isPresent()) {
+            return null;
+        }
+        Bridge longest = opt.get();
+        if (longest.getLength() < 4) {
+            return null;
+        }
+        return longest;
+    }
+
+    private void addIslandInExistingBridge(Bridge longest) throws IndicatorException {
+        this.bridges.remove(longest);
+        Island start = longest.getStartIsland();
+        Island end = longest.getEndIsland();
+
+        int minX = Math.min(start.getX(), end.getX());
+        int minY = Math.min(start.getY(), end.getY());
+
+        if (longest.isHorizontal()) {
+            Island newIsland = createNewValidIslandHorizontal(longest, minX, minY);
+            this.islands.add(newIsland);
+            this.bridges.add(newRandomBridge(start, newIsland));
+            this.bridges.add(newRandomBridge(newIsland, end));
+        } else {
+            Island newIsland = createNewValidIslandVertical(longest, minX, minY);
+            this.islands.add(newIsland);
+            this.bridges.add(newRandomBridge(start, newIsland));
+            this.bridges.add(newRandomBridge(newIsland, end));
+        }
+    }
+
+    private Island createNewValidIslandHorizontal(Bridge longest, int minX, int minY) throws IndicatorException {
+        int counter = 0;
+        Island newIsland = new Island(0, minX + random.nextInt(longest.getLength()), minY, 0);
+        while (isForbidden(newIsland)) {
+            newIsland = new Island(0, minX + random.nextInt(longest.getLength()), minY, 0);
+            counter++;
+            if (counter > 1000) {
+                throw new IndicatorException();
+            }
+        }
+        return newIsland;
+    }
+
+    private Island createNewValidIslandVertical(Bridge longest, int minX, int minY) throws IndicatorException {
+        int counter = 0;
+        Island newIsland = new Island(0, minX, minY + random.nextInt(longest.getLength()), 0);
+        while (isForbidden(newIsland)) {
+            newIsland = new Island(0, minX, minY + random.nextInt(longest.getLength()), 0);
+            counter++;
+            if (counter > 1000) {
+                throw new IndicatorException();
+            }
+        }
+        return newIsland;
+    }
+
+    private boolean isForbidden(Island island) {
+        return this.islands.stream().anyMatch(other -> Math.abs(island.getX() - other.getX()) + Math.abs(island.getY() - other.getY()) <= 1);
+    }
+
+    private void resetGenerator(PuzzleSpecification spec) {
+        this.resetCounters();
         this.islands.clear();
         this.bridges.clear();
+        this.islands.add(newRandomIsland(spec.getWidth(), spec.getHeight()));
     }
 
     private void setRequiredBridgesForAllIslands() {
@@ -78,7 +170,9 @@ public class GeneratorImpl implements Generator {
         }
     }
 
-    private Map<Integer, Island> getIslandMap() {
+    private List<Island> getIslandList() {
+        setRequiredBridgesForAllIslands();
+
         this.islands.sort((o1, o2) -> {
             int diff = o1.getX() - o2.getX();
             if (diff != 0) {
@@ -88,12 +182,11 @@ public class GeneratorImpl implements Generator {
             return o1.getY() - o2.getY();
         });
 
-        Map<Integer, Island> result = new HashMap<>();
-        for (int i = 0; i < islands.size(); i++) {
-            islands.get(i).setId(i);
-            result.put(i, islands.get(i));
+        for (int i = 0; i < this.islands.size(); i++) {
+            this.islands.get(i).setId(i);
         }
-        return result;
+
+        return this.islands;
     }
 
     private List<Bridge> getBridgeList() {
@@ -127,7 +220,7 @@ public class GeneratorImpl implements Generator {
             puzzle.markInvalidBridges();
             return puzzle.getBridges().stream().allMatch(Bridge::isValid);
         } catch (ValidateException e) {
-            System.out.println(e.getMessage());
+//            System.out.println("Gen#isValid: " + e.getMessage());
             return false;
         }
     }
@@ -141,43 +234,26 @@ public class GeneratorImpl implements Generator {
      * @param height height of the puzzle
      * @return an island at a random location
      */
-    private Island generateAdjacentIsland(Island island, int width, int height) {
-        // TODO currently bridges cross islands very often, maybe optimize that?
-        if (random.nextDouble() > 0.5) {
-            return newRandomHorizonzalIsland(island, width);
-        } else {
-            return newRandomVerticalIsland(island, height);
+    private Island generateAdjacentIsland(Island island, int width, int height) throws IndicatorException {
+        int counter = 0;
+        Island newIsland = random.nextBoolean() ? newRandomHorizontalIsland(island, width) : newRandomVerticalIsland(island, height);
+        while (isForbidden(newIsland)) {
+            newIsland = random.nextBoolean() ? newRandomHorizontalIsland(island, width) : newRandomVerticalIsland(island, height);
+            counter++;
+            if (counter > 200) {
+                throw new IndicatorException();
+            }
         }
+        return newIsland;
     }
 
-    private Island newRandomHorizonzalIsland(Island island, int width) {
-        if (island.getX() <= 1) { // island at left border
-            return new Island(nextIslandId(), intBetween(island.getX() + 2, width - 1), island.getY(), 0);
-        } else if (width - island.getX() <= 2) { // island at right border
-            return new Island(nextIslandId(), intBetween(0, island.getX() - 2), island.getY(), 0);
-        }
-
-        if (random.nextDouble() > 0.5) { // place new island on left side
-            return new Island(nextIslandId(), intBetween(0, island.getX() - 2), island.getY(), 0);
-        } else { // place new island on right side
-            return new Island(nextIslandId(), intBetween(island.getX() + 2, width - 1), island.getY(), 0);
-        }
+    private Island newRandomHorizontalIsland(Island island, int width) {
+        return new Island(0, random.nextInt(width), island.getY(), 0);
     }
 
     private Island newRandomVerticalIsland(Island island, int height) {
-        if (island.getY() <= 1) { // island at top border
-            return new Island(nextIslandId(), island.getX(), intBetween(island.getY() + 2, height - 1), 0);
-        } else if (height - island.getY() <= 2) { // island at bottom border
-            return new Island(nextIslandId(), island.getX(), intBetween(0, island.getY() - 2), 0);
-        }
-
-        if (random.nextDouble() > 0.5) { // place new island on top side
-            return new Island(nextIslandId(), island.getX(), intBetween(0, island.getY() - 2), 0);
-        } else { // place new island on bottom side
-            return new Island(nextIslandId(), island.getX(), intBetween(island.getY() + 2, height - 1), 0);
-        }
+        return new Island(0, island.getX(), random.nextInt(height), 0);
     }
-
 
     /**
      * Selects one of the existing islands at random.
@@ -187,7 +263,6 @@ public class GeneratorImpl implements Generator {
     private Island selectRandomIsland() {
         return this.islands.get(random.nextInt(this.islands.size()));
     }
-
 
     /**
      * Generates a bridge connection between two islands. The bridge count is chosen randomly.
@@ -208,24 +283,25 @@ public class GeneratorImpl implements Generator {
      * @return an island at a random location
      */
     private Island newRandomIsland(int width, int height) {
-        return new Island(nextIslandId(), random.nextInt(width), random.nextInt(height), 0);
+        return new Island(0, random.nextInt(width), random.nextInt(height), 0);
     }
 
-    private int nextIslandId() {
-        return this.islands.size();
+    public void resetCounters() {
+        counter.resetCounters();
     }
 
-    /**
-     * Returns a random integer between (inclusive) the given values. The order of the parameters does not matter.
-     * The lower value is used as the lower bound and the higher value is used as the upper bound.
-     *
-     * @param a an integer
-     * @param b an integer
-     * @return a random integer
-     */
-    private static int intBetween(int a, int b) {
-        int min = Math.min(a, b);
-        int max = Math.max(a, b);
-        return min + random.nextInt(max - min + 1);
+    public boolean shouldSplit() {
+        return counter.shouldSplit();
+    }
+
+    public boolean shouldReset() {
+        return counter.shouldReset();
+    }
+
+    public void incrementSplitCounter() {
+        counter.incrementSplitCounter();
+    }
+
+    private static class IndicatorException extends Exception {
     }
 }

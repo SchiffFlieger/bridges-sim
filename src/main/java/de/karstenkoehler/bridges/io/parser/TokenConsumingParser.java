@@ -7,9 +7,7 @@ import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.Island;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * An implementation of the {@link Parser} interface based on a {@link Tokenizer}. It reads tokens from the tokenizer
@@ -29,7 +27,7 @@ import java.util.Map;
  */
 public class TokenConsumingParser extends AbstractTokenParser implements Parser {
 
-    private final Map<Integer, Island> islands = new HashMap<>();
+    private final List<Island> islands = new ArrayList<>();
     private final List<Bridge> bridges = new ArrayList<>();
     private int width, height, islandCount;
 
@@ -84,7 +82,7 @@ public class TokenConsumingParser extends AbstractTokenParser implements Parser 
         int bridges = readNumberToken();
 
         int id = this.islands.size();
-        this.islands.put(id, new Island(id, x, y, bridges));
+        this.islands.add(new Island(id, x, y, bridges));
 
         consume(Token.Type.CLOSE_PARENTHESIS);
     }

@@ -42,6 +42,10 @@ public class PuzzleSpecification {
         return new PuzzleSpecification(solution, width, height, islandCount);
     }
 
+    public static PuzzleSpecification withSpecsNoCheck(boolean solution, int width, int height, int islandCount) {
+        return new PuzzleSpecification(solution, width, height, islandCount);
+    }
+
     private PuzzleSpecification(boolean solution, int width, int height, int islandCount) {
         this.solution = solution;
         this.width = width;
@@ -85,5 +89,14 @@ public class PuzzleSpecification {
      */
     private static int maxIslandCount(int width, int height) {
         return (int) Math.ceil(width * height / 5.0);
+    }
+
+    @Override
+    public String toString() {
+        return "PuzzleSpecification{" +
+                "width=" + width +
+                ", height=" + height +
+                ", islandCount=" + islandCount +
+                '}';
     }
 }

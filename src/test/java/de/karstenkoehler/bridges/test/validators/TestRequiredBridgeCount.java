@@ -1,9 +1,9 @@
 package de.karstenkoehler.bridges.test.validators;
 
-import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.io.validator.RequiredBridgesCountValidator;
 import de.karstenkoehler.bridges.io.validator.ValidateException;
 import de.karstenkoehler.bridges.io.validator.Validator;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.Island;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -31,15 +31,15 @@ public class TestRequiredBridgeCount {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {null, new BridgesPuzzle(Collections.singletonMap(valid1.getId(), valid1), null, 0, 0)},
-                {null, new BridgesPuzzle(Collections.singletonMap(valid2.getId(), valid2), null, 0, 0)},
-                {null, new BridgesPuzzle(Collections.singletonMap(valid3.getId(), valid3), null, 0, 0)},
-                {null, new BridgesPuzzle(Collections.singletonMap(valid4.getId(), valid4), null, 0, 0)},
+                {null, new BridgesPuzzle(Collections.singletonList(valid1), null, 0, 0)},
+                {null, new BridgesPuzzle(Collections.singletonList(valid2), null, 0, 0)},
+                {null, new BridgesPuzzle(Collections.singletonList(valid3), null, 0, 0)},
+                {null, new BridgesPuzzle(Collections.singletonList(valid4), null, 0, 0)},
 
-                {ValidateException.class, new BridgesPuzzle(Collections.singletonMap(invalid1.getId(), invalid1), null, 0, 0)},
-                {ValidateException.class, new BridgesPuzzle(Collections.singletonMap(invalid2.getId(), invalid2), null, 0, 0)},
-                {ValidateException.class, new BridgesPuzzle(Collections.singletonMap(invalid3.getId(), invalid3), null, 0, 0)},
-                {ValidateException.class, new BridgesPuzzle(Collections.singletonMap(invalid4.getId(), invalid4), null, 0, 0)},
+                {ValidateException.class, new BridgesPuzzle(Collections.singletonList(invalid1), null, 0, 0)},
+                {ValidateException.class, new BridgesPuzzle(Collections.singletonList(invalid2), null, 0, 0)},
+                {ValidateException.class, new BridgesPuzzle(Collections.singletonList(invalid3), null, 0, 0)},
+                {ValidateException.class, new BridgesPuzzle(Collections.singletonList(invalid4), null, 0, 0)},
         });
     }
 

@@ -18,16 +18,17 @@ public class PuzzleStateTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        Map<Integer, Island> bsp_5x5 = new HashMap<>();
-        bsp_5x5.put(0, new Island(0, 0, 0, 3));
-        bsp_5x5.put(1, new Island(1, 0, 2, 4));
-        bsp_5x5.put(2, new Island(2, 0, 4, 2));
-        bsp_5x5.put(3, new Island(3, 2, 0, 3));
-        bsp_5x5.put(4, new Island(4, 2, 3, 2));
-        bsp_5x5.put(5, new Island(5, 3, 2, 1));
-        bsp_5x5.put(6, new Island(6, 3, 4, 1));
-        bsp_5x5.put(7, new Island(7, 4, 0, 3));
-        bsp_5x5.put(8, new Island(8, 4, 3, 3));
+        List<Island> bsp_5x5 = Arrays.asList(
+                new Island(0, 0, 0, 3),
+                new Island(1, 0, 2, 4),
+                new Island(2, 0, 4, 2),
+                new Island(3, 2, 0, 3),
+                new Island(4, 2, 3, 2),
+                new Island(5, 3, 2, 1),
+                new Island(6, 3, 4, 1),
+                new Island(7, 4, 0, 3),
+                new Island(8, 4, 3, 3)
+        );
 
         // bridges required to solve the puzzle
         Bridge bridge1 = new Bridge(bsp_5x5.get(0), bsp_5x5.get(1), 2);
@@ -45,11 +46,12 @@ public class PuzzleStateTest {
         Bridge bridge9 = new Bridge(bsp_5x5.get(3), bsp_5x5.get(4), 1);
         Bridge bridge10 = new Bridge(bsp_5x5.get(5), bsp_5x5.get(6), 1);
 
-        Map<Integer, Island> bsp_isolation_3 = new HashMap<>();
-        bsp_isolation_3.put(0, new Island(0, 0, 0, 1));
-        bsp_isolation_3.put(1, new Island(1, 0, 3, 1));
-        bsp_isolation_3.put(2, new Island(2, 3, 0, 2));
-        bsp_isolation_3.put(3, new Island(3, 3, 3, 2));
+        List<Island> bsp_isolation_3 = Arrays.asList(
+                new Island(0, 0, 0, 1),
+                new Island(1, 0, 3, 1),
+                new Island(2, 3, 0, 2),
+                new Island(3, 3, 3, 2)
+        );
 
         // bridges required to solve the puzzle
         Bridge isoBridge1 = new Bridge(bsp_isolation_3.get(0), bsp_isolation_3.get(2), 1);

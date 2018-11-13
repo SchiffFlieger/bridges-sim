@@ -1,9 +1,9 @@
 package de.karstenkoehler.bridges.test.validators;
 
-import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.io.validator.FieldSizeValidator;
 import de.karstenkoehler.bridges.io.validator.ValidateException;
 import de.karstenkoehler.bridges.io.validator.Validator;
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.junit.Test;
@@ -14,7 +14,6 @@ import org.junit.runners.Parameterized;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashMap;
 
 @RunWith(Parameterized.class)
 public class TestFieldSize {
@@ -22,18 +21,18 @@ public class TestFieldSize {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {null, new BridgesPuzzle(new HashMap<>(), new ArrayList<>(), 4, 4)},
-                {null, new BridgesPuzzle(new HashMap<>(), new ArrayList<>(), 25, 25)},
-                {null, new BridgesPuzzle(new HashMap<>(), new ArrayList<>(), 4, 25)},
-                {null, new BridgesPuzzle(new HashMap<>(), new ArrayList<>(), 25, 4)},
-                {null, new BridgesPuzzle(new HashMap<>(), new ArrayList<>(), 12, 12)},
+                {null, new BridgesPuzzle(new ArrayList<>(), new ArrayList<>(), 4, 4)},
+                {null, new BridgesPuzzle(new ArrayList<>(), new ArrayList<>(), 25, 25)},
+                {null, new BridgesPuzzle(new ArrayList<>(), new ArrayList<>(), 4, 25)},
+                {null, new BridgesPuzzle(new ArrayList<>(), new ArrayList<>(), 25, 4)},
+                {null, new BridgesPuzzle(new ArrayList<>(), new ArrayList<>(), 12, 12)},
 
-                {ValidateException.class, new BridgesPuzzle(new HashMap<>(), new ArrayList<>(), 1, 1)},
-                {ValidateException.class, new BridgesPuzzle(new HashMap<>(), new ArrayList<>(), 1, 5)},
-                {ValidateException.class, new BridgesPuzzle(new HashMap<>(), new ArrayList<>(), 5, 1)},
-                {ValidateException.class, new BridgesPuzzle(new HashMap<>(), new ArrayList<>(), 5, 26)},
-                {ValidateException.class, new BridgesPuzzle(new HashMap<>(), new ArrayList<>(), 26, 5)},
-                {ValidateException.class, new BridgesPuzzle(new HashMap<>(), new ArrayList<>(), 26, 26)}
+                {ValidateException.class, new BridgesPuzzle(new ArrayList<>(), new ArrayList<>(), 1, 1)},
+                {ValidateException.class, new BridgesPuzzle(new ArrayList<>(), new ArrayList<>(), 1, 5)},
+                {ValidateException.class, new BridgesPuzzle(new ArrayList<>(), new ArrayList<>(), 5, 1)},
+                {ValidateException.class, new BridgesPuzzle(new ArrayList<>(), new ArrayList<>(), 5, 26)},
+                {ValidateException.class, new BridgesPuzzle(new ArrayList<>(), new ArrayList<>(), 26, 5)},
+                {ValidateException.class, new BridgesPuzzle(new ArrayList<>(), new ArrayList<>(), 26, 26)}
         });
     }
 

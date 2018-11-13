@@ -13,7 +13,9 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 @RunWith(Parameterized.class)
 public class BridgeOrderTest {
@@ -22,14 +24,15 @@ public class BridgeOrderTest {
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        final Map<Integer, Island> islands = new HashMap<>();
-        islands.put(0, new Island(0, 0, 0, 2));
-        islands.put(1, new Island(1, 0, 2, 2));
-        islands.put(2, new Island(2, 0, 4, 2));
-        islands.put(3, new Island(3, 2, 0, 2));
-        islands.put(4, new Island(4, 2, 3, 2));
-        islands.put(5, new Island(5, 3, 2, 2));
-        islands.put(6, new Island(6, 3, 4, 2));
+        final List<Island> islands = Arrays.asList(
+                new Island(0, 0, 0, 2),
+                new Island(1, 0, 2, 2),
+                new Island(2, 0, 4, 2),
+                new Island(3, 2, 0, 2),
+                new Island(4, 2, 3, 2),
+                new Island(5, 3, 2, 2),
+                new Island(6, 3, 4, 2)
+        );
 
         final List<Bridge> valid = Arrays.asList(
                 new Bridge(islands.get(0), islands.get(1), 2),

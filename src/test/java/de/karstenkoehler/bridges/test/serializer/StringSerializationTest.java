@@ -9,7 +9,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -23,16 +26,17 @@ public class StringSerializationTest {
 
     @Parameterized.Parameters()
     public static Collection<Object[]> data() {
-        Map<Integer, Island> islands = new HashMap<>();
-        islands.put(0, new Island(0, 0, 0, 3));
-        islands.put(1, new Island(1, 0, 2, 4));
-        islands.put(2, new Island(2, 0, 4, 2));
-        islands.put(3, new Island(3, 2, 0, 3));
-        islands.put(4, new Island(4, 2, 3, 2));
-        islands.put(5, new Island(5, 3, 2, 1));
-        islands.put(6, new Island(6, 3, 4, 1));
-        islands.put(7, new Island(7, 4, 0, 3));
-        islands.put(8, new Island(8, 4, 3, 3));
+        List<Island> islands = Arrays.asList(
+                new Island(0, 0, 0, 3),
+                new Island(1, 0, 2, 4),
+                new Island(2, 0, 4, 2),
+                new Island(3, 2, 0, 3),
+                new Island(4, 2, 3, 2),
+                new Island(5, 3, 2, 1),
+                new Island(6, 3, 4, 1),
+                new Island(7, 4, 0, 3),
+                new Island(8, 4, 3, 3)
+        );
 
         Bridge bridge1 = new Bridge(islands.get(0), islands.get(1), 2);
         Bridge bridge2 = new Bridge(islands.get(0), islands.get(3), 1);

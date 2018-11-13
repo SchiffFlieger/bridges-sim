@@ -6,31 +6,30 @@ import de.karstenkoehler.bridges.model.Island;
 import org.junit.Test;
 
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
 public class ResetBridgesTest {
     @Test
     public void test() {
-        Map<Integer, Island> islands = new HashMap<>();
-        islands.put(0, new Island(0, 0, 0, 1));
-        islands.put(1, new Island(1, 0, 2, 4));
-        islands.put(2, new Island(2, 0, 5, 3));
-        islands.put(3, new Island(3, 2, 0, 4));
-        islands.put(4, new Island(4, 2, 2, 7));
-        islands.put(5, new Island(5, 2, 4, 3));
-        islands.put(6, new Island(6, 3, 1, 2));
-        islands.put(7, new Island(7, 3, 3, 2));
-        islands.put(8, new Island(8, 3, 5, 3));
-        islands.put(9, new Island(9, 4, 0, 2));
-        islands.put(10, new Island(10, 4, 2, 1));
-        islands.put(11, new Island(11, 4, 4, 1));
-        islands.put(12, new Island(12, 5, 1, 3));
-        islands.put(13, new Island(13, 5, 3, 5));
-        islands.put(14, new Island(14, 5, 5, 3));
+        List<Island> islands = Arrays.asList(
+                new Island(0, 0, 0, 1),
+                new Island(1, 0, 2, 4),
+                new Island(2, 0, 5, 3),
+                new Island(3, 2, 0, 4),
+                new Island(4, 2, 2, 7),
+                new Island(5, 2, 4, 3),
+                new Island(6, 3, 1, 2),
+                new Island(7, 3, 3, 2),
+                new Island(8, 3, 5, 3),
+                new Island(9, 4, 0, 2),
+                new Island(10, 4, 2, 1),
+                new Island(11, 4, 4, 1),
+                new Island(12, 5, 1, 3),
+                new Island(13, 5, 3, 5),
+                new Island(14, 5, 5, 3)
+        );
 
         List<Bridge> bridges = Arrays.asList(
                 // vertical
@@ -61,8 +60,7 @@ public class ResetBridgesTest {
         puzzle.fillMissingBridges();
         puzzle.restart();
 
-        for (int i = 0; i < islands.size(); i++) {
-            Island island = islands.get(i);
+        for (Island island : islands) {
             assertEquals(island.getRequiredBridges(), puzzle.getRemainingBridgeCount(island));
         }
     }

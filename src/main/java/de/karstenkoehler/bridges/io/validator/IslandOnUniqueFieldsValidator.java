@@ -8,6 +8,9 @@ import de.karstenkoehler.bridges.model.Island;
  * if they do not share the same x and y coordinates.
  */
 public class IslandOnUniqueFieldsValidator implements Validator {
+
+    // TODO merge with NoIslandsOnAdjacentFieldsValidator
+
     /**
      * @see Validator#validate(BridgesPuzzle)
      */

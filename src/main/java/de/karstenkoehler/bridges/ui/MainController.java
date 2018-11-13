@@ -11,7 +11,6 @@ import de.karstenkoehler.bridges.ui.components.SaveAction;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.fxml.FXML;

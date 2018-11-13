@@ -40,9 +40,9 @@ public class BridgeShape {
         final double x1 = params.coordinate(this.bridge.getEndIsland().getX());
         final double y1 = params.coordinate(this.bridge.getEndIsland().getY());
 
-        if (puzzle.isVertical(bridge)) {
+        if (bridge.isVertical()) {
             createLine(x0 + offset, y0, x1 + offset, y1, hintsVisible);
-        } else if (puzzle.isHorizontal(bridge)) {
+        } else if (bridge.isHorizontal()) {
             createLine(x0, y0 + offset, x1, y1 + offset, hintsVisible);
         } else {
             throw new RuntimeException("fatal error: bridge is neither vertical nor horizontal");

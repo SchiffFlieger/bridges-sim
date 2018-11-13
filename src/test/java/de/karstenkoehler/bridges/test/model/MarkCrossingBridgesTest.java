@@ -7,7 +7,10 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
@@ -16,22 +19,23 @@ import static org.junit.Assert.assertTrue;
 public class MarkCrossingBridgesTest {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
-        Map<Integer, Island> bsp_6x6 = new HashMap<>();
-        bsp_6x6.put(0, new Island(0, 0, 0, 1));
-        bsp_6x6.put(1, new Island(1, 0, 2, 4));
-        bsp_6x6.put(2, new Island(2, 0, 5, 3));
-        bsp_6x6.put(3, new Island(3, 2, 0, 4));
-        bsp_6x6.put(4, new Island(4, 2, 2, 7));
-        bsp_6x6.put(5, new Island(5, 2, 4, 3));
-        bsp_6x6.put(6, new Island(6, 3, 1, 2));
-        bsp_6x6.put(7, new Island(7, 3, 3, 2));
-        bsp_6x6.put(8, new Island(8, 3, 5, 3));
-        bsp_6x6.put(9, new Island(9, 4, 0, 2));
-        bsp_6x6.put(10, new Island(10, 4, 2, 1));
-        bsp_6x6.put(11, new Island(11, 4, 4, 1));
-        bsp_6x6.put(12, new Island(12, 5, 1, 3));
-        bsp_6x6.put(13, new Island(13, 5, 3, 5));
-        bsp_6x6.put(14, new Island(14, 5, 5, 3));
+        List<Island> bsp_6x6 = Arrays.asList(
+                new Island(0, 0, 0, 1),
+                new Island(1, 0, 2, 4),
+                new Island(2, 0, 5, 3),
+                new Island(3, 2, 0, 4),
+                new Island(4, 2, 2, 7),
+                new Island(5, 2, 4, 3),
+                new Island(6, 3, 1, 2),
+                new Island(7, 3, 3, 2),
+                new Island(8, 3, 5, 3),
+                new Island(9, 4, 0, 2),
+                new Island(10, 4, 2, 1),
+                new Island(11, 4, 4, 1),
+                new Island(12, 5, 1, 3),
+                new Island(13, 5, 3, 5),
+                new Island(14, 5, 5, 3)
+        );
 
         // all valid
         Bridge a1 = new Bridge(bsp_6x6.get(0), bsp_6x6.get(1), 1);

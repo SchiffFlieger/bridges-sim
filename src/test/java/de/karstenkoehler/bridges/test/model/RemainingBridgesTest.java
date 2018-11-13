@@ -7,7 +7,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -31,22 +33,9 @@ public class RemainingBridgesTest {
         Island island13 = new Island(13, 5, 3, 5);
         Island island14 = new Island(14, 5, 5, 3);
 
-        Map<Integer, Island> bsp_6x6 = new HashMap<>();
-        bsp_6x6.put(0, island0);
-        bsp_6x6.put(1, island1);
-        bsp_6x6.put(2, island2);
-        bsp_6x6.put(3, island3);
-        bsp_6x6.put(4, island4);
-        bsp_6x6.put(5, island5);
-        bsp_6x6.put(6, island6);
-        bsp_6x6.put(7, island7);
-        bsp_6x6.put(8, island8);
-        bsp_6x6.put(9, island9);
-        bsp_6x6.put(10, island10);
-        bsp_6x6.put(11, island11);
-        bsp_6x6.put(12, island12);
-        bsp_6x6.put(13, island13);
-        bsp_6x6.put(14, island14);
+        List<Island> bsp_6x6 = Arrays.asList(island0, island1, island2, island3, island4, island5,
+                island6, island7, island8, island9, island10, island11, island12, island13, island14
+        );
 
         List<Bridge> bridges = Arrays.asList(
                 // vertical
