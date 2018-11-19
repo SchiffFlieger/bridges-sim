@@ -88,7 +88,7 @@ public class PuzzleSpecification {
      * @return maximum number of islands
      */
     private static int maxIslandCount(int width, int height) {
-        return (int) Math.ceil(width * height / 5.0);
+        return (int) (width * height / 5.0);
     }
 
     @Override

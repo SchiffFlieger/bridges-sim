@@ -23,7 +23,7 @@ public class PuzzleSpecificationTest {
             assertTrue(spec.getHeight() >= 4);
             assertTrue(spec.getHeight() <= 25);
             assertTrue(spec.getIslandCount() >= 2);
-            assertTrue(spec.getIslandCount() <= (int) Math.ceil(spec.getWidth() * spec.getHeight() / 5.0));
+            assertTrue(spec.getIslandCount() <= spec.getWidth() * spec.getHeight() / 5.0);
         }
     }
 
