@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<HBox style="-fx-background-color: TRANSPARENT;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="de.karstenkoehler.bridges.ui.components.toast.ToastController">
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+   </padding>
+   <HBox style="-fx-background-radius: 10; -fx-background-color: WHITE; -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.8), 10, 0, 0, 0);">
+      <padding>
+         <Insets bottom="5.0" left="15.0" right="15.0" top="5.0"/>
+      </padding>
+      <Label fx:id="lblMessage" layoutX="110.0" layoutY="209.0" text="default text"/>
+   </HBox>
+</HBox>
