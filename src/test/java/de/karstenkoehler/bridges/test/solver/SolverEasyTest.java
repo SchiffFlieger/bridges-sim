@@ -54,7 +54,7 @@ public class SolverEasyTest {
         );
         return Arrays.asList(new Object[][]{
                 {new BridgesPuzzle(bsp_5x5, new ArrayList<>(), 5, 5), 11},
-//                {new BridgesPuzzle(bsp_6x6, new ArrayList<>(), 6, 6), 20},
+                {new BridgesPuzzle(bsp_6x6, new ArrayList<>(), 6, 6), 22},
         });
     }
 

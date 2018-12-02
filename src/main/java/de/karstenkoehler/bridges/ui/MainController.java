@@ -103,7 +103,7 @@ public class MainController {
         });
         this.canvasController.setBridgeHintsVisible(BridgeHintsVisible.NEVER);
 
-        Optional<BridgesPuzzle> puzzle = this.fileHelper.openInitialFile(new File("src\\main\\resources\\data\\bsp_5x5.bgs"));
+        Optional<BridgesPuzzle> puzzle = this.fileHelper.openInitialFile(new File("src\\main\\resources\\data\\bsp_25x25.bgs"));
         puzzle.ifPresent(bridgesPuzzle -> this.canvasController.setPuzzle(bridgesPuzzle));
     }
 
@@ -205,13 +205,16 @@ public class MainController {
             return;
         }
 
+        this.canvasController.getPuzzle().emphasizeBridge(next);
         next.setBridgeCount(next.getBridgeCount() + 1);
         canvasController.drawThings();
     }
 
     @FXML
     private void onSolve() {
-        System.out.println("solve");
+        for (int i = 0; i < 150; i++) {
+            onNextBridge();
+        }
     }
 
     private ChangeListener<Boolean> setGridVisibility() {

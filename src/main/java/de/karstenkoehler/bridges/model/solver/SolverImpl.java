@@ -9,10 +9,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SolverImpl implements Solver {
+
     @Override
     public Bridge nextSafeBridge(BridgesPuzzle puzzle) {
         for (Island island : puzzle.getIslands()) {
-            Bridge save = findSaveBridge(island, puzzle);
+            Bridge save = findNextSimple(island, puzzle);
+            if (save != null) {
+                return save;
+            }
+        }
+
+        for (Island island : puzzle.getIslands()) {
+            Bridge save = findNextExtended(island, puzzle);
             if (save != null) {
                 return save;
             }
@@ -21,37 +29,52 @@ public class SolverImpl implements Solver {
         return null;
     }
 
-    private Bridge findSaveBridge(Island island, BridgesPuzzle puzzle) {
+    private Bridge findNextSimple(Island island, BridgesPuzzle puzzle) {
         int remaining = puzzle.getRemainingBridgeCount(island);
         if (remaining == 0) {
             return null;
         }
 
         List<Bridge> neighbors = getPossibleNeighborBridges(island, puzzle);
-        int calc = (neighbors.size() * 2) - remaining;
-//        System.out.printf("neighbors: %d, remaining: %d, calc: %d%n", neighbors.size(), puzzle.getRemainingBridgeCount(island), calc);
 
-        if (calc == 0) {
-            // every adjacent island has double bridge
-            Bridge bridge = assureAtLeastXBridges(neighbors, 2);
+        int val = (neighbors.size() * 2) - remaining;
+        if (val >= 0 && val <= 1) {
+            Bridge bridge = findFirstWithLessBridges(neighbors, 2);
             if (bridge != null) return bridge;
         }
-        if (calc == 1) {
-            // every adjacent island has at least single bridge
-            Bridge bridge = assureAtLeastXBridges(neighbors, 2);
+
+        int possibleBridges = getMaxPossibleBridges(neighbors, puzzle);
+        if (possibleBridges == remaining) {
+            Bridge bridge = findFirstWithLessBridges(neighbors, 2);
             if (bridge != null) return bridge;
         }
 
         return null;
     }
 
-    private Bridge assureAtLeastXBridges(List<Bridge> bridges, int minBridgeCount) {
-        for (Bridge bridge : bridges) {
-            if (bridge != null && bridge.getBridgeCount() < minBridgeCount) {
-                return bridge;
-            }
+    private Bridge findNextExtended(Island island, BridgesPuzzle puzzle) {
+        List<Bridge> possibleNeighborBridges = getPossibleNeighborBridges(island, puzzle);
+        int possibleNeighborBridgeCount = possibleNeighborBridges.stream().mapToInt((bridge) -> {
+            int bridgesPossible = 2 - bridge.getBridgeCount();
+            int bridgesNeededByOtherIsland = puzzle.getRemainingBridgeCount(getOtherIsland(bridge, island));
+
+            return Math.min(bridgesNeededByOtherIsland, bridgesPossible);
+        }).sum();
+        int remainingBridges = puzzle.getRemainingBridgeCount(island);
+
+        if (possibleNeighborBridgeCount - remainingBridges == 0) {
+            return findFirstWithLessBridges(possibleNeighborBridges, 2);
         }
+
+        if (possibleNeighborBridgeCount - remainingBridges == 1) {
+            return findFirstWithLessBridges(possibleNeighborBridges, 1);
+        }
+
         return null;
+    }
+
+    private Bridge findFirstWithLessBridges(List<Bridge> bridges, int minBridgeCount) {
+        return bridges.stream().filter(bridge -> bridge.getBridgeCount() < minBridgeCount).findFirst().orElse(null);
     }
 
     private List<Bridge> getPossibleNeighborBridges(Island island, BridgesPuzzle puzzle) {
@@ -76,5 +99,17 @@ public class SolverImpl implements Solver {
             return bridge.getEndIsland();
         }
         return bridge.getStartIsland();
+    }
+
+    private int getMaxPossibleBridges(List<Bridge> bridges, BridgesPuzzle puzzle) {
+        int sum = 0;
+        for (Bridge bridge : bridges) {
+            int val = 2 - bridge.getBridgeCount();
+            if (puzzle.getRemainingBridgeCount(bridge.getStartIsland()) == 1 || puzzle.getRemainingBridgeCount(bridge.getEndIsland()) == 1) {
+                val = Math.min(val, 1);
+            }
+            sum += val;
+        }
+        return sum;
     }
 }
