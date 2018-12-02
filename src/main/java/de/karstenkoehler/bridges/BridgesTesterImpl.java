@@ -11,8 +11,8 @@ import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.PuzzleSpecification;
 import de.karstenkoehler.bridges.model.generator.Generator;
 import de.karstenkoehler.bridges.model.generator.GeneratorImpl;
-import de.karstenkoehler.bridges.model.solver.DefaultSolver;
 import de.karstenkoehler.bridges.model.solver.Solver;
+import de.karstenkoehler.bridges.model.solver.SolverImpl;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,7 +25,7 @@ public class BridgesTesterImpl implements BridgesTester {
 
     public BridgesTesterImpl() {
         this.generator = new GeneratorImpl(new DefaultValidator());
-        this.solver = new DefaultSolver();
+        this.solver = new SolverImpl();
         this.writer = new BridgesFileWriter();
         this.reader = new BridgesFileReader();
     }
