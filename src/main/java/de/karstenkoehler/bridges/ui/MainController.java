@@ -19,9 +19,9 @@ import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.RadioMenuItem;
+import javafx.scene.control.Slider;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -33,6 +33,11 @@ import static de.karstenkoehler.bridges.ui.CanvasController.*;
 
 public class MainController {
     public static final EventType<Event> FILE_CHANGED = new EventType<>("FILE_CHANGED");
+
+    @FXML
+    private RadioMenuItem rbtnShowRemaining;
+    @FXML
+    private RadioMenuItem rbtnShowRequired;
 
     @FXML
     private RadioMenuItem rbtnBridgeHintsAlways;
@@ -48,11 +53,13 @@ public class MainController {
     @FXML
     private CheckMenuItem cbxShowGrid;
     @FXML
-    private ChoiceBox<String> islandDisplayChoice;
-    @FXML
     private Label lblState;
     @FXML
     private Canvas canvas;
+
+    @FXML
+    private Slider slSpeed;
+
 
     private CanvasController canvasController;
 
@@ -72,14 +79,17 @@ public class MainController {
         cbxShowGrid.selectedProperty().addListener(setGridVisibility());
         cbxShowClickArea.selectedProperty().addListener(setClickAreaVisibility());
 
-        this.islandDisplayChoice.getSelectionModel().selectedIndexProperty().addListener((observable, oldValue, newValue) -> {
-            NumberDisplay display = NumberDisplay.values()[newValue.intValue()];
-            this.canvasController.setNumberDisplay(display);
+        this.rbtnShowRequired.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            this.canvasController.setNumberDisplay(NumberDisplay.SHOW_REQUIRED);
             this.canvasController.drawThings();
         });
 
-        NumberDisplay currentDisplay = NumberDisplay.values()[islandDisplayChoice.getSelectionModel().getSelectedIndex()];
-        this.canvasController = new CanvasController(this.canvas, this.controlPane, currentDisplay);
+        this.rbtnShowRemaining.selectedProperty().addListener((observable, oldValue, newValue) -> {
+            this.canvasController.setNumberDisplay(NumberDisplay.SHOW_REMAINING);
+            this.canvasController.drawThings();
+        });
+
+        this.canvasController = new CanvasController(this.canvas, this.controlPane, NumberDisplay.SHOW_REQUIRED);
 
         rbtnBridgeHintsAlways.selectedProperty().addListener((observable, oldValue, selected) -> {
             if (selected) {

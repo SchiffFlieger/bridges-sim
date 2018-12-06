@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.collections.FXCollections?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import java.lang.String?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0"
             prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="de.karstenkoehler.bridges.ui.MainController">
@@ -22,6 +20,16 @@
             <Menu mnemonicParsing="false" text="View">
                 <CheckMenuItem fx:id="cbxShowGrid" mnemonicParsing="false" text="Show Grid"/>
                 <CheckMenuItem fx:id="cbxShowClickArea" mnemonicParsing="false" text="Show Click Area"/>
+                <Menu mnemonicParsing="false" text="Island Numbers">
+                    <RadioMenuItem fx:id="rbtnShowRequired" mnemonicParsing="false" text="Show Required Bridges"
+                                   selected="true">
+                        <toggleGroup>
+                            <ToggleGroup fx:id="islandNumbers"/>
+                        </toggleGroup>
+                    </RadioMenuItem>
+                    <RadioMenuItem fx:id="rbtnShowRemaining" mnemonicParsing="false" text="Show Remaining Bridges"
+                                   toggleGroup="$islandNumbers"/>
+                </Menu>
                 <Menu mnemonicParsing="false" text="Show Bridge Hints">
                     <RadioMenuItem fx:id="rbtnBridgeHintsAlways" mnemonicParsing="false" text="Always">
                         <toggleGroup>
@@ -49,19 +57,12 @@
                 </StackPane>
             </HBox>
             <AnchorPane minHeight="0.0" minWidth="270.0">
-                <ChoiceBox fx:id="islandDisplayChoice" layoutX="14.0" layoutY="14.0" prefHeight="25.0"
-                           prefWidth="250.0" value="show required bridges">
-                    <items>
-                        <FXCollections fx:factory="observableArrayList">
-                            <String fx:value="show required bridges"/>
-                            <String fx:value="show missing bridges"/>
-                        </FXCollections>
-                    </items>
-                </ChoiceBox>
-                <Button layoutX="14.0" layoutY="51.0" mnemonicParsing="false" onAction="#onNextBridge"
-                        prefWidth="120.0" text="next bridge"/>
-                <Button layoutX="144.0" layoutY="51.0" mnemonicParsing="false" onAction="#onSolve" prefWidth="120.0"
-                        text="solve"/>
+                <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onNextBridge"
+                        prefHeight="30.0" prefWidth="250.0" text="Single Step"/>
+                <Button layoutX="15.0" layoutY="53.0" mnemonicParsing="false" onAction="#onSolve" prefHeight="30.0"
+                        prefWidth="250.0" text="Auto Step"/>
+                <Slider fx:id="slSpeed" layoutX="71.0" layoutY="99.0" prefHeight="20.0" prefWidth="191.0"/>
+                <Label layoutX="15.0" layoutY="99.0" text="Speed"/>
             </AnchorPane>
         </SplitPane>
     </center>
