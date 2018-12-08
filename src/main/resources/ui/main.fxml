@@ -8,7 +8,7 @@
             prefWidth="1000.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="de.karstenkoehler.bridges.ui.MainController">
     <top>
-        <MenuBar BorderPane.alignment="CENTER">
+        <MenuBar fx:id="menubar" BorderPane.alignment="CENTER">
             <Menu mnemonicParsing="false" text="File">
                 <MenuItem mnemonicParsing="false" onAction="#onNewPuzzle" text="New Puzzle"/>
                 <MenuItem mnemonicParsing="false" onAction="#onRestartPuzzle" text="Restart Puzzle"/>
@@ -21,14 +21,14 @@
                 <CheckMenuItem fx:id="cbxShowGrid" mnemonicParsing="false" text="Show Grid"/>
                 <CheckMenuItem fx:id="cbxShowClickArea" mnemonicParsing="false" text="Show Click Area"/>
                 <Menu mnemonicParsing="false" text="Island Numbers">
-                    <RadioMenuItem fx:id="rbtnShowRequired" mnemonicParsing="false" text="Show Required Bridges"
-                                   selected="true">
+                    <RadioMenuItem fx:id="rbtnShowRequired" mnemonicParsing="false" selected="true"
+                                   text="Show Required Bridges">
                         <toggleGroup>
                             <ToggleGroup fx:id="islandNumbers"/>
                         </toggleGroup>
                     </RadioMenuItem>
-                    <RadioMenuItem fx:id="rbtnShowRemaining" mnemonicParsing="false" text="Show Remaining Bridges"
-                                   toggleGroup="$islandNumbers"/>
+                    <RadioMenuItem fx:id="rbtnShowRemaining" mnemonicParsing="false"
+                                   text="Show Remaining Bridges" toggleGroup="$islandNumbers"/>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Show Bridge Hints">
                     <RadioMenuItem fx:id="rbtnBridgeHintsAlways" mnemonicParsing="false" text="Always">
@@ -57,11 +57,14 @@
                 </StackPane>
             </HBox>
             <AnchorPane minHeight="0.0" minWidth="270.0">
-                <Button layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#onNextBridge"
+                <Button fx:id="btnNextBridge" layoutX="14.0" layoutY="14.0" mnemonicParsing="false"
+                        onAction="#onNextBridge"
                         prefHeight="30.0" prefWidth="250.0" text="Single Step"/>
-                <Button layoutX="15.0" layoutY="53.0" mnemonicParsing="false" onAction="#onSolve" prefHeight="30.0"
+                <Button fx:id="btnToggleSimulation" layoutX="15.0" layoutY="53.0" mnemonicParsing="false"
+                        onAction="#onSolve" prefHeight="30.0"
                         prefWidth="250.0" text="Auto Step"/>
-                <Slider fx:id="slSpeed" layoutX="71.0" layoutY="99.0" prefHeight="20.0" prefWidth="191.0"/>
+                <Slider fx:id="slSpeed" layoutX="71.0" layoutY="99.0" max="1500.0" min="50.0" prefHeight="20.0"
+                        prefWidth="191.0"/>
                 <Label layoutX="15.0" layoutY="99.0" text="Speed"/>
             </AnchorPane>
         </SplitPane>

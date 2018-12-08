@@ -13,15 +13,15 @@ import de.karstenkoehler.bridges.ui.components.NewPuzzleStage;
 import de.karstenkoehler.bridges.ui.components.SaveAction;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
+import javafx.concurrent.Service;
 import javafx.event.Event;
 import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
-import javafx.scene.control.CheckMenuItem;
-import javafx.scene.control.Label;
-import javafx.scene.control.RadioMenuItem;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -33,6 +33,13 @@ import static de.karstenkoehler.bridges.ui.CanvasController.*;
 
 public class MainController {
     public static final EventType<Event> FILE_CHANGED = new EventType<>("FILE_CHANGED");
+    @FXML
+    private Button btnNextBridge;
+    @FXML
+    private MenuBar menubar;
+
+    @FXML
+    private Button btnToggleSimulation;
 
     @FXML
     private RadioMenuItem rbtnShowRemaining;
@@ -60,6 +67,7 @@ public class MainController {
     @FXML
     private Slider slSpeed;
 
+    private Service<Void> service;
 
     private CanvasController canvasController;
 
@@ -112,6 +120,17 @@ public class MainController {
             }
         });
         this.canvasController.setBridgeHintsVisible(BridgeHintsVisible.NEVER);
+
+        IntegerProperty sleepTime = new SimpleIntegerProperty();
+        sleepTime.bind(Bindings.subtract(1550, slSpeed.valueProperty()));
+        this.service = new SolveSimulationService(puzzleSolver, canvasController, sleepTime);
+
+        this.service.setOnCancelled(event -> enableControls());
+        this.service.setOnFailed(event -> enableControls());
+        this.service.setOnSucceeded(event -> enableControls());
+
+        this.service.setOnRunning(event -> disableControls());
+        this.service.setOnScheduled(event -> disableControls());
 
         Optional<BridgesPuzzle> puzzle = this.fileHelper.openInitialFile(new File("src\\main\\resources\\data\\bsp_25x25.bgs"));
         puzzle.ifPresent(bridgesPuzzle -> this.canvasController.setPuzzle(bridgesPuzzle));
@@ -222,9 +241,25 @@ public class MainController {
 
     @FXML
     private void onSolve() {
-        for (int i = 0; i < 150; i++) {
-            onNextBridge();
+        if (!service.isRunning()) {
+            service.restart();
+        } else {
+            service.cancel();
         }
+    }
+
+    private void enableControls() {
+        btnToggleSimulation.setText("Auto Step");
+        slSpeed.setDisable(false);
+        btnNextBridge.setDisable(false);
+        menubar.setDisable(false);
+    }
+
+    private void disableControls() {
+        btnToggleSimulation.setText("Stop");
+        slSpeed.setDisable(true);
+        btnNextBridge.setDisable(true);
+        menubar.setDisable(true);
     }
 
     private ChangeListener<Boolean> setGridVisibility() {
@@ -234,5 +269,4 @@ public class MainController {
     private ChangeListener<Boolean> setClickAreaVisibility() {
         return (observable, old, selected) -> canvasController.setClickAreaVisible(selected);
     }
-
 }
