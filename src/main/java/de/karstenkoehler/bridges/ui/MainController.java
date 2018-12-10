@@ -123,7 +123,7 @@ public class MainController {
 
         IntegerProperty sleepTime = new SimpleIntegerProperty();
         sleepTime.bind(Bindings.subtract(1550, slSpeed.valueProperty()));
-        this.service = new SolveSimulationService(puzzleSolver, canvasController, sleepTime);
+        this.service = new SolveSimulationService(puzzleSolver, canvas, canvasController, sleepTime);
 
         this.service.setOnCancelled(event -> enableControls());
         this.service.setOnFailed(event -> enableControls());
@@ -236,7 +236,8 @@ public class MainController {
 
         this.canvasController.getPuzzle().emphasizeBridge(next);
         next.setBridgeCount(next.getBridgeCount() + 1);
-        canvasController.drawThings();
+        canvas.fireEvent(new Event(EVAL_STATE));
+        canvas.fireEvent(new Event(REDRAW));
     }
 
     @FXML
