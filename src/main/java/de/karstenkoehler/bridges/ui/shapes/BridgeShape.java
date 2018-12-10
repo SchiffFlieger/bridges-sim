@@ -2,6 +2,7 @@ package de.karstenkoehler.bridges.ui.shapes;
 
 import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Island;
 import de.karstenkoehler.bridges.ui.BridgeHintsVisible;
 import de.karstenkoehler.bridges.ui.ParameterObject;
 import javafx.scene.canvas.GraphicsContext;
@@ -53,7 +54,7 @@ public class BridgeShape {
         cg.setLineWidth(params.getBridgeLineSize());
 
         if (bridge.getBridgeCount() == 0) {
-            if (hintsVisible == BridgeHintsVisible.ALWAYS || !puzzle.causesCrossing(this.bridge)) {
+            if (showBridgeHint(hintsVisible)) {
                 cg.setLineDashes(params.getBridgeLineSize() * 5);
                 cg.setStroke(Color.LIGHTGRAY);
                 cg.strokeLine(x0, y0, x1, y1);
@@ -71,5 +72,14 @@ public class BridgeShape {
             }
             cg.strokeLine(x0, y0, x1, y1);
         }
+    }
+
+    private boolean showBridgeHint(BridgeHintsVisible hintsVisible) {
+        return hintsVisible == BridgeHintsVisible.ALWAYS
+                || (!puzzle.causesCrossing(this.bridge) && needsMoreBridges(bridge.getStartIsland()) && needsMoreBridges(bridge.getEndIsland()));
+    }
+
+    private boolean needsMoreBridges(Island island) {
+        return puzzle.getRemainingBridgeCount(island) != 0;
     }
 }
