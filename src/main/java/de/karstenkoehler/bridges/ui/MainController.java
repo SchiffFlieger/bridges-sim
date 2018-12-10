@@ -236,8 +236,10 @@ public class MainController {
 
         this.canvasController.getPuzzle().emphasizeBridge(next);
         next.setBridgeCount(next.getBridgeCount() + 1);
-        canvas.fireEvent(new Event(EVAL_STATE));
-        canvas.fireEvent(new Event(REDRAW));
+
+        this.canvas.fireEvent(new Event(EVAL_STATE));
+        this.canvas.fireEvent(new Event(REDRAW));
+        this.canvas.fireEvent(new Event(FILE_CHANGED));
     }
 
     @FXML

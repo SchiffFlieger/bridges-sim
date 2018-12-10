@@ -54,6 +54,7 @@ public class SolveSimulationService extends Service<Void> {
                 Platform.runLater(() -> {
                     this.canvas.fireEvent(new Event(CanvasController.EVAL_STATE));
                     this.canvas.fireEvent(new Event(CanvasController.REDRAW));
+                    this.canvas.fireEvent(new Event(MainController.FILE_CHANGED));
                 });
 
                 Thread.sleep(sleepTime.get());
