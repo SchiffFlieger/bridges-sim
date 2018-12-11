@@ -13,8 +13,6 @@ import de.karstenkoehler.bridges.ui.components.NewPuzzleStage;
 import de.karstenkoehler.bridges.ui.components.SaveAction;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.concurrent.Service;
 import javafx.event.Event;
@@ -28,6 +26,7 @@ import javafx.stage.Stage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static de.karstenkoehler.bridges.ui.CanvasController.*;
 
@@ -121,9 +120,11 @@ public class MainController {
         });
         this.canvasController.setBridgeHintsVisible(BridgeHintsVisible.NEVER);
 
-        IntegerProperty sleepTime = new SimpleIntegerProperty();
-        sleepTime.bind(Bindings.subtract(1550, slSpeed.valueProperty()));
-        this.service = new SolveSimulationService(puzzleSolver, canvas, canvasController, sleepTime);
+        System.out.println(slSpeed.valueProperty().intValue());
+        AtomicInteger sleepCount = new AtomicInteger(slSpeed.valueProperty().intValue());
+        slSpeed.valueProperty().addListener((observable, oldValue, newValue) -> sleepCount.set(slSpeed.maxProperty().intValue() + 1 - newValue.intValue()));
+
+        this.service = new SolveSimulationService(puzzleSolver, canvas, canvasController, sleepCount);
 
         this.service.setOnCancelled(event -> enableControls());
         this.service.setOnFailed(event -> enableControls());
@@ -253,14 +254,12 @@ public class MainController {
 
     private void enableControls() {
         btnToggleSimulation.setText("Auto Step");
-        slSpeed.setDisable(false);
         btnNextBridge.setDisable(false);
         menubar.setDisable(false);
     }
 
     private void disableControls() {
         btnToggleSimulation.setText("Stop");
-        slSpeed.setDisable(true);
         btnNextBridge.setDisable(true);
         menubar.setDisable(true);
     }
