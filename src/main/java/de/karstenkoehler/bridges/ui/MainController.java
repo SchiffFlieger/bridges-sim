@@ -11,6 +11,7 @@ import de.karstenkoehler.bridges.model.solver.Solver;
 import de.karstenkoehler.bridges.model.solver.SolverImpl;
 import de.karstenkoehler.bridges.ui.components.NewPuzzleStage;
 import de.karstenkoehler.bridges.ui.components.SaveAction;
+import de.karstenkoehler.bridges.ui.components.toast.ToastMessage;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
@@ -74,6 +75,7 @@ public class MainController {
     private final Solver puzzleSolver;
     private final FileHelper fileHelper;
     private NewPuzzleStage newPuzzleStage;
+    private Stage stage;
 
     public MainController() {
         this.puzzleGenerator = new GeneratorImpl(new DefaultValidator());
@@ -138,6 +140,7 @@ public class MainController {
     }
 
     public void setMainStage(Stage mainStage) throws IOException {
+        this.stage = mainStage;
         mainStage.addEventHandler(FILE_CHANGED, event -> this.fileHelper.fileModified());
         mainStage.addEventHandler(REDRAW, event -> this.canvasController.drawThings());
         mainStage.addEventHandler(ERROR, event -> System.out.println("could not draw bridge"));
@@ -230,6 +233,12 @@ public class MainController {
 
     @FXML
     private void onNextBridge() {
+        PuzzleState state = canvasController.getPuzzle().getState();
+        if (state != PuzzleState.NOT_SOLVED) {
+            showError(state);
+            return;
+        }
+
         Bridge next = puzzleSolver.nextSafeBridge(canvasController.getPuzzle());
         if (next == null) {
             return;
@@ -245,10 +254,26 @@ public class MainController {
 
     @FXML
     private void onSolve() {
+        PuzzleState state = canvasController.getPuzzle().getState();
+        if (state != PuzzleState.NOT_SOLVED) {
+            showError(state);
+            return;
+        }
+
         if (!service.isRunning()) {
             service.restart();
         } else {
             service.cancel();
+        }
+    }
+
+    private void showError(PuzzleState state) {
+        if (state == PuzzleState.SOLVED) {
+            ToastMessage.show(this.stage, "The puzzle is already solved");
+        } else if (state == PuzzleState.ERROR) {
+            ToastMessage.show(this.stage, "You need to fix the errors first");
+        } else if (state == PuzzleState.NO_LONGER_SOLVABLE) {
+            ToastMessage.show(this.stage, "The puzzle is no longer solvable");
         }
     }
 
