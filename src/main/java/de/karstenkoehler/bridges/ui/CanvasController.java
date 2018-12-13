@@ -17,7 +17,6 @@ import java.util.List;
 
 public class CanvasController {
     public static final EventType<Event> REDRAW = new EventType<>("REDRAW");
-    public static final EventType<Event> ERROR = new EventType<>("ERROR");
     public static final EventType<Event> EVAL_STATE = new EventType<>("EVAL_STATE");
 
     private final Canvas canvas;

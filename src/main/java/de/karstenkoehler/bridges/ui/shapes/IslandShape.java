@@ -1,6 +1,6 @@
 package de.karstenkoehler.bridges.ui.shapes;
 
-import de.karstenkoehler.bridges.InvalidBridgeCountException;
+import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.Island;
 import de.karstenkoehler.bridges.model.Orientation;
@@ -17,6 +17,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
+
+import java.util.function.Consumer;
+import java.util.function.Function;
 
 import static de.karstenkoehler.bridges.ui.CanvasController.EVAL_STATE;
 
@@ -65,7 +68,7 @@ public class IslandShape {
 
     }
 
-    private String getDisplayNumber (NumberDisplay display) {
+    private String getDisplayNumber(NumberDisplay display) {
         if (display == NumberDisplay.SHOW_REQUIRED) {
             return String.valueOf(island.getRequiredBridges());
         } else if (display == NumberDisplay.SHOW_REMAINING) {
@@ -94,23 +97,37 @@ public class IslandShape {
         poly.setOnMouseEntered(event -> poly.setFill(FILL_COLOR));
         poly.setOnMouseExited(event -> poly.setFill(Color.TRANSPARENT));
         poly.setOnMouseClicked(event -> {
-            int count = event.getButton().equals(MouseButton.PRIMARY) ? 1 : -1;
-            onClick(poly, orientation, count);
+            if (event.getButton().equals(MouseButton.PRIMARY)) {
+                onLeftClick(poly, orientation);
+            } else {
+                onRightClick(poly, orientation);
+            }
         });
         this.controlPane.getChildren().add(0, poly);
     }
 
-    private void onClick(Polygon poly, Orientation orientation, int count) {
-        try {
-            this.puzzle.getConnectedBridge(this.island, orientation).addBridges(count);
-            this.puzzle.emphasizeBridge(this.puzzle.getConnectedBridge(this.island, orientation));
-            poly.fireEvent(new Event(MainController.FILE_CHANGED));
-            poly.fireEvent(new Event(EVAL_STATE));
-            poly.fireEvent(new Event(CanvasController.REDRAW));
+    private void onLeftClick(Polygon poly, Orientation orientation) {
+        onClick(poly, orientation, Bridge::canAddBridge, Bridge::addBridge);
+    }
 
-        } catch (NullPointerException | InvalidBridgeCountException e) {
-            poly.fireEvent(new Event(CanvasController.ERROR));
+    private void onRightClick(Polygon poly, Orientation orientation) {
+        onClick(poly, orientation, Bridge::canRemoveBridge, Bridge::removeBridge);
+    }
+
+    private void onClick(Polygon poly, Orientation orientation, Function<Bridge, Boolean> canExec, Consumer<Bridge> exec) {
+        Bridge bridge = this.puzzle.getConnectedBridge(this.island, orientation);
+        if (bridge == null) {
+            return;
         }
+
+        if (canExec.apply(bridge)) {
+            exec.accept(bridge);
+        }
+        this.puzzle.emphasizeBridge(bridge);
+
+        poly.fireEvent(new Event(MainController.FILE_CHANGED));
+        poly.fireEvent(new Event(EVAL_STATE));
+        poly.fireEvent(new Event(CanvasController.REDRAW));
     }
 
     private void drawClickArea() {

@@ -1,11 +1,8 @@
 package de.karstenkoehler.bridges.test.model;
 
-import de.karstenkoehler.bridges.InvalidBridgeCountException;
 import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.Island;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
@@ -22,17 +19,10 @@ public class AddBridgeTest {
         Island island2 = new Island(1, 0, 2, 4);
 
         return Arrays.asList(new Object[][]{
-                {new Bridge(island1, island2, 0), 1, 1, null},
-                {new Bridge(island1, island2, 1), 1, 2, null},
-                {new Bridge(island1, island2, 2), -1, 1, null},
-                {new Bridge(island1, island2, 1), -1, 0, null},
-
-                {new Bridge(island1, island2, 1), 0, 0, IllegalArgumentException.class},
-                {new Bridge(island1, island2, 1), 2, 0, IllegalArgumentException.class},
-                {new Bridge(island1, island2, 1), -2, 0, IllegalArgumentException.class},
-
-                {new Bridge(island1, island2, 0), -1, 0, InvalidBridgeCountException.class},
-                {new Bridge(island1, island2, 2), 1, 0, InvalidBridgeCountException.class},
+                {new Bridge(island1, island2, 0), 1, 1},
+                {new Bridge(island1, island2, 1), 1, 2},
+                {new Bridge(island1, island2, 2), -1, 1},
+                {new Bridge(island1, island2, 1), -1, 0},
         });
     }
 
@@ -45,19 +35,17 @@ public class AddBridgeTest {
     @Parameterized.Parameter(2)
     public int newCount;
 
-    @Parameterized.Parameter(3)
-    public Class<? extends Exception> expectedException;
-
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-
     @Test
-    public void testFillBridges() throws InvalidBridgeCountException {
-        if (expectedException != null) {
-            thrown.expect(expectedException);
+    public void testFillBridges() {
+        while (toAdd != 0) {
+            if (toAdd > 0) {
+                input.addBridge();
+                toAdd--;
+            } else {
+                input.removeBridge();
+                toAdd++;
+            }
         }
-
-        input.addBridges(toAdd);
 
         assertEquals(newCount, input.getBridgeCount());
     }

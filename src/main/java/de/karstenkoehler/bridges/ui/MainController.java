@@ -30,7 +30,8 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static de.karstenkoehler.bridges.ui.CanvasController.*;
+import static de.karstenkoehler.bridges.ui.CanvasController.EVAL_STATE;
+import static de.karstenkoehler.bridges.ui.CanvasController.REDRAW;
 
 public class MainController {
     public static final EventType<Event> FILE_CHANGED = new EventType<>("FILE_CHANGED");
@@ -144,7 +145,6 @@ public class MainController {
         this.stage = mainStage;
         mainStage.addEventHandler(FILE_CHANGED, event -> this.fileHelper.fileModified());
         mainStage.addEventHandler(REDRAW, event -> this.canvasController.drawThings());
-        mainStage.addEventHandler(ERROR, event -> System.out.println("could not draw bridge"));
 
         mainStage.addEventHandler(EVAL_STATE, event -> {
             PuzzleState state = this.canvasController.getPuzzle().getState();

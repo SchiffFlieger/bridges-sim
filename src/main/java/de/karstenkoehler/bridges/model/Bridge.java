@@ -1,7 +1,5 @@
 package de.karstenkoehler.bridges.model;
 
-import de.karstenkoehler.bridges.InvalidBridgeCountException;
-
 import java.util.Objects;
 
 public class Bridge {
@@ -77,16 +75,20 @@ public class Bridge {
                 '}';
     }
 
-    public void addBridges(int count) throws InvalidBridgeCountException {
-        if (count != 1 && count != -1) {
-            throw new IllegalArgumentException(String.format("Bridge.addBridges got %d as argument", count));
-        }
+    public boolean canAddBridge() {
+        return this.bridgeCount < 2;
+    }
 
-        if ((count == 1 && this.bridgeCount > 1) || (count == -1 && this.bridgeCount == 0)) {
-            throw new InvalidBridgeCountException();
-        }
+    public boolean canRemoveBridge() {
+        return this.bridgeCount > 0;
+    }
 
-        this.bridgeCount += count;
+    public void addBridge() {
+        this.bridgeCount++;
+    }
+
+    public void removeBridge() {
+        this.bridgeCount--;
     }
 
     public boolean isEmphasized() {
