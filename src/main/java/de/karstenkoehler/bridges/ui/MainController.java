@@ -233,16 +233,8 @@ public class MainController {
 
     @FXML
     private void onNextBridge() {
-        PuzzleState state = canvasController.getPuzzle().getState();
-        if (state != PuzzleState.NOT_SOLVED) {
-            showError(state);
-            return;
-        }
-
-        Bridge next = puzzleSolver.nextSafeBridge(canvasController.getPuzzle());
-        if (next == null) {
-            return;
-        }
+        Bridge next = getNextSafeBridge();
+        if (next == null) return;
 
         this.canvasController.getPuzzle().emphasizeBridge(next);
         next.setBridgeCount(next.getBridgeCount() + 1);
@@ -254,17 +246,29 @@ public class MainController {
 
     @FXML
     private void onSolve() {
-        PuzzleState state = canvasController.getPuzzle().getState();
-        if (state != PuzzleState.NOT_SOLVED) {
-            showError(state);
-            return;
-        }
+        Bridge next = getNextSafeBridge();
+        if (next == null) return;
 
         if (!service.isRunning()) {
             service.restart();
         } else {
             service.cancel();
         }
+    }
+
+    private Bridge getNextSafeBridge() {
+        PuzzleState state = canvasController.getPuzzle().getState();
+        if (state != PuzzleState.NOT_SOLVED) {
+            showError(state);
+            return null;
+        }
+
+        Bridge next = puzzleSolver.nextSafeBridge(canvasController.getPuzzle());
+        if (next == null) {
+            ToastMessage.show(this.stage, "There are no more safe bridges");
+            return null;
+        }
+        return next;
     }
 
     private void showError(PuzzleState state) {
