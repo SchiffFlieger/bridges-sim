@@ -109,6 +109,7 @@ public class CanvasController {
 
     public void restartPuzzle() {
         this.puzzle.restart();
+        canvas.fireEvent(new Event(EVAL_STATE));
         this.drawThings();
     }
 
