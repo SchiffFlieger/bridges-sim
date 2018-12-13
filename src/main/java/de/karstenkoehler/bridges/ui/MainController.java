@@ -9,6 +9,7 @@ import de.karstenkoehler.bridges.model.generator.Generator;
 import de.karstenkoehler.bridges.model.generator.GeneratorImpl;
 import de.karstenkoehler.bridges.model.solver.Solver;
 import de.karstenkoehler.bridges.model.solver.SolverImpl;
+import de.karstenkoehler.bridges.ui.components.AboutAlert;
 import de.karstenkoehler.bridges.ui.components.NewPuzzleStage;
 import de.karstenkoehler.bridges.ui.components.SaveAction;
 import de.karstenkoehler.bridges.ui.components.toast.ToastMessage;
@@ -228,7 +229,7 @@ public class MainController {
 
     @FXML
     private void onAbout() {
-        System.out.println("about");
+        AboutAlert.showAndWait();
     }
 
     @FXML
