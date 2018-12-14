@@ -5,8 +5,6 @@ import de.karstenkoehler.bridges.ui.NewPuzzleController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -36,7 +34,6 @@ public class NewPuzzleStage {
     }
 
     public Optional<PuzzleSpecification> showAndWait() {
-
         dialogStage.showAndWait();
         return Optional.ofNullable(this.controller.getSpecs());
     }

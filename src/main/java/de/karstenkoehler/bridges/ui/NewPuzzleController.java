@@ -2,7 +2,6 @@ package de.karstenkoehler.bridges.ui;
 
 import de.karstenkoehler.bridges.model.PuzzleSpecification;
 import javafx.beans.value.ChangeListener;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
@@ -42,6 +41,17 @@ public class NewPuzzleController {
         numbersOnly(txtWidth);
         numbersOnly(txtHeight);
         numbersOnly(txtIslands);
+
+        rbtnUseRandom.setTooltip(new Tooltip("Uses a random specification for the generated puzzle."));
+        rbtnChooseParameters.setTooltip(new Tooltip("Choose the specification for the generated puzzle by yourself."));
+
+        txtWidth.setTooltip(new Tooltip("The width of the puzzle. You can choose values from 4 to 25."));
+        txtHeight.setTooltip(new Tooltip("The height of the puzzle. You can choose values from 4 to 25."));
+        txtIslands.setTooltip(new Tooltip("The number of islands in the puzzle. You can choose values from 2 to (Width * Height) / 5."));
+
+        cbxGenerateSolution.setTooltip(new Tooltip("If this box is checked, the generated puzzle is already solved."));
+        cbxChooseNumOfIslands.setTooltip(new Tooltip("Check this box to choose the number of islands to generate. Otherwise the number of islands is chosen randomly."));
+
     }
 
     @FXML
