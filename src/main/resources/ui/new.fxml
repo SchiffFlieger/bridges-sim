@@ -1,28 +1,94 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.AnchorPane?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="263.0"
-            prefWidth="412.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="de.karstenkoehler.bridges.ui.NewPuzzleController">
-    <RadioButton fx:id="rbtnUseRandom" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" selected="true"
-                 text="random parameters">
+<?import javafx.scene.layout.*?>
+<GridPane hgap="5.0" vgap="5.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="de.karstenkoehler.bridges.ui.NewPuzzleController">
+    <columnConstraints>
+        <ColumnConstraints hgrow="SOMETIMES"/>
+        <ColumnConstraints hgrow="SOMETIMES"/>
+        <ColumnConstraints hgrow="SOMETIMES"/>
+        <ColumnConstraints hgrow="SOMETIMES"/>
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+        <RowConstraints vgrow="SOMETIMES"/>
+    </rowConstraints>
+    <padding>
+        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+    </padding>
+    <Separator GridPane.columnSpan="2147483647" GridPane.rowIndex="4">
+        <VBox.margin>
+            <Insets/>
+        </VBox.margin>
+    </Separator>
+    <RadioButton fx:id="rbtnUseRandom" mnemonicParsing="false" selected="true" text="Puzzle with random size">
         <toggleGroup>
             <ToggleGroup fx:id="group"/>
         </toggleGroup>
     </RadioButton>
-    <RadioButton fx:id="rbtnChooseParameters" layoutX="14.0" layoutY="37.0" mnemonicParsing="false"
-                 text="choose parameters" toggleGroup="$group"/>
-    <Label fx:id="lblWidth" disable="true" layoutX="40.0" layoutY="72.0" text="width:"/>
-    <Label fx:id="lblHeight" disable="true" layoutX="40.0" layoutY="103.0" text="height:"/>
-    <CheckBox fx:id="cbxChooseNumOfIslands" disable="true" layoutX="40.0" layoutY="140.0" mnemonicParsing="false"
-              selected="true" text="choose number of islands"/>
-    <TextField fx:id="txtWidth" disable="true" layoutX="92.0" layoutY="68.0"/>
-    <TextField fx:id="txtHeight" disable="true" layoutX="92.0" layoutY="99.0"/>
-    <TextField fx:id="txtIslands" disable="true" layoutX="92.0" layoutY="163.0"/>
-    <Button layoutX="239.0" layoutY="224.0" mnemonicParsing="false" onAction="#onOk" prefWidth="75.0" text="OK"/>
-    <Button layoutX="323.0" layoutY="224.0" mnemonicParsing="false" onAction="#onCancel" prefWidth="75.0"
-            text="Cancel"/>
-    <CheckBox fx:id="cbxGenerateSolution" layoutX="14.0" layoutY="199.0" mnemonicParsing="false"
-              text="generate solution"/>
-</AnchorPane>
+    <RadioButton fx:id="rbtnChooseParameters" mnemonicParsing="false" text="Puzzle with fixed size" toggleGroup="$group"
+                 GridPane.columnIndex="1" GridPane.columnSpan="2147483647"/>
+    <Label fx:id="lblWidth" disable="true" text="Width:" GridPane.columnIndex="1" GridPane.rowIndex="1">
+        <VBox.margin>
+            <Insets left="5.0" right="5.0" top="5.0"/>
+        </VBox.margin>
+        <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+        </HBox.margin>
+    </Label>
+    <TextField fx:id="txtWidth" disable="true" prefWidth="50.0" GridPane.columnIndex="2" GridPane.rowIndex="1">
+        <VBox.margin>
+            <Insets left="5.0" right="5.0" top="5.0"/>
+        </VBox.margin>
+        <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+        </HBox.margin>
+    </TextField>
+    <Label fx:id="lblHeight" disable="true" text="Height:" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <VBox.margin>
+            <Insets left="5.0" right="5.0" top="5.0"/>
+        </VBox.margin>
+        <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+        </HBox.margin>
+    </Label>
+    <TextField fx:id="txtHeight" disable="true" prefWidth="50.0" GridPane.columnIndex="2" GridPane.rowIndex="2">
+        <VBox.margin>
+            <Insets left="5.0" right="5.0" top="5.0"/>
+        </VBox.margin>
+        <HBox.margin>
+            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+        </HBox.margin>
+    </TextField>
+    <CheckBox fx:id="cbxChooseNumOfIslands" disable="true" mnemonicParsing="false" selected="true"
+              text="Use fixed island count" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+    <TextField fx:id="txtIslands" disable="true" prefWidth="50.0" GridPane.columnIndex="2" GridPane.rowIndex="3"/>
+    <HBox alignment="CENTER_RIGHT" spacing="5.0" GridPane.columnSpan="2147483647" GridPane.rowIndex="6">
+        <CheckBox fx:id="cbxGenerateSolution" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT"
+                  text="Generate Solution">
+            <HBox.margin>
+                <Insets left="15.0" right="15.0"/>
+            </HBox.margin>
+        </CheckBox>
+        <Button mnemonicParsing="false" onAction="#onCancel" prefWidth="75.0" text="Cancel" GridPane.columnIndex="3"
+                GridPane.rowIndex="6">
+            <HBox.margin>
+                <Insets/>
+            </HBox.margin>
+        </Button>
+        <Button mnemonicParsing="false" onAction="#onOk" prefWidth="75.0" text="OK" GridPane.columnIndex="2"
+                GridPane.rowIndex="6">
+            <HBox.margin>
+                <Insets/>
+            </HBox.margin>
+        </Button>
+    </HBox>
+</GridPane>
