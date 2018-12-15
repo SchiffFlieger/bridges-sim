@@ -286,19 +286,19 @@ public class GeneratorImpl implements Generator {
         return new Island(0, random.nextInt(width), random.nextInt(height), 0);
     }
 
-    public void resetCounters() {
+    private void resetCounters() {
         counter.resetCounters();
     }
 
-    public boolean shouldSplit() {
+    private boolean shouldSplit() {
         return counter.shouldSplit();
     }
 
-    public boolean shouldReset() {
+    private boolean shouldReset() {
         return counter.shouldReset();
     }
 
-    public void incrementSplitCounter() {
+    private void incrementSplitCounter() {
         counter.incrementSplitCounter();
     }
 
