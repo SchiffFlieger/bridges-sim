@@ -30,7 +30,7 @@ public class PuzzleSpecification {
         checkBounds(width, height);
 
         if (islandCount < 2 || islandCount > maxIslandCount(width, height)) {
-            throw new IllegalArgumentException("island count must be in range [2, width*height/5].");
+            throw new IllegalArgumentException("Number of islands must be in range [2, (Width*Height) / 5]");
         }
 
         return new PuzzleSpecification(solution, width, height, islandCount);
@@ -104,10 +104,10 @@ public class PuzzleSpecification {
      */
     private static void checkBounds(int width, int height) {
         if (width < MIN_SIZE || width > MAX_SIZE) {
-            throw new IllegalArgumentException("width must be in range [4, 25].");
+            throw new IllegalArgumentException("Width must be in range [4, 25]");
         }
         if (height < MIN_SIZE || height > MAX_SIZE) {
-            throw new IllegalArgumentException("height must be in range [4, 25].");
+            throw new IllegalArgumentException("Height must be in range [4, 25]");
         }
     }
 

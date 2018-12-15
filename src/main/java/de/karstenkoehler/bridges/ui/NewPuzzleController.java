@@ -1,6 +1,7 @@
 package de.karstenkoehler.bridges.ui;
 
 import de.karstenkoehler.bridges.model.PuzzleSpecification;
+import de.karstenkoehler.bridges.ui.components.toast.ToastMessage;
 import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
@@ -65,8 +66,8 @@ public class NewPuzzleController {
         }
 
         try {
-            int width = Integer.parseInt(txtWidth.getText());
-            int height = Integer.parseInt(txtHeight.getText());
+            int width = tryParseInt(txtWidth, "Width");
+            int height = tryParseInt(txtHeight, "Height");
 
             if (!cbxChooseNumOfIslands.isSelected()) {
                 this.specs = PuzzleSpecification.withBounds(solution, width, height);
@@ -74,16 +75,23 @@ public class NewPuzzleController {
                 return;
             }
 
-            int islands = Integer.parseInt(txtIslands.getText());
+            int islands = tryParseInt(txtIslands, "Number of islands");
             this.specs = PuzzleSpecification.withSpecs(solution, width, height, islands);
             this.stage.close();
+        } catch (IllegalArgumentException | InputException e) {
+            ToastMessage.show(this.stage, e.getMessage());
+        }
+    }
+
+    private int tryParseInt(TextField field, String fieldName) throws InputException {
+        if (field.getText().isEmpty()) {
+            throw new InputException(fieldName + " is empty");
+        }
+
+        try {
+            return Integer.parseInt(field.getText());
         } catch (IllegalArgumentException e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error");
-            alert.setHeaderText(null);
-            alert.setGraphic(null);
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
+            throw new InputException(fieldName + " needs to be an integer");
         }
     }
 
@@ -144,5 +152,11 @@ public class NewPuzzleController {
                 field.setText(newValue.replaceAll("[^\\d]", ""));
             }
         });
+    }
+
+    private static class InputException extends Exception {
+        public InputException(String message) {
+            super(message);
+        }
     }
 }
