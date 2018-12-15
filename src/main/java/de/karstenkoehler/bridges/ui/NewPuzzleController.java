@@ -1,15 +1,26 @@
 package de.karstenkoehler.bridges.ui;
 
+import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.PuzzleSpecification;
+import de.karstenkoehler.bridges.ui.components.GeneratePuzzleTask;
+import de.karstenkoehler.bridges.ui.components.PuzzleChangeEvent;
 import de.karstenkoehler.bridges.ui.components.toast.ToastMessage;
 import javafx.beans.value.ChangeListener;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
 public class NewPuzzleController {
+    @FXML
+    private ProgressBar progress;
+    @FXML
+    private Button btnCancel;
+    @FXML
+    private Button btnOk;
 
     @FXML
     private RadioButton rbtnUseRandom;
@@ -31,7 +42,7 @@ public class NewPuzzleController {
     private Label lblHeight;
 
     private Stage stage;
-    private PuzzleSpecification specs;
+    private Node node;
 
     @FXML
     private void initialize() {
@@ -52,7 +63,6 @@ public class NewPuzzleController {
 
         cbxGenerateSolution.setTooltip(new Tooltip("If this box is checked, the generated puzzle is already solved."));
         cbxChooseNumOfIslands.setTooltip(new Tooltip("Check this box to choose the number of islands to generate. Otherwise the number of islands is chosen randomly."));
-
     }
 
     @FXML
@@ -60,8 +70,7 @@ public class NewPuzzleController {
         boolean solution = this.cbxGenerateSolution.isSelected();
 
         if (rbtnUseRandom.isSelected()) {
-            this.specs = PuzzleSpecification.random(solution);
-            this.stage.close();
+            generateAndClose(PuzzleSpecification.random(solution));
             return;
         }
 
@@ -70,16 +79,63 @@ public class NewPuzzleController {
             int height = tryParseInt(txtHeight, "Height");
 
             if (!cbxChooseNumOfIslands.isSelected()) {
-                this.specs = PuzzleSpecification.withBounds(solution, width, height);
-                this.stage.close();
+                generateAndClose(PuzzleSpecification.withBounds(solution, width, height));
                 return;
             }
 
             int islands = tryParseInt(txtIslands, "Number of islands");
-            this.specs = PuzzleSpecification.withSpecs(solution, width, height, islands);
-            this.stage.close();
+            generateAndClose(PuzzleSpecification.withSpecs(solution, width, height, islands));
         } catch (IllegalArgumentException | InputException e) {
             ToastMessage.show(this.stage, e.getMessage());
+        }
+    }
+
+    private void generateAndClose(PuzzleSpecification specs) {
+        disableControls();
+
+        Task<BridgesPuzzle> task = new GeneratePuzzleTask(specs);
+        task.onSucceededProperty().set(event -> {
+            this.node.fireEvent(new PuzzleChangeEvent(MainController.CHANGE_PUZZLE, task.getValue()));
+            this.stage.close();
+            enableControls();
+        });
+
+
+        new Thread(task).start();
+    }
+
+    private void disableControls() {
+        this.progress.setVisible(true);
+
+        this.btnOk.setDisable(true);
+        this.btnCancel.setDisable(true);
+        this.txtWidth.setDisable(true);
+        this.txtHeight.setDisable(true);
+        this.txtIslands.setDisable(true);
+        this.rbtnUseRandom.setDisable(true);
+        this.rbtnChooseParameters.setDisable(true);
+        this.cbxChooseNumOfIslands.setDisable(true);
+        this.cbxGenerateSolution.setDisable(true);
+        this.lblWidth.setDisable(true);
+        this.lblHeight.setDisable(true);
+    }
+
+    private void enableControls() {
+        this.progress.setVisible(false);
+
+        this.btnOk.setDisable(false);
+        this.btnCancel.setDisable(false);
+        this.cbxGenerateSolution.setDisable(false);
+        this.rbtnUseRandom.setDisable(false);
+        this.rbtnChooseParameters.setDisable(false);
+
+        if (rbtnChooseParameters.isSelected()) {
+            this.cbxChooseNumOfIslands.setDisable(false);
+            this.lblWidth.setDisable(false);
+            this.lblHeight.setDisable(false);
+            this.txtWidth.setDisable(false);
+            this.txtHeight.setDisable(false);
+            this.txtIslands.setDisable(false);
         }
     }
 
@@ -97,24 +153,19 @@ public class NewPuzzleController {
 
     @FXML
     private void onCancel() {
-        this.specs = null;
         stage.close();
+        enableControls();
     }
 
-    public void setStage(Stage stage) {
+    public void setDependencies(Stage stage, Node node) {
         this.stage = stage;
-        this.stage.setOnCloseRequest(event -> this.specs = null);
-
+        this.node = node;
 
         stage.addEventHandler(KeyEvent.KEY_PRESSED, ev -> {
             if (ev.getCode() == KeyCode.ENTER) {
                 this.onOk();
             }
         });
-    }
-
-    public PuzzleSpecification getSpecs() {
-        return specs;
     }
 
     private ChangeListener<Boolean> useRandomSelected() {

@@ -1,16 +1,13 @@
 package de.karstenkoehler.bridges.ui;
 
-import de.karstenkoehler.bridges.io.validator.DefaultValidator;
 import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
-import de.karstenkoehler.bridges.model.PuzzleSpecification;
 import de.karstenkoehler.bridges.model.PuzzleState;
-import de.karstenkoehler.bridges.model.generator.Generator;
-import de.karstenkoehler.bridges.model.generator.GeneratorImpl;
 import de.karstenkoehler.bridges.model.solver.Solver;
 import de.karstenkoehler.bridges.model.solver.SolverImpl;
 import de.karstenkoehler.bridges.ui.components.AboutAlert;
 import de.karstenkoehler.bridges.ui.components.NewPuzzleStage;
+import de.karstenkoehler.bridges.ui.components.PuzzleChangeEvent;
 import de.karstenkoehler.bridges.ui.components.SaveAction;
 import de.karstenkoehler.bridges.ui.components.toast.ToastMessage;
 import javafx.application.Platform;
@@ -35,6 +32,8 @@ import static de.karstenkoehler.bridges.ui.CanvasController.REDRAW;
 
 public class MainController {
     public static final EventType<Event> FILE_CHANGED = new EventType<>("FILE_CHANGED");
+    public static final EventType<PuzzleChangeEvent> CHANGE_PUZZLE = new EventType<>("CHANGE_PUZZLE");
+
     @FXML
     private Button btnNextBridge;
     @FXML
@@ -73,14 +72,12 @@ public class MainController {
 
     private CanvasController canvasController;
 
-    private final Generator puzzleGenerator;
     private final Solver puzzleSolver;
     private final FileHelper fileHelper;
     private NewPuzzleStage newPuzzleStage;
     private Stage stage;
 
     public MainController() {
-        this.puzzleGenerator = new GeneratorImpl(new DefaultValidator());
         this.fileHelper = new FileHelper();
         this.puzzleSolver = new SolverImpl();
     }
@@ -145,6 +142,10 @@ public class MainController {
         this.stage = mainStage;
         mainStage.addEventHandler(FILE_CHANGED, event -> this.fileHelper.fileModified());
         mainStage.addEventHandler(REDRAW, event -> this.canvasController.drawThings());
+        mainStage.addEventHandler(CHANGE_PUZZLE, event -> {
+            this.canvasController.setPuzzle(event.getPuzzle());
+            this.fileHelper.resetFile();
+        });
 
         mainStage.addEventHandler(EVAL_STATE, event -> {
             PuzzleState state = this.canvasController.getPuzzle().getState();
@@ -165,7 +166,7 @@ public class MainController {
 
         this.fileHelper.setStage(mainStage);
         this.newPuzzleStage = new NewPuzzleStage(mainStage);
-        this.newPuzzleStage.init();
+        this.newPuzzleStage.init(this.canvas);
 
         mainStage.fireEvent(new Event(EVAL_STATE));
     }
@@ -177,13 +178,7 @@ public class MainController {
             return;
         }
 
-        Optional<PuzzleSpecification> specs = newPuzzleStage.showAndWait();
-
-        specs.ifPresent(puzzleSpecification -> {
-            BridgesPuzzle puzzle = this.puzzleGenerator.generate(specs.get());
-            this.canvasController.setPuzzle(puzzle);
-            this.fileHelper.resetFile();
-        });
+        newPuzzleStage.showAndWait();
     }
 
     @FXML
