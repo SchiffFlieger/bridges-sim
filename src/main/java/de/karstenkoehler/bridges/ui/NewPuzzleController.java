@@ -39,9 +39,9 @@ public class NewPuzzleController {
         this.rbtnChooseParameters.selectedProperty().addListener(chooseParametersSelected());
         this.cbxChooseNumOfIslands.selectedProperty().addListener(numOfIslandsSelected());
 
-        numbersOnly(txtWidth);
-        numbersOnly(txtHeight);
-        numbersOnly(txtIslands);
+        makeConstraints(txtWidth);
+        makeConstraints(txtHeight);
+        makeConstraints(txtIslands);
 
         rbtnUseRandom.setTooltip(new Tooltip("Uses a random specification for the generated puzzle."));
         rbtnChooseParameters.setTooltip(new Tooltip("Choose the specification for the generated puzzle by yourself."));
@@ -146,8 +146,11 @@ public class NewPuzzleController {
         lblHeight.setDisable(value);
     }
 
-    private void numbersOnly(TextField field) {
+    private void makeConstraints(TextField field) {
         field.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (newValue.length() > 4) {
+                field.setText(oldValue);
+            }
             if (!newValue.matches("\\d*")) {
                 field.setText(newValue.replaceAll("[^\\d]", ""));
             }
