@@ -107,6 +107,10 @@ public class TokenConsumingParser extends AbstractTokenParser implements Parser 
         consume(Token.Type.PIPE);
         int bridges = readBoolToken() ? 2 : 1; // double or single bridge
 
+        if (node1 >= islandCount || node2 >= islandCount) {
+            throw new ParseException("Bridge references unknown island");
+        }
+
         this.bridges.add(new Bridge(islands.get(node1), islands.get(node2), bridges));
 
         consume(Token.Type.CLOSE_PARENTHESIS);

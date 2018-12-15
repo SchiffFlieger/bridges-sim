@@ -20,7 +20,6 @@ public class DefaultValidator implements Validator {
         this.validators = new HashSet<>(Arrays.asList(
                 new BridgeOrderValidator(),
                 new BridgeReferenceOrderValidator(),
-                new BridgeReferenceToIslandValidator(),
                 new BridgesConnectDifferentIslandsValidator(),
                 new BridgesDoNotCrossIslandValidator(),
                 new BridgesNotDiagonalValidator(),
