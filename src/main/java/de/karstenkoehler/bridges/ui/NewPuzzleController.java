@@ -86,7 +86,7 @@ public class NewPuzzleController {
             int islands = tryParseInt(txtIslands, "Number of islands");
             generateAndClose(PuzzleSpecification.withSpecs(solution, width, height, islands));
         } catch (IllegalArgumentException | InputException e) {
-            ToastMessage.show(this.stage, e.getMessage());
+            ToastMessage.show(this.stage, ToastMessage.Type.ERROR, e.getMessage());
         }
     }
 

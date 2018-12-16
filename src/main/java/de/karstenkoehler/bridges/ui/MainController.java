@@ -261,7 +261,7 @@ public class MainController {
 
         Bridge next = puzzleSolver.nextSafeBridge(canvasController.getPuzzle());
         if (next == null) {
-            ToastMessage.show(this.stage, "There are no more safe bridges");
+            ToastMessage.show(this.stage, ToastMessage.Type.INFO, "There are no more safe bridges");
             return null;
         }
         return next;
@@ -269,11 +269,11 @@ public class MainController {
 
     private void showError(PuzzleState state) {
         if (state == PuzzleState.SOLVED) {
-            ToastMessage.show(this.stage, "The puzzle is already solved");
+            ToastMessage.show(this.stage, ToastMessage.Type.INFO, "The puzzle is already solved");
         } else if (state == PuzzleState.ERROR) {
-            ToastMessage.show(this.stage, "You need to fix the errors first");
+            ToastMessage.show(this.stage, ToastMessage.Type.ERROR, "You need to fix the errors first");
         } else if (state == PuzzleState.NO_LONGER_SOLVABLE) {
-            ToastMessage.show(this.stage, "The puzzle is no longer solvable");
+            ToastMessage.show(this.stage, ToastMessage.Type.ERROR, "The puzzle is no longer solvable");
         }
     }
 

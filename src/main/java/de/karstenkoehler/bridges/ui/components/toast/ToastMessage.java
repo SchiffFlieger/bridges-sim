@@ -9,6 +9,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
@@ -17,9 +18,9 @@ import javafx.util.Duration;
 import java.io.IOException;
 
 public class ToastMessage {
-    private ToastMessage(Stage parent, final String message) {
+    private ToastMessage(Stage parent, Type type, String message) {
         Stage stage = createStage(parent);
-        Parent root = createRootPane(message);
+        Parent root = createRootPane(type, message);
 
         Scene scene = new Scene(root);
         scene.setFill(Color.TRANSPARENT);
@@ -31,7 +32,7 @@ public class ToastMessage {
 
         addListenerForPositioning(parent, stage);
         stage.show();
-        stage.show();
+        parent.requestFocus();
     }
 
     /**
@@ -70,11 +71,12 @@ public class ToastMessage {
         return sequence;
     }
 
-    private Parent createRootPane(String message) {
+    private Parent createRootPane(Type type, String message) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/toast.fxml"));
             Parent root = loader.load();
             ToastController controller = loader.getController();
+            controller.setImage(getImage(type));
             controller.setMessage(message);
             return root;
         } catch (IOException e) {
@@ -84,7 +86,21 @@ public class ToastMessage {
         return new Label(message);
     }
 
-    public static void show(Stage parent, String message) {
-        new ToastMessage(parent, message);
+    private Image getImage(Type type) {
+        if (type == Type.INFO) {
+            return new Image(ToastMessage.class.getResourceAsStream("/ui/info.png"));
+        } else if (type == Type.ERROR) {
+            return new Image(ToastMessage.class.getResourceAsStream("/ui/error.png"));
+        }
+
+        return null;
+    }
+
+    public static void show(Stage parent, Type type, String message) {
+        new ToastMessage(parent, type, message);
+    }
+
+    public enum Type {
+        ERROR, INFO
     }
 }
