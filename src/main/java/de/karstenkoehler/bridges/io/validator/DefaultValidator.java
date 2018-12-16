@@ -24,11 +24,10 @@ public class DefaultValidator implements Validator {
                 new BridgesDoNotCrossIslandValidator(),
                 new BridgesNotDiagonalValidator(),
                 new FieldSizeValidator(),
-                new IslandOnUniqueFieldsValidator(),
                 new IslandOrderValidator(),
                 new IslandsOnFieldValidator(),
                 new MaxOneBridgePerIslandPairValidator(),
-                new NoIslandsOnAdjacentFieldsValidator(),
+                new IslandPlacementValidator(),
                 new RequiredBridgesCountValidator()));
     }
 
