@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -19,6 +20,7 @@ public class NewPuzzleStage {
         this.dialogStage.initOwner(mainStage);
         this.dialogStage.initModality(Modality.WINDOW_MODAL);
         this.dialogStage.resizableProperty().setValue(false);
+        this.dialogStage.getIcons().add(new Image(NewPuzzleStage.class.getResourceAsStream("/ui/icon.png")));
         this.dialogStage.setTitle("Create new puzzle");
     }
 
