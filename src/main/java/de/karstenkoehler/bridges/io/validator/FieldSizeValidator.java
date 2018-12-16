@@ -21,8 +21,8 @@ public class FieldSizeValidator implements Validator {
 
     private void checkValue(final String name, final int value) throws ValidateException {
         if (value < MIN_FIELD_DIMENSION || value > MAX_FIELD_DIMENSION) {
-            throw new ValidateException(String.format("field %s is %d. should be in range %d to %d.",
-                    name, value, MIN_FIELD_DIMENSION, MAX_FIELD_DIMENSION));
+            throw new ValidateException(String.format("The field %s should be in range %d to %d.",
+                    name, MIN_FIELD_DIMENSION, MAX_FIELD_DIMENSION));
         }
     }
 }

@@ -13,7 +13,7 @@ public class BridgeReferenceOrderValidator implements Validator {
     public void validate(BridgesPuzzle puzzle) throws ValidateException {
         for (Bridge bridge : puzzle.getBridges()) {
             if (bridge.getStartIsland().getId() > bridge.getEndIsland().getId()) {
-                throw new ValidateException("a bridge has its island references not sorted correctly");
+                throw new ValidateException("A bridge has its island references not sorted correctly.");
             }
         }
     }

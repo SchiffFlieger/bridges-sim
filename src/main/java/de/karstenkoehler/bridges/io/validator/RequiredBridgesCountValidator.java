@@ -18,7 +18,7 @@ public class RequiredBridgesCountValidator implements Validator {
     public void validate(BridgesPuzzle puzzle) throws ValidateException {
         for (Island island : puzzle.getIslands()) {
             if (requiredBridgesOutOfRange(island)) {
-                throw new ValidateException(String.format("island at position (%d, %d) requires %d bridges. should be in range %d to %d.",
+                throw new ValidateException(String.format("The island in position (%d, %d) requires %d bridges. It should be in range %d to %d.",
                         island.getX(), island.getY(), island.getRequiredBridges(), MIN_BRIDGES_PER_ISLAND, MAX_BRIDGES_PER_ISLAND));
             }
         }

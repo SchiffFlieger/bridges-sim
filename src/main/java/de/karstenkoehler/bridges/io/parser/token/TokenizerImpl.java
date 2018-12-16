@@ -69,7 +69,7 @@ public class TokenizerImpl implements Tokenizer {
             } else if (boolMatcher.reset(current).matches()) {
                 return boolToken();
             } else {
-                throw new ParseException("found unknown character '" + current + "'");
+                throw new ParseException("Found unknown character '" + current + "'.");
             }
         }
 

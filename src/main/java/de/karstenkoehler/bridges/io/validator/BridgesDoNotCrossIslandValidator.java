@@ -16,7 +16,7 @@ public class BridgesDoNotCrossIslandValidator implements Validator {
     public void validate(BridgesPuzzle puzzle) throws ValidateException {
         for (Bridge bridge : puzzle.getBridges()) {
             if (bridgeCrossesIsland(bridge, puzzle.getIslands())) {
-                throw new ValidateException("a bridge runs over another island.");
+                throw new ValidateException("A bridge runs over another island.");
             }
         }
     }

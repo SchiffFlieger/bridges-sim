@@ -17,7 +17,7 @@ public class NoIslandsOnAdjacentFieldsValidator implements Validator {
         for (Island island : puzzle.getIslands()) {
             for (Island other : puzzle.getIslands()) {
                 if (island != other && (adjacentOnX(island, other) || adjacentOnY(island, other))) {
-                    throw new ValidateException(String.format("island (%d, %d) is adjacent to island (%d, %d). there must be at least one free space in between.",
+                    throw new ValidateException(String.format("Island (%d, %d) is adjacent to island (%d, %d). There must be at least one free space in between.",
                             island.getX(), island.getY(), other.getX(), other.getY()));
                 }
             }

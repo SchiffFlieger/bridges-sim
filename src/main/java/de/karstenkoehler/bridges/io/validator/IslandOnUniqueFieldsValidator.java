@@ -19,7 +19,7 @@ public class IslandOnUniqueFieldsValidator implements Validator {
         for (Island island : puzzle.getIslands()) {
             for (Island other : puzzle.getIslands()) {
                 if (islandsOnSameField(island, other)) {
-                    throw new ValidateException(String.format("there are two islands on field (%d, %d).",
+                    throw new ValidateException(String.format("There are two islands in position (%d, %d).",
                             island.getX(), island.getY()));
                 }
             }

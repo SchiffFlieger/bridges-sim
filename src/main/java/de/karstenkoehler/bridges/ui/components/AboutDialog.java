@@ -2,7 +2,7 @@ package de.karstenkoehler.bridges.ui.components;
 
 import javafx.scene.control.Alert;
 
-public class AboutAlert {
+public class AboutDialog {
 
     private static Alert alert;
 

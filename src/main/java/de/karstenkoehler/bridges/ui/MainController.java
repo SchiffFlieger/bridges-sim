@@ -5,7 +5,7 @@ import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.PuzzleState;
 import de.karstenkoehler.bridges.model.solver.Solver;
 import de.karstenkoehler.bridges.model.solver.SolverImpl;
-import de.karstenkoehler.bridges.ui.components.AboutAlert;
+import de.karstenkoehler.bridges.ui.components.AboutDialog;
 import de.karstenkoehler.bridges.ui.components.NewPuzzleStage;
 import de.karstenkoehler.bridges.ui.components.PuzzleChangeEvent;
 import de.karstenkoehler.bridges.ui.components.SaveAction;
@@ -224,7 +224,7 @@ public class MainController {
 
     @FXML
     private void onAbout() {
-        AboutAlert.showAndWait();
+        AboutDialog.showAndWait();
     }
 
     @FXML

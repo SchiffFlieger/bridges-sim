@@ -108,7 +108,7 @@ public class TokenConsumingParser extends AbstractTokenParser implements Parser 
         int bridges = readBoolToken() ? 2 : 1; // double or single bridge
 
         if (node1 >= islandCount || node2 >= islandCount) {
-            throw new ParseException("Bridge references unknown island");
+            throw new ParseException("A bridge references unknown island.");
         }
 
         this.bridges.add(new Bridge(islands.get(node1), islands.get(node2), bridges));

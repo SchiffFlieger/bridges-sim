@@ -12,7 +12,7 @@ public class BridgesConnectDifferentIslandsValidator implements Validator {
     public void validate(BridgesPuzzle puzzle) throws ValidateException {
         for (Bridge bridge : puzzle.getBridges()) {
             if (bridge.getStartIsland() == bridge.getEndIsland()) {
-                throw new ValidateException("a bridge connects to the same island twice.");
+                throw new ValidateException("A bridge connects to the same island twice.");
             }
         }
     }

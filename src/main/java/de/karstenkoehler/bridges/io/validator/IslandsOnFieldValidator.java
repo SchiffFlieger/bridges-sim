@@ -24,7 +24,7 @@ public class IslandsOnFieldValidator implements Validator {
 
     private void checkValueInRange(Island island, int value, int max) throws ValidateException {
         if (value < MIN_COORDINATE || value > max - 1) {
-            throw new ValidateException(String.format("island at position (%d, %d) is off the field.",
+            throw new ValidateException(String.format("The island in position (%d, %d) is off the field.",
                     island.getX(), island.getY()));
         }
     }

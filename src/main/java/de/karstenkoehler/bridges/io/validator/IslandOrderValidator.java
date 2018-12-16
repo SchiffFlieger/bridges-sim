@@ -19,7 +19,7 @@ public class IslandOrderValidator implements Validator {
             Island island = puzzle.getIslands().get(i);
 
             if (island.getX() < prevX) {
-                throw new ValidateException(String.format("island sort order not valid. check island %d.", island.getId()));
+                throw new ValidateException("The bridge sort order is not valid.");
             } else if (island.getX() > prevX) {
                 prevX = island.getX();
                 prevY = -1;

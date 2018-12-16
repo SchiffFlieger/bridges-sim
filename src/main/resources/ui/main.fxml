@@ -75,7 +75,7 @@
             <padding>
                 <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </padding>
-            <Label text="state: ">
+            <Label text="State: ">
                 <HBox.margin>
                     <Insets right="5.0"/>
                 </HBox.margin>

@@ -26,7 +26,7 @@ abstract class AbstractTokenParser {
      */
     void consume(Token.Type type) throws ParseException {
         if (this.token().getType() != type) {
-            throw new ParseException(String.format("expected: %s, found: %s", type, current.getType()));
+            throw new ParseException(String.format("Found unexpected token %s, expected: %s", current.getType(), type));
         }
         this.current = this.tokenizer.next();
     }

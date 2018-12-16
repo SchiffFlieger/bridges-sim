@@ -21,7 +21,7 @@ public class NewPuzzleStage {
         this.dialogStage.initModality(Modality.WINDOW_MODAL);
         this.dialogStage.resizableProperty().setValue(false);
         this.dialogStage.getIcons().add(new Image(NewPuzzleStage.class.getResourceAsStream("/ui/icon.png")));
-        this.dialogStage.setTitle("Create new puzzle");
+        this.dialogStage.setTitle("Create New Puzzle");
     }
 
     public void init(Node node) throws IOException {
