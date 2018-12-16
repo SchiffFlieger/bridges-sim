@@ -27,7 +27,7 @@ public class CanvasController {
 
     private List<IslandShape> islands;
     private List<BridgeShape> bridges;
-    private ParameterObject params;
+    private CanvasDimensions dimensions;
     private BridgesPuzzle puzzle;
     private BridgeHintsVisible bridgeHintsVisible;
     private NumberDisplay numberDisplay;
@@ -72,16 +72,16 @@ public class CanvasController {
         }
 
         final int lineWidth = 1;
-        final double x1 = canvas.getWidth() - params.getPadding();
-        final double y1 = canvas.getHeight() - params.getPadding();
+        final double x1 = canvas.getWidth() - dimensions.getPadding();
+        final double y1 = canvas.getHeight() - dimensions.getPadding();
 
         gc.setStroke(Color.RED);
         gc.setLineWidth(lineWidth);
 
-        for (int i = 0; i < params.getGridLines(); i++) {
-            final double val = params.coordinate(i);
-            gc.strokeLine(params.getPadding(), val, x1, val);
-            gc.strokeLine(val, params.getPadding(), val, y1);
+        for (int i = 0; i < dimensions.getGridLines(); i++) {
+            final double val = dimensions.coordinate(i);
+            gc.strokeLine(dimensions.getPadding(), val, x1, val);
+            gc.strokeLine(val, dimensions.getPadding(), val, y1);
         }
     }
 
@@ -117,14 +117,14 @@ public class CanvasController {
         this.puzzle = puzzle;
 
         clearEverything();
-        this.params = new ParameterObject(Math.max(puzzle.getWidth(), puzzle.getHeight()), this.canvas.getWidth());
+        this.dimensions = new CanvasDimensions(Math.max(puzzle.getWidth(), puzzle.getHeight()), this.canvas.getWidth());
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
         for (Island island : puzzle.getIslands()) {
-            this.islands.add(new IslandShape(island, controlPane, gc, params, puzzle));
+            this.islands.add(new IslandShape(island, controlPane, gc, dimensions, puzzle));
         }
         for (Bridge bridge : puzzle.getBridges()) {
-            this.bridges.add(new BridgeShape(bridge, canvas.getGraphicsContext2D(), params, puzzle));
+            this.bridges.add(new BridgeShape(bridge, canvas.getGraphicsContext2D(), dimensions, puzzle));
         }
         drawThings();
 

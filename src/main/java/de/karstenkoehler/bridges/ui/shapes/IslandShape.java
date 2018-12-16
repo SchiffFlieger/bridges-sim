@@ -5,9 +5,9 @@ import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.Island;
 import de.karstenkoehler.bridges.model.Orientation;
 import de.karstenkoehler.bridges.ui.CanvasController;
+import de.karstenkoehler.bridges.ui.CanvasDimensions;
 import de.karstenkoehler.bridges.ui.MainController;
 import de.karstenkoehler.bridges.ui.NumberDisplay;
-import de.karstenkoehler.bridges.ui.ParameterObject;
 import javafx.event.Event;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
@@ -29,22 +29,22 @@ public class IslandShape {
     private final Island island;
     private final Pane controlPane;
     private final GraphicsContext gc;
-    private final ParameterObject params;
+    private final CanvasDimensions dimensions;
     private final BridgesPuzzle puzzle;
 
-    public IslandShape(Island island, Pane controlPane, GraphicsContext gc, ParameterObject params, BridgesPuzzle puzzle) {
+    public IslandShape(Island island, Pane controlPane, GraphicsContext gc, CanvasDimensions dimensions, BridgesPuzzle puzzle) {
         this.island = island;
         this.controlPane = controlPane;
         this.gc = gc;
-        this.params = params;
+        this.dimensions = dimensions;
         this.puzzle = puzzle;
 
-        initControls(params.coordinate(island.getX()), params.coordinate(island.getY()));
+        initControls(dimensions.coordinate(island.getX()), dimensions.coordinate(island.getY()));
     }
 
     public void draw(NumberDisplay numberDisplay, boolean drawClickArea) {
-        double x = params.coordinate(island.getX());
-        double y = params.coordinate(island.getY());
+        double x = dimensions.coordinate(island.getX());
+        double y = dimensions.coordinate(island.getY());
 
         if (puzzle.getRemainingBridgeCount(island) > 0) {
             gc.setFill(Color.GRAY);
@@ -54,11 +54,11 @@ public class IslandShape {
             gc.setFill(Color.RED);
         }
 
-        gc.fillOval(x - params.getIslandOffset(), y - params.getIslandOffset(), params.getIslandDiameter(), params.getIslandDiameter());
+        gc.fillOval(x - dimensions.getIslandOffset(), y - dimensions.getIslandOffset(), dimensions.getIslandDiameter(), dimensions.getIslandDiameter());
 
         gc.setTextAlign(TextAlignment.CENTER);
         gc.setTextBaseline(VPos.CENTER);
-        gc.setFont(Font.font(params.getFontSize()));
+        gc.setFont(Font.font(dimensions.getFontSize()));
         gc.setFill(Color.BLACK);
         gc.fillText(getDisplayNumber(numberDisplay), x, y);
 
@@ -79,10 +79,10 @@ public class IslandShape {
     }
 
     private void initControls(double x, double y) {
-        final double x0 = x - params.getClickAreaSize();
-        final double x1 = x + params.getClickAreaSize();
-        final double y0 = y - params.getClickAreaSize();
-        final double y1 = y + params.getClickAreaSize();
+        final double x0 = x - dimensions.getClickAreaSize();
+        final double x1 = x + dimensions.getClickAreaSize();
+        final double y0 = y - dimensions.getClickAreaSize();
+        final double y1 = y + dimensions.getClickAreaSize();
 
         createTriangle(Orientation.NORTH, x, y, x1, y0, x0, y0);
         createTriangle(Orientation.EAST, x, y, x1, y0, x1, y1);
@@ -131,13 +131,13 @@ public class IslandShape {
     }
 
     private void drawClickArea() {
-        final double x = params.coordinate(island.getX());
-        final double y = params.coordinate(island.getY());
+        final double x = dimensions.coordinate(island.getX());
+        final double y = dimensions.coordinate(island.getY());
 
-        final double x0 = x - params.getClickAreaSize();
-        final double x1 = x + params.getClickAreaSize();
-        final double y0 = y - params.getClickAreaSize();
-        final double y1 = y + params.getClickAreaSize();
+        final double x0 = x - dimensions.getClickAreaSize();
+        final double x1 = x + dimensions.getClickAreaSize();
+        final double y0 = y - dimensions.getClickAreaSize();
+        final double y1 = y + dimensions.getClickAreaSize();
 
         gc.setStroke(Color.RED);
         gc.setLineWidth(1);

@@ -1,6 +1,6 @@
 package de.karstenkoehler.bridges.ui;
 
-public class ParameterObject {
+public class CanvasDimensions {
 
     private final int gridLines;
     private final double fieldSize;
@@ -12,12 +12,12 @@ public class ParameterObject {
     private final double doubleBridgeOffset;
     private final double bridgeLineSize;
 
-    public ParameterObject(final int gridLines, final double canvasSize) {
+    public CanvasDimensions(final int gridLines, final double canvasSize) {
         this.gridLines = gridLines;
         this.fontSize = 500.0 / gridLines;
         this.islandDiameter = 600.0 / gridLines;
         this.doubleBridgeOffset = 90.0 / gridLines;
-        this.bridgeLineSize = 6 - gridLines / 5.0;
+        this.bridgeLineSize = 7.8 - (gridLines / 5.0);
         this.islandOffset = this.islandDiameter / 2;
         this.padding = (this.islandDiameter / 2) + 5;
         this.clickAreaSize = (this.islandDiameter / 2);

@@ -4,7 +4,7 @@ import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.Island;
 import de.karstenkoehler.bridges.ui.BridgeHintsVisible;
-import de.karstenkoehler.bridges.ui.ParameterObject;
+import de.karstenkoehler.bridges.ui.CanvasDimensions;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
@@ -12,13 +12,13 @@ public class BridgeShape {
 
     private final Bridge bridge;
     private final GraphicsContext cg;
-    private final ParameterObject params;
+    private final CanvasDimensions dimensions;
     private final BridgesPuzzle puzzle;
 
-    public BridgeShape(Bridge bridge, GraphicsContext cg, ParameterObject params, BridgesPuzzle puzzle) {
+    public BridgeShape(Bridge bridge, GraphicsContext cg, CanvasDimensions dimensions, BridgesPuzzle puzzle) {
         this.bridge = bridge;
         this.cg = cg;
-        this.params = params;
+        this.dimensions = dimensions;
         this.puzzle = puzzle;
     }
 
@@ -26,8 +26,8 @@ public class BridgeShape {
         if (bridge.getBridgeCount() <= 1) {
             drawBridge(0, hintsVisible);
         } else {
-            drawBridge(-params.getDoubleBridgeOffset(), hintsVisible);
-            drawBridge(params.getDoubleBridgeOffset(), hintsVisible);
+            drawBridge(-dimensions.getDoubleBridgeOffset(), hintsVisible);
+            drawBridge(dimensions.getDoubleBridgeOffset(), hintsVisible);
         }
     }
 
@@ -36,10 +36,10 @@ public class BridgeShape {
             return;
         }
 
-        final double x0 = params.coordinate(this.bridge.getStartIsland().getX());
-        final double y0 = params.coordinate(this.bridge.getStartIsland().getY());
-        final double x1 = params.coordinate(this.bridge.getEndIsland().getX());
-        final double y1 = params.coordinate(this.bridge.getEndIsland().getY());
+        final double x0 = dimensions.coordinate(this.bridge.getStartIsland().getX());
+        final double y0 = dimensions.coordinate(this.bridge.getStartIsland().getY());
+        final double x1 = dimensions.coordinate(this.bridge.getEndIsland().getX());
+        final double y1 = dimensions.coordinate(this.bridge.getEndIsland().getY());
 
         if (bridge.isVertical()) {
             createLine(x0 + offset, y0, x1 + offset, y1, hintsVisible);
@@ -51,11 +51,11 @@ public class BridgeShape {
     }
 
     private void createLine(double x0, double y0, double x1, double y1, BridgeHintsVisible hintsVisible) {
-        cg.setLineWidth(params.getBridgeLineSize());
+        cg.setLineWidth(dimensions.getBridgeLineSize());
 
         if (bridge.getBridgeCount() == 0) {
             if (showBridgeHint(hintsVisible)) {
-                cg.setLineDashes(params.getBridgeLineSize() * 5);
+                cg.setLineDashes(dimensions.getBridgeLineSize() * 5);
                 cg.setStroke(Color.LIGHTGRAY);
                 cg.strokeLine(x0, y0, x1, y1);
             }
