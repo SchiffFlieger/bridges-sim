@@ -193,7 +193,7 @@ public class FileHelper {
 
         @Override
         protected String computeValue() {
-            return file.get() != null ? file.asString().get() : "New file";
+            return file.get() != null ? file.get().getName() : "New file";
         }
     }
 }
