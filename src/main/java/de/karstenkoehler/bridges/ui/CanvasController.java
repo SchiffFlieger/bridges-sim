@@ -109,6 +109,7 @@ public class CanvasController {
     public void restartPuzzle() {
         this.puzzle.restart();
         canvas.fireEvent(new Event(EVAL_STATE));
+        canvas.fireEvent(new Event(MainController.FILE_CHANGED));
         this.drawThings();
     }
 
