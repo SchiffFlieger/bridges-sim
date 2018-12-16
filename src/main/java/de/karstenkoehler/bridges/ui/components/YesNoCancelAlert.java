@@ -3,6 +3,8 @@ package de.karstenkoehler.bridges.ui.components;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 
 import java.util.Optional;
 
@@ -22,6 +24,10 @@ public class YesNoCancelAlert {
         alert.setHeaderText(null);
         alert.setGraphic(null);
         alert.getButtonTypes().setAll(yesButton, noButton, cancelButton);
+
+        Image icon = new Image(AboutDialog.class.getResourceAsStream("/ui/icon.png"));
+        ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(icon);
+
     }
 
     public SaveAction showAndWait(String filename) {

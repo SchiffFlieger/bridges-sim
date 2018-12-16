@@ -1,6 +1,8 @@
 package de.karstenkoehler.bridges.ui.components;
 
 import javafx.scene.control.Alert;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 
 public class AboutDialog {
 
@@ -12,6 +14,9 @@ public class AboutDialog {
         alert.setGraphic(null);
         alert.setHeaderText(null);
         alert.setContentText("BridgesSim 0.5\nMade by Karsten Köhler");
+
+        Image icon = new Image(AboutDialog.class.getResourceAsStream("/ui/icon.png"));
+        ((Stage) alert.getDialogPane().getScene().getWindow()).getIcons().add(icon);
 
         return alert;
     }
