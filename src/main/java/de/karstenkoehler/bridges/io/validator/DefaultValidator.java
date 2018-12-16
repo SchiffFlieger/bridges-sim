@@ -16,7 +16,6 @@ public class DefaultValidator implements Validator {
     private final Set<Validator> validators;
 
     public DefaultValidator() {
-        // ToDo maybe replace this with reflection?
         this.validators = new HashSet<>(Arrays.asList(
                 new BridgeOrderValidator(),
                 new BridgeReferenceOrderValidator(),

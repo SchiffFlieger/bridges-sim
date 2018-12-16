@@ -18,7 +18,6 @@ public class GeneratorImpl implements Generator {
     private final Counter counter;
 
     public GeneratorImpl(Validator validator) {
-        // TODO replace validator with check of last added bridge/island
         this.validator = validator;
         this.islands = new ArrayList<>();
         this.bridges = new ArrayList<>();
@@ -30,7 +29,7 @@ public class GeneratorImpl implements Generator {
         while (true) {
             try {
                 BridgesPuzzle puzzle = generateNewPuzzle(spec);
-                if (!isValid(puzzle)) {
+                if (isInvalid(puzzle)) {
                     continue;
                 }
                 if (!spec.generateSolution()) {
@@ -44,8 +43,6 @@ public class GeneratorImpl implements Generator {
     }
 
     private BridgesPuzzle generateNewPuzzle(PuzzleSpecification spec) throws IndicatorException {
-        // TODO somewhere in here is a bug that allows the last bridge to cross other bridges
-
         this.resetGenerator(spec);
         BridgesPuzzle puzzle = new BridgesPuzzle(getIslandList(), getBridgeList(), spec.getWidth(), spec.getHeight());
 
@@ -81,7 +78,7 @@ public class GeneratorImpl implements Generator {
         BridgesPuzzle puzzle = new BridgesPuzzle(getIslandList(), getBridgeList(), spec.getWidth(), spec.getHeight());
         puzzle.fillMissingBridges();
 
-        if (!isValid(puzzle)) {
+        if (isInvalid(puzzle)) {
             this.islands.remove(newIsland);
             this.bridges.remove(bridge);
             incrementSplitCounter();
@@ -214,14 +211,13 @@ public class GeneratorImpl implements Generator {
         return result;
     }
 
-    private boolean isValid(BridgesPuzzle puzzle) {
+    private boolean isInvalid(BridgesPuzzle puzzle) {
         try {
             this.validator.validate(puzzle);
             puzzle.markInvalidBridges();
-            return puzzle.getBridges().stream().allMatch(Bridge::isValid);
+            return puzzle.getBridges().stream().anyMatch(bridge -> !bridge.isValid());
         } catch (ValidateException e) {
-//            System.out.println("Gen#isValid: " + e.getMessage());
-            return false;
+            return true;
         }
     }
 

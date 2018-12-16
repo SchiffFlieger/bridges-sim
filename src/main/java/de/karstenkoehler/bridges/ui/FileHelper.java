@@ -162,7 +162,6 @@ public class FileHelper {
         this.modified.setValue(true);
     }
 
-    // TODO allow empty puzzle in canvas controller, then remove this method
     public Optional<BridgesPuzzle> openInitialFile(File toLoad) {
         if (toLoad != null) {
             return tryReadFile(toLoad);
