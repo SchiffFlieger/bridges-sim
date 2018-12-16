@@ -5,10 +5,10 @@ import de.karstenkoehler.bridges.io.BridgesFileWriter;
 import de.karstenkoehler.bridges.io.parser.ParseException;
 import de.karstenkoehler.bridges.io.validator.ValidateException;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
-import de.karstenkoehler.bridges.ui.components.ErrorAlert;
 import de.karstenkoehler.bridges.ui.components.RetentionFileChooser;
 import de.karstenkoehler.bridges.ui.components.SaveAction;
 import de.karstenkoehler.bridges.ui.components.YesNoCancelAlert;
+import de.karstenkoehler.bridges.ui.components.toast.ToastMessage;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
 import javafx.beans.property.*;
@@ -27,7 +27,6 @@ public class FileHelper {
     private final BooleanProperty modified;
 
 
-    private final ErrorAlert error;
     private final BridgesFileReader reader;
     private final BridgesFileWriter writer;
 
@@ -38,7 +37,6 @@ public class FileHelper {
         this.saveRequest = new YesNoCancelAlert();
         this.file = new SimpleObjectProperty<>();
 
-        this.error = new ErrorAlert();
         this.reader = new BridgesFileReader();
         this.writer = new BridgesFileWriter();
 
@@ -124,12 +122,10 @@ public class FileHelper {
             this.file.setValue(file);
             this.modified.setValue(false);
             return Optional.ofNullable(puzzle);
-        } catch (ParseException e) {
-            this.error.showAndWait("syntactic error in file:\n" + e.getMessage());
-        } catch (ValidateException e) {
-            this.error.showAndWait("semantic error in file:\n" + e.getMessage());
+        } catch (ValidateException | ParseException e) {
+            ToastMessage.show(this.stage, ToastMessage.Type.ERROR, "Error in file:\n" + e.getMessage());
         } catch (IOException e) {
-            this.error.showAndWait("could not read file:\n" + e.getMessage());
+            ToastMessage.show(this.stage, ToastMessage.Type.ERROR, "Could not read file:\n" + e.getMessage());
         }
         return Optional.empty();
     }
@@ -145,7 +141,7 @@ public class FileHelper {
             writer.writeFile(file, puzzle);
             this.modified.setValue(false);
         } catch (IOException e) {
-            this.error.showAndWait("could not write file:\n" + e.getMessage());
+            ToastMessage.show(this.stage, ToastMessage.Type.ERROR, "Could not write file:\n" + e.getMessage());
         }
     }
 
