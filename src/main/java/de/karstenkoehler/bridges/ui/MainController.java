@@ -84,6 +84,10 @@ public class MainController {
 
     @FXML
     private void initialize() {
+        btnNextBridge.setTooltip(new Tooltip("Build a safe bridge in the current puzzle."));
+        btnToggleSimulation.setTooltip(new Tooltip("Automatically build safe bridges with a slight delay."));
+        slSpeed.setTooltip(new Tooltip("Adjust the speed of the automatic solver."));
+
         cbxShowGrid.selectedProperty().addListener(setGridVisibility());
         cbxShowClickArea.selectedProperty().addListener(setClickAreaVisibility());
 
