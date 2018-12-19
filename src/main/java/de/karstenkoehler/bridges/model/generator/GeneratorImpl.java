@@ -9,6 +9,16 @@ import de.karstenkoehler.bridges.model.PuzzleSpecification;
 
 import java.util.*;
 
+/**
+ * An implementation of the {@link Generator} interface. A simple algorithm is used to create the puzzles. The first
+ * island is randomly placed on the field. Then one of the existing islands is chosen randomly and a new island is
+ * placed either horizontally or vertically. The new island is connected with a bridge, taking care that no bridges
+ * are crossing. This step repeats until the desired number of islands is reached.
+ * <p>
+ * If no new island can be added during a step, an attempt is made to split an existing bridge. This creates a new
+ * island in the middle of this bridge. If this is not possible, all existing islands are discarded and the
+ * generator starts from scratch.
+ */
 public class GeneratorImpl implements Generator {
     private static final Random random = new Random(System.nanoTime());
 
@@ -17,6 +27,9 @@ public class GeneratorImpl implements Generator {
     private final List<Bridge> bridges;
     private final Counter counter;
 
+    /**
+     * @param validator a validator to check if the generated puzzles are correct
+     */
     public GeneratorImpl(Validator validator) {
         this.validator = validator;
         this.islands = new ArrayList<>();
@@ -24,10 +37,16 @@ public class GeneratorImpl implements Generator {
         this.counter = new Counter();
     }
 
+    /**
+     * @see Generator#generate(PuzzleSpecification)
+     */
     @Override
     public BridgesPuzzle generate(PuzzleSpecification spec) {
         while (true) {
             try {
+                // The generateNewPuzzle-method still has a bug that allows the
+                // last set bridge to cross other islands/bridges, therefore another
+                // validation step is needed.
                 BridgesPuzzle puzzle = generateNewPuzzle(spec);
                 if (isInvalid(puzzle)) {
                     continue;
@@ -36,21 +55,27 @@ public class GeneratorImpl implements Generator {
                     puzzle.restart();
                 }
                 return puzzle;
-            } catch (IndicatorException e) {
-//                System.out.println("Indicator");
+            } catch (RetryException ignored) {
             }
         }
     }
 
-    private BridgesPuzzle generateNewPuzzle(PuzzleSpecification spec) throws IndicatorException {
+    /**
+     * Generates a random puzzle from the given specification.
+     *
+     * @param spec the specification for the generated puzzle
+     * @return a randomly generated puzzle
+     * @throws RetryException if the generator got stuck and wants to restart from scratch
+     */
+    private BridgesPuzzle generateNewPuzzle(PuzzleSpecification spec) throws RetryException {
         this.resetGenerator(spec);
         BridgesPuzzle puzzle = new BridgesPuzzle(getIslandList(), getBridgeList(), spec.getWidth(), spec.getHeight());
 
         while (this.islands.size() < spec.getIslandCount()) {
-            if (shouldReset()) {
+            if (counter.shouldReset()) {
                 resetGenerator(spec);
             }
-            if (shouldSplit()) {
+            if (counter.shouldSplit()) {
                 Bridge longest = getLongestBridge();
                 if (longest != null) {
                     addIslandInExistingBridge(longest);
@@ -66,7 +91,14 @@ public class GeneratorImpl implements Generator {
         return puzzle;
     }
 
-    private BridgesPuzzle tryNextIsland(PuzzleSpecification spec) throws IndicatorException {
+    /**
+     * Tries to add a new island to the existing puzzle. To do so, this method randomly selects an existing
+     * island and connects a new island with a bridge to it.
+     *
+     * @param spec the specification for the generated puzzle
+     * @return the generated puzzle
+     */
+    private BridgesPuzzle tryNextIsland(PuzzleSpecification spec) throws RetryException {
         Island start = selectRandomIsland();
         Island newIsland = generateAdjacentIsland(start, spec.getWidth(), spec.getHeight());
         Bridge bridge = newRandomBridge(start, newIsland);
@@ -81,9 +113,9 @@ public class GeneratorImpl implements Generator {
         if (isInvalid(puzzle)) {
             this.islands.remove(newIsland);
             this.bridges.remove(bridge);
-            incrementSplitCounter();
+            counter.incrementSplitCounter();
         } else {
-            this.resetCounters();
+            counter.resetCounters();
         }
         return puzzle;
     }
@@ -100,7 +132,13 @@ public class GeneratorImpl implements Generator {
         return longest;
     }
 
-    private void addIslandInExistingBridge(Bridge longest) throws IndicatorException {
+    /**
+     * This method takes an existing bridge between two islands and splits it up. A new island is created
+     * somewhere in the path of the bridge, creating two new bridges.
+     *
+     * @param longest the bridge to split
+     */
+    private void addIslandInExistingBridge(Bridge longest) throws RetryException {
         this.bridges.remove(longest);
         Island start = longest.getStartIsland();
         Island end = longest.getEndIsland();
@@ -121,27 +159,27 @@ public class GeneratorImpl implements Generator {
         }
     }
 
-    private Island createNewValidIslandHorizontal(Bridge longest, int minX, int minY) throws IndicatorException {
+    private Island createNewValidIslandHorizontal(Bridge longest, int minX, int minY) throws RetryException {
         int counter = 0;
         Island newIsland = new Island(0, minX + random.nextInt(longest.getLength()), minY, 0);
         while (isForbidden(newIsland)) {
             newIsland = new Island(0, minX + random.nextInt(longest.getLength()), minY, 0);
             counter++;
             if (counter > 1000) {
-                throw new IndicatorException();
+                throw new RetryException();
             }
         }
         return newIsland;
     }
 
-    private Island createNewValidIslandVertical(Bridge longest, int minX, int minY) throws IndicatorException {
+    private Island createNewValidIslandVertical(Bridge longest, int minX, int minY) throws RetryException {
         int counter = 0;
         Island newIsland = new Island(0, minX, minY + random.nextInt(longest.getLength()), 0);
         while (isForbidden(newIsland)) {
             newIsland = new Island(0, minX, minY + random.nextInt(longest.getLength()), 0);
             counter++;
             if (counter > 1000) {
-                throw new IndicatorException();
+                throw new RetryException();
             }
         }
         return newIsland;
@@ -152,12 +190,15 @@ public class GeneratorImpl implements Generator {
     }
 
     private void resetGenerator(PuzzleSpecification spec) {
-        this.resetCounters();
+        counter.resetCounters();
         this.islands.clear();
         this.bridges.clear();
         this.islands.add(newRandomIsland(spec.getWidth(), spec.getHeight()));
     }
 
+    /**
+     * Iterates through all existing islands and updates their required bridge count.
+     */
     private void setRequiredBridgesForAllIslands() {
         this.islands.forEach(island -> island.setRequiredBridges(0));
 
@@ -167,6 +208,14 @@ public class GeneratorImpl implements Generator {
         }
     }
 
+    /**
+     * To create a valid {@link BridgesPuzzle} you need a list of islands that matches specific conditions
+     * like being sorted by coordinate and having appropriate ids. Because in this implementation new
+     * islands are created randomly without any order, we need to prepare the existing list to match those
+     * conditions.
+     *
+     * @return the prepared list of all existing islands
+     */
     private List<Island> getIslandList() {
         setRequiredBridgesForAllIslands();
 
@@ -186,6 +235,14 @@ public class GeneratorImpl implements Generator {
         return this.islands;
     }
 
+    /**
+     * To create a valid {@link BridgesPuzzle} you need a list of bridges that matches specific conditions
+     * like beeing sorted by island id and having appropriate ids themselves. Because in this implementation new
+     * bridges are created randomly without any order, we need to prepare the existing list to match those
+     * conditions.
+     *
+     * @return the prepared list of all existing bridges
+     */
     private List<Bridge> getBridgeList() {
         List<Bridge> result = new ArrayList<>(this.bridges.size());
 
@@ -230,14 +287,14 @@ public class GeneratorImpl implements Generator {
      * @param height height of the puzzle
      * @return an island at a random location
      */
-    private Island generateAdjacentIsland(Island island, int width, int height) throws IndicatorException {
+    private Island generateAdjacentIsland(Island island, int width, int height) throws RetryException {
         int counter = 0;
         Island newIsland = random.nextBoolean() ? newRandomHorizontalIsland(island, width) : newRandomVerticalIsland(island, height);
         while (isForbidden(newIsland)) {
             newIsland = random.nextBoolean() ? newRandomHorizontalIsland(island, width) : newRandomVerticalIsland(island, height);
             counter++;
             if (counter > 200) {
-                throw new IndicatorException();
+                throw new RetryException();
             }
         }
         return newIsland;
@@ -282,22 +339,6 @@ public class GeneratorImpl implements Generator {
         return new Island(0, random.nextInt(width), random.nextInt(height), 0);
     }
 
-    private void resetCounters() {
-        counter.resetCounters();
-    }
-
-    private boolean shouldSplit() {
-        return counter.shouldSplit();
-    }
-
-    private boolean shouldReset() {
-        return counter.shouldReset();
-    }
-
-    private void incrementSplitCounter() {
-        counter.incrementSplitCounter();
-    }
-
-    private static class IndicatorException extends Exception {
+    private static class RetryException extends Exception {
     }
 }
