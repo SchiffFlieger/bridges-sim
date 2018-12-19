@@ -1,7 +1,7 @@
 package de.karstenkoehler.bridges.io.serializer;
 
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
 
 /**
@@ -57,9 +57,9 @@ public class SerializerImpl implements Serializer {
      */
     private void addBridges(BridgesPuzzle puzzle, StringBuilder builder) {
         builder.append("BRIDGES").append(System.lineSeparator());
-        for (Bridge bridge : puzzle.getBridges()) {
-            if (bridge.getBridgeCount() > 0) {
-                builder.append(String.format("( %d, %d | %s )%n", bridge.getStartIsland().getId(), bridge.getEndIsland().getId(), bridge.getBridgeCount() == 2 ? "true" : "false"));
+        for (Connection connection : puzzle.getConnections()) {
+            if (connection.getBridgeCount() > 0) {
+                builder.append(String.format("( %d, %d | %s )%n", connection.getStartIsland().getId(), connection.getEndIsland().getId(), connection.getBridgeCount() == 2 ? "true" : "false"));
             }
         }
     }
@@ -70,6 +70,6 @@ public class SerializerImpl implements Serializer {
      * @return true if the puzzle contains at least one bridge
      */
     private boolean hasBridges(BridgesPuzzle puzzle) {
-        return puzzle.getBridges().stream().mapToInt(Bridge::getBridgeCount).sum() != 0;
+        return puzzle.getConnections().stream().mapToInt(Connection::getBridgeCount).sum() != 0;
     }
 }

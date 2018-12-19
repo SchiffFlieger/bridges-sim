@@ -1,7 +1,7 @@
 package de.karstenkoehler.bridges.io.validator;
 
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
 
 /**
@@ -11,7 +11,7 @@ import de.karstenkoehler.bridges.model.Island;
 public class BridgesNotDiagonalValidator implements Validator {
     @Override
     public void validate(BridgesPuzzle puzzle) throws ValidateException {
-        for (Bridge bridge : puzzle.getBridges()) {
+        for (Connection bridge : puzzle.getConnections()) {
             if (isDiagonal(bridge.getStartIsland(), bridge.getEndIsland())) {
                 throw new ValidateException("A bridge is neither horizontal or vertical.");
             }

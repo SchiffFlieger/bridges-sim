@@ -1,7 +1,7 @@
 package de.karstenkoehler.bridges.io.validator;
 
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 
 /**
  * Checks if bridges are sorted correctly. They must first be sorted by node1 and then by node2.
@@ -13,7 +13,7 @@ public class BridgeOrderValidator implements Validator {
         int prevN1 = -1;
         int prevN2 = -1;
 
-        for (Bridge bridge : puzzle.getBridges()) {
+        for (Connection bridge : puzzle.getConnections()) {
             if (bridge.getStartIsland().getId() < prevN1) {
                 throw new ValidateException("The bridge sort order is not valid.");
             } else if (bridge.getStartIsland().getId() > prevN1) {

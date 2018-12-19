@@ -5,8 +5,8 @@ import de.karstenkoehler.bridges.io.parser.Parser;
 import de.karstenkoehler.bridges.io.parser.TokenConsumingParser;
 import de.karstenkoehler.bridges.io.parser.token.Token;
 import de.karstenkoehler.bridges.io.parser.token.Tokenizer;
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
 import org.junit.Rule;
 import org.junit.Test;
@@ -55,10 +55,10 @@ public class ParserTest {
         Island island1 = new Island(1, 3, 0, 2);
 
         List<Island> islands = Arrays.asList(island0, island1);
-        List<Bridge> bridges = Collections.singletonList(new Bridge(island0, island1, 2));
+        List<Connection> connections = Collections.singletonList(new Connection(island0, island1, 2));
 
         BridgesPuzzle bsp_5x5_parsed = new BridgesPuzzle(islands, new ArrayList<>(), 5, 5);
-        BridgesPuzzle bsp_5x5_parsed_sol = new BridgesPuzzle(islands, bridges, 5, 5);
+        BridgesPuzzle bsp_5x5_parsed_sol = new BridgesPuzzle(islands, connections, 5, 5);
 
         return Arrays.asList(new Object[][]{
                 {"bsp_5x5", bsp_5x5, bsp_5x5_parsed, null},
@@ -116,7 +116,7 @@ public class ParserTest {
 
         assertEquals(expectedOutput.getWidth(), actual.getWidth());
         assertEquals(expectedOutput.getHeight(), actual.getHeight());
-        assertEquals(expectedOutput.getBridges(), actual.getBridges());
+        assertEquals(expectedOutput.getConnections(), actual.getConnections());
         assertEquals(expectedOutput.getIslands(), actual.getIslands());
     }
 

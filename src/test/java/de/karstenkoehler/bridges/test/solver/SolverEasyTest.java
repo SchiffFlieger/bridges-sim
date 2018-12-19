@@ -1,7 +1,7 @@
 package de.karstenkoehler.bridges.test.solver;
 
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
 import de.karstenkoehler.bridges.model.solver.Solver;
 import de.karstenkoehler.bridges.model.solver.SolverImpl;
@@ -69,7 +69,7 @@ public class SolverEasyTest {
         this.input.fillMissingBridges();
         int bridgesBuilt = 0;
 
-        Bridge next;
+        Connection next;
         do {
             next = solver.nextSafeBridge(this.input);
 
@@ -81,6 +81,6 @@ public class SolverEasyTest {
 
         this.input.markInvalidBridges();
         assertEquals(expectedBridges, bridgesBuilt);
-        assertTrue(input.getBridges().stream().allMatch(Bridge::isValid));
+        assertTrue(input.getConnections().stream().allMatch(Connection::isValid));
     }
 }

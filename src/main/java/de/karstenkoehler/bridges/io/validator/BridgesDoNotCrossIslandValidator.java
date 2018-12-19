@@ -1,7 +1,7 @@
 package de.karstenkoehler.bridges.io.validator;
 
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
 
 import java.util.List;
@@ -14,14 +14,14 @@ import java.util.List;
 public class BridgesDoNotCrossIslandValidator implements Validator {
     @Override
     public void validate(BridgesPuzzle puzzle) throws ValidateException {
-        for (Bridge bridge : puzzle.getBridges()) {
+        for (Connection bridge : puzzle.getConnections()) {
             if (bridgeCrossesIsland(bridge, puzzle.getIslands())) {
                 throw new ValidateException("A bridge runs over another island.");
             }
         }
     }
 
-    private boolean bridgeCrossesIsland(Bridge bridge, List<Island> islands) {
+    private boolean bridgeCrossesIsland(Connection bridge, List<Island> islands) {
         Island startIsland = bridge.getStartIsland();
         Island endIsland = bridge.getEndIsland();
 

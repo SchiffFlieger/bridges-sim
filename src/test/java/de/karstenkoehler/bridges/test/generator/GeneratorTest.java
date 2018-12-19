@@ -1,8 +1,8 @@
 package de.karstenkoehler.bridges.test.generator;
 
 import de.karstenkoehler.bridges.io.validator.DefaultValidator;
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
 import de.karstenkoehler.bridges.model.PuzzleSpecification;
 import de.karstenkoehler.bridges.model.generator.Generator;
@@ -60,10 +60,10 @@ public class GeneratorTest {
 
         if (spec.generateSolution()) {
             int islandSum = puzzle.getIslands().stream().mapToInt(Island::getRequiredBridges).sum();
-            int bridgeSum = puzzle.getBridges().stream().mapToInt(Bridge::getBridgeCount).sum();
+            int bridgeSum = puzzle.getConnections().stream().mapToInt(Connection::getBridgeCount).sum();
             assertEquals(islandSum, bridgeSum * 2);
         } else {
-            int bridgeSum = puzzle.getBridges().stream().mapToInt(Bridge::getBridgeCount).sum();
+            int bridgeSum = puzzle.getConnections().stream().mapToInt(Connection::getBridgeCount).sum();
             assertEquals(0, bridgeSum);
         }
 

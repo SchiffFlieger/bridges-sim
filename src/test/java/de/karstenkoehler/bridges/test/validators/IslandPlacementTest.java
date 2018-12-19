@@ -3,8 +3,8 @@ package de.karstenkoehler.bridges.test.validators;
 import de.karstenkoehler.bridges.io.validator.IslandPlacementValidator;
 import de.karstenkoehler.bridges.io.validator.ValidateException;
 import de.karstenkoehler.bridges.io.validator.Validator;
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -22,7 +22,7 @@ import java.util.List;
 public class IslandPlacementTest {
 
     private static final int FIELD_SIZE = 10;
-    private static final List<Bridge> bridges = new ArrayList<>();
+    private static final List<Connection> CONNECTIONS = new ArrayList<>();
 
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
@@ -48,12 +48,12 @@ public class IslandPlacementTest {
         final List<Island> invalid3 = Arrays.asList(island3a, island3b);
 
         return Arrays.asList(new Object[][]{
-                {null, new BridgesPuzzle(valid1, bridges, FIELD_SIZE, FIELD_SIZE)},
-                {null, new BridgesPuzzle(valid2, bridges, FIELD_SIZE, FIELD_SIZE)},
+                {null, new BridgesPuzzle(valid1, CONNECTIONS, FIELD_SIZE, FIELD_SIZE)},
+                {null, new BridgesPuzzle(valid2, CONNECTIONS, FIELD_SIZE, FIELD_SIZE)},
 
-                {ValidateException.class, new BridgesPuzzle(invalid1, bridges, FIELD_SIZE, FIELD_SIZE)},
-                {ValidateException.class, new BridgesPuzzle(invalid2, bridges, FIELD_SIZE, FIELD_SIZE)},
-                {ValidateException.class, new BridgesPuzzle(invalid3, bridges, FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(invalid1, CONNECTIONS, FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(invalid2, CONNECTIONS, FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(invalid3, CONNECTIONS, FIELD_SIZE, FIELD_SIZE)},
 
         });
     }
@@ -73,11 +73,11 @@ public class IslandPlacementTest {
         final List<Island> invalid2 = Arrays.asList(island2a, island2b);
 
         return Arrays.asList(new Object[][]{
-                {null, new BridgesPuzzle(valid1, bridges, FIELD_SIZE, FIELD_SIZE)},
-                {null, new BridgesPuzzle(valid2, bridges, FIELD_SIZE, FIELD_SIZE)},
+                {null, new BridgesPuzzle(valid1, CONNECTIONS, FIELD_SIZE, FIELD_SIZE)},
+                {null, new BridgesPuzzle(valid2, CONNECTIONS, FIELD_SIZE, FIELD_SIZE)},
 
-                {ValidateException.class, new BridgesPuzzle(invalid1, bridges, FIELD_SIZE, FIELD_SIZE)},
-                {ValidateException.class, new BridgesPuzzle(invalid2, bridges, FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(invalid1, CONNECTIONS, FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(invalid2, CONNECTIONS, FIELD_SIZE, FIELD_SIZE)},
         });
     }
 

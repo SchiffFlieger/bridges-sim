@@ -1,7 +1,7 @@
 package de.karstenkoehler.bridges.test.model;
 
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
 import de.karstenkoehler.bridges.model.PuzzleState;
 import org.junit.Test;
@@ -31,20 +31,20 @@ public class PuzzleStateTest {
         );
 
         // bridges required to solve the puzzle
-        Bridge bridge1 = new Bridge(bsp_5x5.get(0), bsp_5x5.get(1), 2);
-        Bridge bridge2 = new Bridge(bsp_5x5.get(0), bsp_5x5.get(3), 1);
-        Bridge bridge3 = new Bridge(bsp_5x5.get(1), bsp_5x5.get(2), 1);
-        Bridge bridge4 = new Bridge(bsp_5x5.get(1), bsp_5x5.get(5), 1);
-        Bridge bridge5 = new Bridge(bsp_5x5.get(2), bsp_5x5.get(6), 1);
-        Bridge bridge6 = new Bridge(bsp_5x5.get(3), bsp_5x5.get(7), 2);
-        Bridge bridge7 = new Bridge(bsp_5x5.get(4), bsp_5x5.get(8), 2);
-        Bridge bridge8 = new Bridge(bsp_5x5.get(7), bsp_5x5.get(8), 1);
+        Connection bridge1 = new Connection(bsp_5x5.get(0), bsp_5x5.get(1), 2);
+        Connection bridge2 = new Connection(bsp_5x5.get(0), bsp_5x5.get(3), 1);
+        Connection bridge3 = new Connection(bsp_5x5.get(1), bsp_5x5.get(2), 1);
+        Connection bridge4 = new Connection(bsp_5x5.get(1), bsp_5x5.get(5), 1);
+        Connection bridge5 = new Connection(bsp_5x5.get(2), bsp_5x5.get(6), 1);
+        Connection bridge6 = new Connection(bsp_5x5.get(3), bsp_5x5.get(7), 2);
+        Connection bridge7 = new Connection(bsp_5x5.get(4), bsp_5x5.get(8), 2);
+        Connection bridge8 = new Connection(bsp_5x5.get(7), bsp_5x5.get(8), 1);
 
         // other bridges
-        Bridge bridge5b = new Bridge(bsp_5x5.get(2), bsp_5x5.get(6), 2);
-        Bridge bridge8b = new Bridge(bsp_5x5.get(7), bsp_5x5.get(8), 2);
-        Bridge bridge9 = new Bridge(bsp_5x5.get(3), bsp_5x5.get(4), 1);
-        Bridge bridge10 = new Bridge(bsp_5x5.get(5), bsp_5x5.get(6), 1);
+        Connection bridge5b = new Connection(bsp_5x5.get(2), bsp_5x5.get(6), 2);
+        Connection bridge8b = new Connection(bsp_5x5.get(7), bsp_5x5.get(8), 2);
+        Connection bridge9 = new Connection(bsp_5x5.get(3), bsp_5x5.get(4), 1);
+        Connection bridge10 = new Connection(bsp_5x5.get(5), bsp_5x5.get(6), 1);
 
         List<Island> bsp_isolation_3 = Arrays.asList(
                 new Island(0, 0, 0, 1),
@@ -54,13 +54,13 @@ public class PuzzleStateTest {
         );
 
         // bridges required to solve the puzzle
-        Bridge isoBridge1 = new Bridge(bsp_isolation_3.get(0), bsp_isolation_3.get(2), 1);
-        Bridge isoBridge2 = new Bridge(bsp_isolation_3.get(1), bsp_isolation_3.get(3), 1);
-        Bridge isoBridge3 = new Bridge(bsp_isolation_3.get(2), bsp_isolation_3.get(3), 1);
+        Connection isoBridge1 = new Connection(bsp_isolation_3.get(0), bsp_isolation_3.get(2), 1);
+        Connection isoBridge2 = new Connection(bsp_isolation_3.get(1), bsp_isolation_3.get(3), 1);
+        Connection isoBridge3 = new Connection(bsp_isolation_3.get(2), bsp_isolation_3.get(3), 1);
 
         // other bridges
-        Bridge isoBridge3b = new Bridge(bsp_isolation_3.get(2), bsp_isolation_3.get(3), 2);
-        Bridge isoBridge4 = new Bridge(bsp_isolation_3.get(0), bsp_isolation_3.get(1), 1);
+        Connection isoBridge3b = new Connection(bsp_isolation_3.get(2), bsp_isolation_3.get(3), 2);
+        Connection isoBridge4 = new Connection(bsp_isolation_3.get(0), bsp_isolation_3.get(1), 1);
 
 
         return Arrays.asList(new Object[][]{

@@ -3,8 +3,8 @@ package de.karstenkoehler.bridges.test.validators;
 import de.karstenkoehler.bridges.io.validator.BridgesDoNotCrossIslandValidator;
 import de.karstenkoehler.bridges.io.validator.ValidateException;
 import de.karstenkoehler.bridges.io.validator.Validator;
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -35,15 +35,15 @@ public class BridgesDoNotCrossIslandTest {
                 new Island(6, 4, 3, 2)
         );
 
-        final Bridge validLeft = new Bridge(islands.get(5), islands.get(2));
-        final Bridge validRight = new Bridge(islands.get(0), islands.get(2));
-        final Bridge validUp = new Bridge(islands.get(6), islands.get(5));
-        final Bridge validDown = new Bridge(islands.get(3), islands.get(4));
+        final Connection validLeft = new Connection(islands.get(5), islands.get(2));
+        final Connection validRight = new Connection(islands.get(0), islands.get(2));
+        final Connection validUp = new Connection(islands.get(6), islands.get(5));
+        final Connection validDown = new Connection(islands.get(3), islands.get(4));
 
-        final Bridge invalidLeft = new Bridge(islands.get(5), islands.get(0));
-        final Bridge invalidRight = new Bridge(islands.get(0), islands.get(5));
-        final Bridge invalidUp = new Bridge(islands.get(4), islands.get(2));
-        final Bridge invalidDown = new Bridge(islands.get(2), islands.get(4));
+        final Connection invalidLeft = new Connection(islands.get(5), islands.get(0));
+        final Connection invalidRight = new Connection(islands.get(0), islands.get(5));
+        final Connection invalidUp = new Connection(islands.get(4), islands.get(2));
+        final Connection invalidDown = new Connection(islands.get(2), islands.get(4));
 
         return Arrays.asList(new Object[][]{
                 {null, new BridgesPuzzle(islands, Arrays.asList(validLeft, validRight, validUp, validDown), FIELD_SIZE, FIELD_SIZE)},

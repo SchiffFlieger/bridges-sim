@@ -1,6 +1,6 @@
 package de.karstenkoehler.bridges.ui;
 
-import de.karstenkoehler.bridges.model.Bridge;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.solver.Solver;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
@@ -44,7 +44,7 @@ public class SolveSimulationService extends Service<Void> {
         @Override
         protected Void call() throws InterruptedException {
             while (!isCancelled()) {
-                Bridge next = puzzleSolver.nextSafeBridge(canvasController.getPuzzle());
+                Connection next = puzzleSolver.nextSafeBridge(canvasController.getPuzzle());
                 if (next == null) {
                     return null;
                 }

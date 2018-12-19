@@ -2,8 +2,8 @@ package de.karstenkoehler.bridges.model.generator;
 
 import de.karstenkoehler.bridges.io.validator.ValidateException;
 import de.karstenkoehler.bridges.io.validator.Validator;
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
 import de.karstenkoehler.bridges.model.PuzzleSpecification;
 
@@ -12,7 +12,7 @@ import java.util.*;
 /**
  * An implementation of the {@link Generator} interface. A simple algorithm is used to create the puzzles. The first
  * island is randomly placed on the field. Then one of the existing islands is chosen randomly and a new island is
- * placed either horizontally or vertically. The new island is connected with a bridge, taking care that no bridges
+ * placed either horizontally or vertically. The new island is connected with a bridge, taking care that no connections
  * are crossing. This step repeats until the desired number of islands is reached.
  * <p>
  * If no new island can be added during a step, an attempt is made to split an existing bridge. This creates a new
@@ -24,7 +24,7 @@ public class GeneratorImpl implements Generator {
 
     private final Validator validator;
     private final List<Island> islands;
-    private final List<Bridge> bridges;
+    private final List<Connection> connections;
     private final Counter counter;
 
     /**
@@ -33,7 +33,7 @@ public class GeneratorImpl implements Generator {
     public GeneratorImpl(Validator validator) {
         this.validator = validator;
         this.islands = new ArrayList<>();
-        this.bridges = new ArrayList<>();
+        this.connections = new ArrayList<>();
         this.counter = new Counter();
     }
 
@@ -45,7 +45,7 @@ public class GeneratorImpl implements Generator {
         while (true) {
             try {
                 // The generateNewPuzzle-method still has a bug that allows the
-                // last set bridge to cross other islands/bridges, therefore another
+                // last set bridge to cross other islands/connections, therefore another
                 // validation step is needed.
                 BridgesPuzzle puzzle = generateNewPuzzle(spec);
                 if (isInvalid(puzzle)) {
@@ -76,7 +76,7 @@ public class GeneratorImpl implements Generator {
                 resetGenerator(spec);
             }
             if (counter.shouldSplit()) {
-                Bridge longest = getLongestBridge();
+                Connection longest = getLongestBridge();
                 if (longest != null) {
                     addIslandInExistingBridge(longest);
                 }
@@ -101,10 +101,10 @@ public class GeneratorImpl implements Generator {
     private BridgesPuzzle tryNextIsland(PuzzleSpecification spec) throws RetryException {
         Island start = selectRandomIsland();
         Island newIsland = generateAdjacentIsland(start, spec.getWidth(), spec.getHeight());
-        Bridge bridge = newRandomBridge(start, newIsland);
+        Connection bridge = newRandomBridge(start, newIsland);
 
         this.islands.add(newIsland);
-        this.bridges.add(bridge);
+        this.connections.add(bridge);
 
         setRequiredBridgesForAllIslands();
         BridgesPuzzle puzzle = new BridgesPuzzle(getIslandList(), getBridgeList(), spec.getWidth(), spec.getHeight());
@@ -112,7 +112,7 @@ public class GeneratorImpl implements Generator {
 
         if (isInvalid(puzzle)) {
             this.islands.remove(newIsland);
-            this.bridges.remove(bridge);
+            this.connections.remove(bridge);
             counter.incrementSplitCounter();
         } else {
             counter.resetCounters();
@@ -120,12 +120,12 @@ public class GeneratorImpl implements Generator {
         return puzzle;
     }
 
-    private Bridge getLongestBridge() {
-        Optional<Bridge> opt = bridges.stream().max(Comparator.comparingInt(Bridge::getLength));
+    private Connection getLongestBridge() {
+        Optional<Connection> opt = connections.stream().max(Comparator.comparingInt(Connection::getLength));
         if (!opt.isPresent()) {
             return null;
         }
-        Bridge longest = opt.get();
+        Connection longest = opt.get();
         if (longest.getLength() < 4) {
             return null;
         }
@@ -134,12 +134,12 @@ public class GeneratorImpl implements Generator {
 
     /**
      * This method takes an existing bridge between two islands and splits it up. A new island is created
-     * somewhere in the path of the bridge, creating two new bridges.
+     * somewhere in the path of the bridge, creating two new connections.
      *
      * @param longest the bridge to split
      */
-    private void addIslandInExistingBridge(Bridge longest) throws RetryException {
-        this.bridges.remove(longest);
+    private void addIslandInExistingBridge(Connection longest) throws RetryException {
+        this.connections.remove(longest);
         Island start = longest.getStartIsland();
         Island end = longest.getEndIsland();
 
@@ -149,17 +149,17 @@ public class GeneratorImpl implements Generator {
         if (longest.isHorizontal()) {
             Island newIsland = createNewValidIslandHorizontal(longest, minX, minY);
             this.islands.add(newIsland);
-            this.bridges.add(newRandomBridge(start, newIsland));
-            this.bridges.add(newRandomBridge(newIsland, end));
+            this.connections.add(newRandomBridge(start, newIsland));
+            this.connections.add(newRandomBridge(newIsland, end));
         } else {
             Island newIsland = createNewValidIslandVertical(longest, minX, minY);
             this.islands.add(newIsland);
-            this.bridges.add(newRandomBridge(start, newIsland));
-            this.bridges.add(newRandomBridge(newIsland, end));
+            this.connections.add(newRandomBridge(start, newIsland));
+            this.connections.add(newRandomBridge(newIsland, end));
         }
     }
 
-    private Island createNewValidIslandHorizontal(Bridge longest, int minX, int minY) throws RetryException {
+    private Island createNewValidIslandHorizontal(Connection longest, int minX, int minY) throws RetryException {
         int counter = 0;
         Island newIsland = new Island(0, minX + random.nextInt(longest.getLength()), minY, 0);
         while (isForbidden(newIsland)) {
@@ -172,7 +172,7 @@ public class GeneratorImpl implements Generator {
         return newIsland;
     }
 
-    private Island createNewValidIslandVertical(Bridge longest, int minX, int minY) throws RetryException {
+    private Island createNewValidIslandVertical(Connection longest, int minX, int minY) throws RetryException {
         int counter = 0;
         Island newIsland = new Island(0, minX, minY + random.nextInt(longest.getLength()), 0);
         while (isForbidden(newIsland)) {
@@ -192,7 +192,7 @@ public class GeneratorImpl implements Generator {
     private void resetGenerator(PuzzleSpecification spec) {
         counter.resetCounters();
         this.islands.clear();
-        this.bridges.clear();
+        this.connections.clear();
         this.islands.add(newRandomIsland(spec.getWidth(), spec.getHeight()));
     }
 
@@ -202,9 +202,9 @@ public class GeneratorImpl implements Generator {
     private void setRequiredBridgesForAllIslands() {
         this.islands.forEach(island -> island.setRequiredBridges(0));
 
-        for (Bridge bridge : this.bridges) {
-            bridge.getStartIsland().setRequiredBridges(bridge.getStartIsland().getRequiredBridges() + bridge.getBridgeCount());
-            bridge.getEndIsland().setRequiredBridges(bridge.getEndIsland().getRequiredBridges() + bridge.getBridgeCount());
+        for (Connection connection : this.connections) {
+            connection.getStartIsland().setRequiredBridges(connection.getStartIsland().getRequiredBridges() + connection.getBridgeCount());
+            connection.getEndIsland().setRequiredBridges(connection.getEndIsland().getRequiredBridges() + connection.getBridgeCount());
         }
     }
 
@@ -236,23 +236,23 @@ public class GeneratorImpl implements Generator {
     }
 
     /**
-     * To create a valid {@link BridgesPuzzle} you need a list of bridges that matches specific conditions
+     * To create a valid {@link BridgesPuzzle} you need a list of connections that matches specific conditions
      * like beeing sorted by island id and having appropriate ids themselves. Because in this implementation new
-     * bridges are created randomly without any order, we need to prepare the existing list to match those
+     * connections are created randomly without any order, we need to prepare the existing list to match those
      * conditions.
      *
-     * @return the prepared list of all existing bridges
+     * @return the prepared list of all existing connections
      */
-    private List<Bridge> getBridgeList() {
-        List<Bridge> result = new ArrayList<>(this.bridges.size());
+    private List<Connection> getBridgeList() {
+        List<Connection> result = new ArrayList<>(this.connections.size());
 
-        for (Bridge bridge : this.bridges) {
-            Island a = bridge.getStartIsland();
-            Island b = bridge.getEndIsland();
+        for (Connection connection : this.connections) {
+            Island a = connection.getStartIsland();
+            Island b = connection.getEndIsland();
             if (a.getId() > b.getId()) {
-                result.add(new Bridge(b, a, bridge.getBridgeCount()));
+                result.add(new Connection(b, a, connection.getBridgeCount()));
             } else {
-                result.add(new Bridge(a, b, bridge.getBridgeCount()));
+                result.add(new Connection(a, b, connection.getBridgeCount()));
             }
         }
 
@@ -272,7 +272,7 @@ public class GeneratorImpl implements Generator {
         try {
             this.validator.validate(puzzle);
             puzzle.markInvalidBridges();
-            return puzzle.getBridges().stream().anyMatch(bridge -> !bridge.isValid());
+            return puzzle.getConnections().stream().anyMatch(bridge -> !bridge.isValid());
         } catch (ValidateException e) {
             return true;
         }
@@ -324,8 +324,8 @@ public class GeneratorImpl implements Generator {
      * @param end   the second island
      * @return a bridge between the islands
      */
-    private Bridge newRandomBridge(Island start, Island end) {
-        return new Bridge(start, end, random.nextInt(2) + 1);
+    private Connection newRandomBridge(Island start, Island end) {
+        return new Connection(start, end, random.nextInt(2) + 1);
     }
 
     /**

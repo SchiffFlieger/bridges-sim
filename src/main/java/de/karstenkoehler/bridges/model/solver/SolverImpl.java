@@ -1,7 +1,7 @@
 package de.karstenkoehler.bridges.model.solver;
 
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
 import de.karstenkoehler.bridges.model.Orientation;
 
@@ -18,9 +18,9 @@ public class SolverImpl implements Solver {
      * @see Solver#nextSafeBridge(BridgesPuzzle)
      */
     @Override
-    public Bridge nextSafeBridge(BridgesPuzzle puzzle) {
+    public Connection nextSafeBridge(BridgesPuzzle puzzle) {
         for (Island island : puzzle.getIslands()) {
-            Bridge save = findSafeBridge(island, puzzle);
+            Connection save = findSafeBridge(island, puzzle);
             if (save != null) {
                 return save;
             }
@@ -37,13 +37,13 @@ public class SolverImpl implements Solver {
      * @param puzzle the puzzle that contains the island
      * @return a safe bridge
      */
-    private Bridge findSafeBridge(Island island, BridgesPuzzle puzzle) {
+    private Connection findSafeBridge(Island island, BridgesPuzzle puzzle) {
         int remainingBridges = puzzle.getRemainingBridgeCount(island);
         if (remainingBridges == 0) {
             return null;
         }
 
-        List<Bridge> possibleNeighborBridges = getPossibleNeighborBridges(island, puzzle);
+        List<Connection> possibleNeighborBridges = getPossibleNeighborBridges(island, puzzle);
         int possibleNeighborBridgeCount = possibleNeighborBridges.stream().mapToInt((bridge) -> bridgesPossible(bridge, puzzle)).sum();
 
         if (possibleNeighborBridgeCount - remainingBridges == 0) {
@@ -58,12 +58,12 @@ public class SolverImpl implements Solver {
     }
 
     /**
-     * Calculates how many additional bridges can be build on the given bridge.
+     * Calculates how many additional bridges can be build on the given connection.
      */
-    private int bridgesPossible(Bridge bridge, BridgesPuzzle puzzle) {
-        int bridgesPossible = 2 - bridge.getBridgeCount();
-        int remainingBridgesStart = puzzle.getRemainingBridgeCount(bridge.getStartIsland());
-        int remainingBridgesEnd = puzzle.getRemainingBridgeCount(bridge.getEndIsland());
+    private int bridgesPossible(Connection connection, BridgesPuzzle puzzle) {
+        int bridgesPossible = 2 - connection.getBridgeCount();
+        int remainingBridgesStart = puzzle.getRemainingBridgeCount(connection.getStartIsland());
+        int remainingBridgesEnd = puzzle.getRemainingBridgeCount(connection.getEndIsland());
 
         return Math.min(Math.min(bridgesPossible, remainingBridgesStart), remainingBridgesEnd);
     }
@@ -71,30 +71,30 @@ public class SolverImpl implements Solver {
     /**
      * Returns all connected bridges of an island, considering the fact that these bridges are actually safe.
      */
-    private List<Bridge> getPossibleNeighborBridges(Island island, BridgesPuzzle puzzle) {
-        List<Bridge> result = new ArrayList<>(4);
+    private List<Connection> getPossibleNeighborBridges(Island island, BridgesPuzzle puzzle) {
+        List<Connection> result = new ArrayList<>(4);
 
         for (Orientation orientation : Orientation.values()) {
-            Bridge bridge = puzzle.getConnectedBridge(island, orientation);
-            if (isConsideredSafe(bridge, puzzle)) {
-                result.add(bridge);
+            Connection connection = puzzle.getConnectedBridge(island, orientation);
+            if (isConsideredSafe(connection, puzzle)) {
+                result.add(connection);
             }
         }
 
         return result;
     }
 
-    private boolean isConsideredSafe(Bridge bridge, BridgesPuzzle puzzle) {
-        return bridge != null && bridge.getBridgeCount() < 2
-                && !puzzle.causesCrossing(bridge)
-                && !onlyTwoIslandsPuzzle(bridge, puzzle)
-                && !(puzzle.getRemainingBridgeCount(bridge.getStartIsland()) == 0)
-                && !(puzzle.getRemainingBridgeCount(bridge.getEndIsland()) == 0);
+    private boolean isConsideredSafe(Connection connection, BridgesPuzzle puzzle) {
+        return connection != null && connection.getBridgeCount() < 2
+                && !puzzle.causesCrossing(connection)
+                && !onlyTwoIslandsPuzzle(connection, puzzle)
+                && !(puzzle.getRemainingBridgeCount(connection.getStartIsland()) == 0)
+                && !(puzzle.getRemainingBridgeCount(connection.getEndIsland()) == 0);
     }
 
-    private boolean onlyTwoIslandsPuzzle(Bridge bridge, BridgesPuzzle puzzle) {
-        return bridge.getStartIsland().getRequiredBridges() == 1
-                && bridge.getEndIsland().getRequiredBridges() == 1
+    private boolean onlyTwoIslandsPuzzle(Connection connection, BridgesPuzzle puzzle) {
+        return connection.getStartIsland().getRequiredBridges() == 1
+                && connection.getEndIsland().getRequiredBridges() == 1
                 && puzzle.getIslands().size() != 2;
     }
 }

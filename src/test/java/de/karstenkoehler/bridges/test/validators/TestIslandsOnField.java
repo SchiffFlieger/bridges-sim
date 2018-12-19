@@ -3,8 +3,8 @@ package de.karstenkoehler.bridges.test.validators;
 import de.karstenkoehler.bridges.io.validator.IslandsOnFieldValidator;
 import de.karstenkoehler.bridges.io.validator.ValidateException;
 import de.karstenkoehler.bridges.io.validator.Validator;
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -19,7 +19,7 @@ import java.util.*;
 public class TestIslandsOnField {
 
     private static final int FIELD_SIZE = 10;
-    private static final List<Bridge> bridges = new ArrayList<>();
+    private static final List<Connection> CONNECTIONS = new ArrayList<>();
 
     private static final Island valid1 = new Island(0, 0, 9, 2);
     private static final Island valid2 = new Island(1, 9, 0, 2);
@@ -36,17 +36,17 @@ public class TestIslandsOnField {
     @Parameterized.Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(new Object[][]{
-                {null, new BridgesPuzzle(Collections.singletonList(valid1), bridges, FIELD_SIZE, FIELD_SIZE)},
-                {null, new BridgesPuzzle(Collections.singletonList(valid2), bridges, FIELD_SIZE, FIELD_SIZE)},
-                {null, new BridgesPuzzle(Collections.singletonList(valid3), bridges, FIELD_SIZE, FIELD_SIZE)},
-                {null, new BridgesPuzzle(Collections.singletonList(valid4), bridges, FIELD_SIZE, FIELD_SIZE)},
-                {null, new BridgesPuzzle(Collections.singletonList(valid5), bridges, FIELD_SIZE, FIELD_SIZE)},
+                {null, new BridgesPuzzle(Collections.singletonList(valid1), CONNECTIONS, FIELD_SIZE, FIELD_SIZE)},
+                {null, new BridgesPuzzle(Collections.singletonList(valid2), CONNECTIONS, FIELD_SIZE, FIELD_SIZE)},
+                {null, new BridgesPuzzle(Collections.singletonList(valid3), CONNECTIONS, FIELD_SIZE, FIELD_SIZE)},
+                {null, new BridgesPuzzle(Collections.singletonList(valid4), CONNECTIONS, FIELD_SIZE, FIELD_SIZE)},
+                {null, new BridgesPuzzle(Collections.singletonList(valid5), CONNECTIONS, FIELD_SIZE, FIELD_SIZE)},
 
-                {ValidateException.class, new BridgesPuzzle(Collections.singletonList(invalid1), bridges, FIELD_SIZE, FIELD_SIZE)},
-                {ValidateException.class, new BridgesPuzzle(Collections.singletonList(invalid2), bridges, FIELD_SIZE, FIELD_SIZE)},
-                {ValidateException.class, new BridgesPuzzle(Collections.singletonList(invalid3), bridges, FIELD_SIZE, FIELD_SIZE)},
-                {ValidateException.class, new BridgesPuzzle(Collections.singletonList(invalid4), bridges, FIELD_SIZE, FIELD_SIZE)},
-                {ValidateException.class, new BridgesPuzzle(Collections.singletonList(invalid5), bridges, FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(Collections.singletonList(invalid1), CONNECTIONS, FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(Collections.singletonList(invalid2), CONNECTIONS, FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(Collections.singletonList(invalid3), CONNECTIONS, FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(Collections.singletonList(invalid4), CONNECTIONS, FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(Collections.singletonList(invalid5), CONNECTIONS, FIELD_SIZE, FIELD_SIZE)},
         });
     }
 

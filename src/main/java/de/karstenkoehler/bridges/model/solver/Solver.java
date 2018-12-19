@@ -1,7 +1,7 @@
 package de.karstenkoehler.bridges.model.solver;
 
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 
 /**
  * A solver can calculate a safe bridge for a given {@link BridgesPuzzle}. The puzzle has to be in state
@@ -18,5 +18,5 @@ public interface Solver {
      * @param puzzle the puzzle to solve
      * @return a bridge that's count can safely be incremented
      */
-    Bridge nextSafeBridge(BridgesPuzzle puzzle);
+    Connection nextSafeBridge(BridgesPuzzle puzzle);
 }

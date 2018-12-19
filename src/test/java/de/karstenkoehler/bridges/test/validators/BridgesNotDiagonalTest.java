@@ -3,8 +3,8 @@ package de.karstenkoehler.bridges.test.validators;
 import de.karstenkoehler.bridges.io.validator.BridgesNotDiagonalValidator;
 import de.karstenkoehler.bridges.io.validator.ValidateException;
 import de.karstenkoehler.bridges.io.validator.Validator;
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -35,16 +35,16 @@ public class BridgesNotDiagonalTest {
                 new Island(6, 6, 2, 2)
         );
 
-        final Bridge valid1 = new Bridge(islands.get(0), islands.get(5));
-        final Bridge valid2 = new Bridge(islands.get(2), islands.get(3));
-        final Bridge valid3 = new Bridge(islands.get(0), islands.get(5));
+        final Connection valid1 = new Connection(islands.get(0), islands.get(5));
+        final Connection valid2 = new Connection(islands.get(2), islands.get(3));
+        final Connection valid3 = new Connection(islands.get(0), islands.get(5));
 
-        final Bridge invalid1 = new Bridge(islands.get(0), islands.get(1));
-        final Bridge invalid2 = new Bridge(islands.get(0), islands.get(2));
-        final Bridge invalid3 = new Bridge(islands.get(1), islands.get(3));
-        final Bridge invalid4 = new Bridge(islands.get(3), islands.get(4));
-        final Bridge invalid5 = new Bridge(islands.get(2), islands.get(5));
-        final Bridge invalid6 = new Bridge(islands.get(2), islands.get(6));
+        final Connection invalid1 = new Connection(islands.get(0), islands.get(1));
+        final Connection invalid2 = new Connection(islands.get(0), islands.get(2));
+        final Connection invalid3 = new Connection(islands.get(1), islands.get(3));
+        final Connection invalid4 = new Connection(islands.get(3), islands.get(4));
+        final Connection invalid5 = new Connection(islands.get(2), islands.get(5));
+        final Connection invalid6 = new Connection(islands.get(2), islands.get(6));
 
         return Arrays.asList(new Object[][]{
                 {null, new BridgesPuzzle(islands, Arrays.asList(valid1, valid2, valid3), FIELD_SIZE, FIELD_SIZE)},

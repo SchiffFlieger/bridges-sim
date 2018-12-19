@@ -1,10 +1,10 @@
 package de.karstenkoehler.bridges.test.validators;
 
-import de.karstenkoehler.bridges.io.validator.BridgeOrderValidator;
+import de.karstenkoehler.bridges.io.validator.BridgeReferenceOrderValidator;
 import de.karstenkoehler.bridges.io.validator.ValidateException;
 import de.karstenkoehler.bridges.io.validator.Validator;
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
 import org.junit.BeforeClass;
 import org.junit.Rule;
@@ -15,10 +15,11 @@ import org.junit.runners.Parameterized;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @RunWith(Parameterized.class)
-public class BridgeOrderTest {
+public class ConnectionReferenceOrderTest {
 
     private static final int FIELD_SIZE = 10;
 
@@ -34,29 +35,21 @@ public class BridgeOrderTest {
                 new Island(6, 3, 4, 2)
         );
 
-        final List<Bridge> valid = Arrays.asList(
-                new Bridge(islands.get(0), islands.get(1), 2),
-                new Bridge(islands.get(0), islands.get(6), 2),
-                new Bridge(islands.get(3), islands.get(4), 2)
-        );
+        final Connection valid1 = new Connection(islands.get(0), islands.get(1), 2);
+        final Connection valid2 = new Connection(islands.get(0), islands.get(6), 2);
+        final Connection valid3 = new Connection(islands.get(3), islands.get(4), 2);
 
-        final List<Bridge> invalidNode1 = Arrays.asList(
-                new Bridge(islands.get(0), islands.get(1), 2),
-                new Bridge(islands.get(3), islands.get(1), 2),
-                new Bridge(islands.get(0), islands.get(6), 2)
-        );
-
-        final List<Bridge> invalidNode2 = Arrays.asList(
-                new Bridge(islands.get(0), islands.get(6), 2),
-                new Bridge(islands.get(0), islands.get(1), 2),
-                new Bridge(islands.get(3), islands.get(4), 2)
-        );
+        final Connection invalid1 = new Connection(islands.get(6), islands.get(0), 2);
+        final Connection invalid2 = new Connection(islands.get(2), islands.get(1), 2);
+        final Connection invalid3 = new Connection(islands.get(5), islands.get(2), 2);
 
         return Arrays.asList(new Object[][]{
-                {null, new BridgesPuzzle(islands, valid, FIELD_SIZE, FIELD_SIZE)},
+                {null, new BridgesPuzzle(islands, Arrays.asList(valid1, valid2, valid3), FIELD_SIZE, FIELD_SIZE)},
 
-                {ValidateException.class, new BridgesPuzzle(islands, invalidNode1, FIELD_SIZE, FIELD_SIZE)},
-                {ValidateException.class, new BridgesPuzzle(islands, invalidNode2, FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(islands, Collections.singletonList(invalid1), FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(islands, Collections.singletonList(invalid2), FIELD_SIZE, FIELD_SIZE)},
+                {ValidateException.class, new BridgesPuzzle(islands, Collections.singletonList(invalid3), FIELD_SIZE, FIELD_SIZE)},
+
         });
     }
 
@@ -82,6 +75,6 @@ public class BridgeOrderTest {
 
     @BeforeClass
     public static void setup() {
-        validator = new BridgeOrderValidator();
+        validator = new BridgeReferenceOrderValidator();
     }
 }

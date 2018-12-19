@@ -1,7 +1,7 @@
 package de.karstenkoehler.bridges.test.model;
 
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,36 +38,36 @@ public class MarkCrossingBridgesTest {
         );
 
         // all valid
-        Bridge a1 = new Bridge(bsp_6x6.get(0), bsp_6x6.get(1), 1);
-        Bridge a2 = new Bridge(bsp_6x6.get(3), bsp_6x6.get(4), 1);
-        Bridge b1 = new Bridge(bsp_6x6.get(0), bsp_6x6.get(3), 1);
-        Bridge b2 = new Bridge(bsp_6x6.get(1), bsp_6x6.get(4), 1);
-        Bridge c1 = new Bridge(bsp_6x6.get(0), bsp_6x6.get(3), 1);
-        Bridge c2 = new Bridge(bsp_6x6.get(0), bsp_6x6.get(1), 1);
+        Connection a1 = new Connection(bsp_6x6.get(0), bsp_6x6.get(1), 1);
+        Connection a2 = new Connection(bsp_6x6.get(3), bsp_6x6.get(4), 1);
+        Connection b1 = new Connection(bsp_6x6.get(0), bsp_6x6.get(3), 1);
+        Connection b2 = new Connection(bsp_6x6.get(1), bsp_6x6.get(4), 1);
+        Connection c1 = new Connection(bsp_6x6.get(0), bsp_6x6.get(3), 1);
+        Connection c2 = new Connection(bsp_6x6.get(0), bsp_6x6.get(1), 1);
 
         // partially invalid
-        Bridge d1 = new Bridge(bsp_6x6.get(9), bsp_6x6.get(10), 1);
-        Bridge d2 = new Bridge(bsp_6x6.get(6), bsp_6x6.get(12), 1);
-        Bridge d3 = new Bridge(bsp_6x6.get(0), bsp_6x6.get(1), 1);
+        Connection d1 = new Connection(bsp_6x6.get(9), bsp_6x6.get(10), 1);
+        Connection d2 = new Connection(bsp_6x6.get(6), bsp_6x6.get(12), 1);
+        Connection d3 = new Connection(bsp_6x6.get(0), bsp_6x6.get(1), 1);
 
-        Bridge e1 = new Bridge(bsp_6x6.get(4), bsp_6x6.get(10), 1);
-        Bridge e2 = new Bridge(bsp_6x6.get(6), bsp_6x6.get(7), 1);
-        Bridge e3 = new Bridge(bsp_6x6.get(9), bsp_6x6.get(10), 1);
+        Connection e1 = new Connection(bsp_6x6.get(4), bsp_6x6.get(10), 1);
+        Connection e2 = new Connection(bsp_6x6.get(6), bsp_6x6.get(7), 1);
+        Connection e3 = new Connection(bsp_6x6.get(9), bsp_6x6.get(10), 1);
 
-        Bridge f1 = new Bridge(bsp_6x6.get(5), bsp_6x6.get(11), 1);
-        Bridge f2 = new Bridge(bsp_6x6.get(7), bsp_6x6.get(8), 1);
+        Connection f1 = new Connection(bsp_6x6.get(5), bsp_6x6.get(11), 1);
+        Connection f2 = new Connection(bsp_6x6.get(7), bsp_6x6.get(8), 1);
 
         // all valid
-        Bridge g1 = new Bridge(bsp_6x6.get(9), bsp_6x6.get(10), 0);
-        Bridge g2 = new Bridge(bsp_6x6.get(6), bsp_6x6.get(12), 1);
-        Bridge g3 = new Bridge(bsp_6x6.get(0), bsp_6x6.get(1), 1);
+        Connection g1 = new Connection(bsp_6x6.get(9), bsp_6x6.get(10), 0);
+        Connection g2 = new Connection(bsp_6x6.get(6), bsp_6x6.get(12), 1);
+        Connection g3 = new Connection(bsp_6x6.get(0), bsp_6x6.get(1), 1);
 
-        Bridge h1 = new Bridge(bsp_6x6.get(4), bsp_6x6.get(10), 1);
-        Bridge h2 = new Bridge(bsp_6x6.get(6), bsp_6x6.get(7), 0);
-        Bridge h3 = new Bridge(bsp_6x6.get(9), bsp_6x6.get(10), 1);
+        Connection h1 = new Connection(bsp_6x6.get(4), bsp_6x6.get(10), 1);
+        Connection h2 = new Connection(bsp_6x6.get(6), bsp_6x6.get(7), 0);
+        Connection h3 = new Connection(bsp_6x6.get(9), bsp_6x6.get(10), 1);
 
-        Bridge i1 = new Bridge(bsp_6x6.get(5), bsp_6x6.get(11), 0);
-        Bridge i2 = new Bridge(bsp_6x6.get(7), bsp_6x6.get(8), 1);
+        Connection i1 = new Connection(bsp_6x6.get(5), bsp_6x6.get(11), 0);
+        Connection i2 = new Connection(bsp_6x6.get(7), bsp_6x6.get(8), 1);
 
         return Arrays.asList(new Object[][]{
                 {new BridgesPuzzle(bsp_6x6, Arrays.asList(a1, a2), 6, 6), Arrays.asList(a1, a2), Collections.emptyList()},
@@ -88,19 +88,19 @@ public class MarkCrossingBridgesTest {
     public BridgesPuzzle input;
 
     @Parameterized.Parameter(1)
-    public List<Bridge> valid;
+    public List<Connection> valid;
 
     @Parameterized.Parameter(2)
-    public List<Bridge> invalid;
+    public List<Connection> invalid;
 
     @Test
     public void testFillBridges() {
         this.input.markInvalidBridges();
 
-        for (Bridge bridge : valid) {
+        for (Connection bridge : valid) {
             assertTrue(bridge.isValid());
         }
-        for (Bridge bridge : invalid) {
+        for (Connection bridge : invalid) {
             assertFalse(bridge.isValid());
         }
     }

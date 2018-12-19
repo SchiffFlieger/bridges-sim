@@ -1,6 +1,6 @@
 package de.karstenkoehler.bridges.test.model;
 
-import de.karstenkoehler.bridges.model.Bridge;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,15 +19,15 @@ public class AddBridgeTest {
         Island island2 = new Island(1, 0, 2, 4);
 
         return Arrays.asList(new Object[][]{
-                {new Bridge(island1, island2, 0), 1, 1},
-                {new Bridge(island1, island2, 1), 1, 2},
-                {new Bridge(island1, island2, 2), -1, 1},
-                {new Bridge(island1, island2, 1), -1, 0},
+                {new Connection(island1, island2, 0), 1, 1},
+                {new Connection(island1, island2, 1), 1, 2},
+                {new Connection(island1, island2, 2), -1, 1},
+                {new Connection(island1, island2, 1), -1, 0},
         });
     }
 
     @Parameterized.Parameter
-    public Bridge input;
+    public Connection input;
 
     @Parameterized.Parameter(1)
     public int toAdd;

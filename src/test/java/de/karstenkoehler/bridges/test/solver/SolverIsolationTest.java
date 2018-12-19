@@ -1,7 +1,7 @@
 package de.karstenkoehler.bridges.test.solver;
 
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
 import de.karstenkoehler.bridges.model.solver.Solver;
 import de.karstenkoehler.bridges.model.solver.SolverImpl;
@@ -25,12 +25,12 @@ public class SolverIsolationTest {
         Island isolation2island1 = new Island(0, 2, 0, 2);
         Island isolation2island2 = new Island(1, 2, 4, 2);
 
-        Bridge bspIsolation2nextSave = new Bridge(isolation2island1, isolation2island2, 1);
-        List<Bridge> bspIsolation2bridges = new ArrayList<>(Collections.singletonList(bspIsolation2nextSave));
+        Connection bspIsolation2nextSave = new Connection(isolation2island1, isolation2island2, 1);
+        List<Connection> bspIsolation2Connections = new ArrayList<>(Collections.singletonList(bspIsolation2nextSave));
 
         return Arrays.asList(new Object[][]{
                 {new BridgesPuzzle(Arrays.asList(isolation1island1, isolation1island2), new ArrayList<>(), 5, 5), isolation1island1, isolation1island2, 1},
-                {new BridgesPuzzle(Arrays.asList(isolation2island1, isolation2island2), bspIsolation2bridges, 5, 5), isolation2island1, isolation2island2, 2},
+                {new BridgesPuzzle(Arrays.asList(isolation2island1, isolation2island2), bspIsolation2Connections, 5, 5), isolation2island1, isolation2island2, 2},
         });
     }
 
@@ -49,7 +49,7 @@ public class SolverIsolationTest {
     @Test
     public void testFillBridges() {
         this.input.fillMissingBridges();
-        Bridge next = solver.nextSafeBridge(this.input);
+        Connection next = solver.nextSafeBridge(this.input);
         next.setBridgeCount(next.getBridgeCount() + 1);
 
         assertEquals(next.getStartIsland(), start);

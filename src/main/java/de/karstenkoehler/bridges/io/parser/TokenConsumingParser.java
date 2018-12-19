@@ -2,8 +2,8 @@ package de.karstenkoehler.bridges.io.parser;
 
 import de.karstenkoehler.bridges.io.parser.token.Token;
 import de.karstenkoehler.bridges.io.parser.token.Tokenizer;
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
 
 import java.util.ArrayList;
@@ -17,10 +17,10 @@ import java.util.List;
  * from that specification. <p>
  *
  * <code>
- * start   := field, islands, [ bridges ]; <br>
+ * start   := field, islands, [ connections ]; <br>
  * field   := 'FIELD', number, 'x', number, '|', number; <br>
  * islands := 'ISLANDS', { island }; <br>
- * bridges := 'BRIDGES', { bridge }; <br>
+ * connections := 'BRIDGES', { bridge }; <br>
  * island  := '(', number, ',', number, '|', number, ')'; <br>
  * bridge  := '(', number, ',', number, '|', ( 'true' | 'false' ), ')'; <br>
  * </code>
@@ -28,7 +28,7 @@ import java.util.List;
 public class TokenConsumingParser extends AbstractTokenParser implements Parser {
 
     private final List<Island> islands = new ArrayList<>();
-    private final List<Bridge> bridges = new ArrayList<>();
+    private final List<Connection> connections = new ArrayList<>();
     private int width, height, islandCount;
 
     /**
@@ -45,7 +45,7 @@ public class TokenConsumingParser extends AbstractTokenParser implements Parser 
     public BridgesPuzzle parse() throws ParseException {
         start();
         consume(Token.Type.EOF);
-        return new BridgesPuzzle(islands, bridges, width, height);
+        return new BridgesPuzzle(islands, connections, width, height);
     }
 
     private void start() throws ParseException {
@@ -111,7 +111,7 @@ public class TokenConsumingParser extends AbstractTokenParser implements Parser 
             throw new ParseException("A bridge references unknown island.");
         }
 
-        this.bridges.add(new Bridge(islands.get(node1), islands.get(node2), bridges));
+        this.connections.add(new Connection(islands.get(node1), islands.get(node2), bridges));
 
         consume(Token.Type.CLOSE_PARENTHESIS);
     }

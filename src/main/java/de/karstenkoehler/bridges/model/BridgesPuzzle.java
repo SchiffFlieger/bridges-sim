@@ -4,14 +4,14 @@ import java.util.*;
 
 public class BridgesPuzzle {
     private final IslandStore islands;
-    private final List<Bridge> bridges;
-    private final Map<Integer, Map<Orientation, Bridge>> bridgeConnections;
+    private final List<Connection> connections;
+    private final Map<Integer, Map<Orientation, Connection>> bridgeConnections;
     private final int width;
     private final int height;
 
-    public BridgesPuzzle(List<Island> islands, List<Bridge> bridges, int width, int height) {
+    public BridgesPuzzle(List<Island> islands, List<Connection> connections, int width, int height) {
         this.islands = new IslandStore(islands);
-        this.bridges = bridges;
+        this.connections = connections;
         this.width = width;
         this.height = height;
         this.bridgeConnections = new HashMap<>();
@@ -21,8 +21,8 @@ public class BridgesPuzzle {
         return Collections.unmodifiableList(this.islands.getAsList());
     }
 
-    public List<Bridge> getBridges() {
-        return Collections.unmodifiableList(this.bridges);
+    public List<Connection> getConnections() {
+        return Collections.unmodifiableList(this.connections);
     }
 
     public int getWidth() {
@@ -35,7 +35,7 @@ public class BridgesPuzzle {
 
     public void fillMissingBridges() {
         for (Island island : this.islands.getAsList()) {
-            Map<Orientation, Bridge> connections = new EnumMap<>(Orientation.class);
+            Map<Orientation, Connection> connections = new EnumMap<>(Orientation.class);
 
             connections.put(Orientation.NORTH, fillBridgeInDirection(island, 0, -1));
             connections.put(Orientation.EAST, fillBridgeInDirection(island, 1, 0));
@@ -45,7 +45,7 @@ public class BridgesPuzzle {
             this.bridgeConnections.put(island.getId(), connections);
         }
 
-        this.bridges.sort((o1, o2) -> {
+        this.connections.sort((o1, o2) -> {
             int diff = o1.getStartIsland().getId() - o2.getStartIsland().getId();
             if (diff != 0) {
                 return diff;
@@ -55,22 +55,22 @@ public class BridgesPuzzle {
         });
     }
 
-    public void emphasizeBridge(Bridge bridge) {
-        this.bridges.forEach(b -> b.setEmphasized(false));
-        if (bridge != null) {
-            bridge.setEmphasized(true);
+    public void emphasizeBridge(Connection connection) {
+        this.connections.forEach(b -> b.setEmphasized(false));
+        if (connection != null) {
+            connection.setEmphasized(true);
         }
     }
 
-    public Bridge getConnectedBridge(Island island, Orientation orientation) {
+    public Connection getConnectedBridge(Island island, Orientation orientation) {
         return this.bridgeConnections.get(island.getId()).get(orientation);
     }
 
     public int getRemainingBridgeCount(Island island) {
         int bridgeCount = 0;
-        for (Bridge bridge : this.bridgeConnections.get(island.getId()).values()) {
-            if (bridge != null) {
-                bridgeCount += bridge.getBridgeCount();
+        for (Connection connection : this.bridgeConnections.get(island.getId()).values()) {
+            if (connection != null) {
+                bridgeCount += connection.getBridgeCount();
             }
         }
 
@@ -78,24 +78,24 @@ public class BridgesPuzzle {
     }
 
     public void markInvalidBridges() {
-        this.bridges.forEach(b -> b.setValid(true));
+        this.connections.forEach(b -> b.setValid(true));
 
-        for (Bridge bridge : this.bridges) {
-            for (Bridge other : this.bridges) {
-                if (bridge == other || bridge.getBridgeCount() == 0 || other.getBridgeCount() == 0) {
+        for (Connection connection : this.connections) {
+            for (Connection other : this.connections) {
+                if (connection == other || connection.getBridgeCount() == 0 || other.getBridgeCount() == 0) {
                     continue;
                 }
 
-                if (bridge.isHorizontal() && other.isVertical()) {
-                    if (areBridgesCrossing(bridge, other)) {
-                        bridge.setValid(false);
+                if (connection.isHorizontal() && other.isVertical()) {
+                    if (areBridgesCrossing(connection, other)) {
+                        connection.setValid(false);
                         other.setValid(false);
                     }
                 }
 
-                if (bridge.isVertical() && other.isHorizontal()) {
-                    if (areBridgesCrossing(other, bridge)) {
-                        bridge.setValid(false);
+                if (connection.isVertical() && other.isHorizontal()) {
+                    if (areBridgesCrossing(other, connection)) {
+                        connection.setValid(false);
                         other.setValid(false);
                     }
                 }
@@ -104,7 +104,7 @@ public class BridgesPuzzle {
     }
 
     public void restart() {
-        this.bridges.forEach(bridge -> bridge.setBridgeCount(0));
+        this.connections.forEach(bridge -> bridge.setBridgeCount(0));
     }
 
     public PuzzleState getState() {
@@ -124,26 +124,26 @@ public class BridgesPuzzle {
     }
 
     private boolean hasPossibleMoves() {
-        return this.bridges.stream().anyMatch(this::hasPossibleMoves);
+        return this.connections.stream().anyMatch(this::hasPossibleMoves);
     }
 
-    private boolean hasPossibleMoves(Bridge bridge) {
-        if (getRemainingBridgeCount(bridge.getStartIsland()) <= 0 || getRemainingBridgeCount(bridge.getEndIsland()) <= 0) {
+    private boolean hasPossibleMoves(Connection connection) {
+        if (getRemainingBridgeCount(connection.getStartIsland()) <= 0 || getRemainingBridgeCount(connection.getEndIsland()) <= 0) {
             return false;
         }
 
-        if (bridge.getBridgeCount() == 1) {
+        if (connection.getBridgeCount() == 1) {
             return true;
         }
-        if (bridge.getBridgeCount() == 2) {
+        if (connection.getBridgeCount() == 2) {
             return false;
         }
 
-        return !causesCrossing(bridge);
+        return !causesCrossing(connection);
     }
 
-    public boolean causesCrossing(Bridge bridge) {
-        for (Bridge other : this.bridges) {
+    public boolean causesCrossing(Connection bridge) {
+        for (Connection other : this.connections) {
             if (bridge == other || other.getBridgeCount() == 0) {
                 continue;
             }
@@ -166,7 +166,7 @@ public class BridgesPuzzle {
     public void reevalIslandBridgeCount() {
         for (Island island : this.islands.getAsList()) {
             int count = 0;
-            for (Bridge bridge : this.bridges) {
+            for (Connection bridge : this.connections) {
                 if (bridge.getStartIsland() == island || bridge.getEndIsland() == island) {
                     count += bridge.getBridgeCount();
                 }
@@ -204,14 +204,14 @@ public class BridgesPuzzle {
     }
 
     private Island getConnectedIsland(Island island, Orientation orientation) {
-        Bridge bridge = getConnectedBridge(island, orientation);
-        if (bridge == null || bridge.getBridgeCount() == 0) {
+        Connection connection = getConnectedBridge(island, orientation);
+        if (connection == null || connection.getBridgeCount() == 0) {
             return null;
         }
-        if (bridge.getStartIsland() == island) {
-            return bridge.getEndIsland();
+        if (connection.getStartIsland() == island) {
+            return connection.getEndIsland();
         }
-        return bridge.getStartIsland();
+        return connection.getStartIsland();
     }
 
     private boolean everyIslandSatisfied() {
@@ -220,14 +220,14 @@ public class BridgesPuzzle {
 
     private boolean anyBridgesCrossing() {
         markInvalidBridges();
-        return this.bridges.stream().anyMatch(bridge -> !bridge.isValid());
+        return this.connections.stream().anyMatch(bridge -> !bridge.isValid());
     }
 
     private boolean anyIslandsTooManyBridges() {
         return this.islands.getAsList().stream().anyMatch(island -> getRemainingBridgeCount(island) < 0);
     }
 
-    private boolean areBridgesCrossing(Bridge bridge, Bridge other) {
+    private boolean areBridgesCrossing(Connection bridge, Connection other) {
         int y1 = bridge.getStartIsland().getY();
         int x2 = other.getEndIsland().getX();
 
@@ -238,30 +238,30 @@ public class BridgesPuzzle {
         return x1a < x2 && x2 < x1e && y2a < y1 && y1 < y2e;
     }
 
-    private Bridge fillBridgeInDirection(Island island, int dx, int dy) {
+    private Connection fillBridgeInDirection(Island island, int dx, int dy) {
         Island neighbor = findNextInDirection(island.getX(), island.getY(), dx, dy);
         if (neighbor == null) {
             return null;
         }
-        Bridge existingBridge = getExistingBridge(island, neighbor);
-        if (existingBridge != null) {
-            return existingBridge;
+        Connection existingConnection = getExistingBridge(island, neighbor);
+        if (existingConnection != null) {
+            return existingConnection;
         }
 
         int min = Math.min(island.getId(), neighbor.getId());
         int max = Math.max(island.getId(), neighbor.getId());
-        Bridge bridge = new Bridge(islands.getById(min), islands.getById(max));
-        this.bridges.add(bridge);
-        return bridge;
+        Connection connection = new Connection(islands.getById(min), islands.getById(max));
+        this.connections.add(connection);
+        return connection;
     }
 
-    private Bridge getExistingBridge(Island island, Island other) {
+    private Connection getExistingBridge(Island island, Island other) {
         int a = Math.min(island.getId(), other.getId());
         int b = Math.max(island.getId(), other.getId());
 
-        for (Bridge bridge : this.bridges) {
-            if (bridge.getStartIsland().getId() == a && bridge.getEndIsland().getId() == b) {
-                return bridge;
+        for (Connection connection : this.connections) {
+            if (connection.getStartIsland().getId() == a && connection.getEndIsland().getId() == b) {
+                return connection;
             }
         }
         return null;

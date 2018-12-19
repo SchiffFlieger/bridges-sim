@@ -1,7 +1,7 @@
 package de.karstenkoehler.bridges.ui;
 
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
 import de.karstenkoehler.bridges.ui.shapes.BridgeShape;
 import de.karstenkoehler.bridges.ui.shapes.IslandShape;
@@ -123,8 +123,8 @@ public class CanvasController {
         for (Island island : puzzle.getIslands()) {
             this.islands.add(new IslandShape(island, controlPane, gc, dimensions, puzzle));
         }
-        for (Bridge bridge : puzzle.getBridges()) {
-            this.bridges.add(new BridgeShape(bridge, canvas.getGraphicsContext2D(), dimensions, puzzle));
+        for (Connection connection : puzzle.getConnections()) {
+            this.bridges.add(new BridgeShape(connection, canvas.getGraphicsContext2D(), dimensions, puzzle));
         }
         drawThings();
 

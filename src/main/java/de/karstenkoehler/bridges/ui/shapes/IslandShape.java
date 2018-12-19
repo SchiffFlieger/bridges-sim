@@ -1,7 +1,7 @@
 package de.karstenkoehler.bridges.ui.shapes;
 
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
 import de.karstenkoehler.bridges.model.Orientation;
 import de.karstenkoehler.bridges.ui.CanvasController;
@@ -107,23 +107,23 @@ public class IslandShape {
     }
 
     private void onLeftClick(Polygon poly, Orientation orientation) {
-        onClick(poly, orientation, Bridge::canAddBridge, Bridge::addBridge);
+        onClick(poly, orientation, Connection::canAddBridge, Connection::addBridge);
     }
 
     private void onRightClick(Polygon poly, Orientation orientation) {
-        onClick(poly, orientation, Bridge::canRemoveBridge, Bridge::removeBridge);
+        onClick(poly, orientation, Connection::canRemoveBridge, Connection::removeBridge);
     }
 
-    private void onClick(Polygon poly, Orientation orientation, Function<Bridge, Boolean> canExec, Consumer<Bridge> exec) {
-        Bridge bridge = this.puzzle.getConnectedBridge(this.island, orientation);
-        if (bridge == null) {
+    private void onClick(Polygon poly, Orientation orientation, Function<Connection, Boolean> canExec, Consumer<Connection> exec) {
+        Connection connection = this.puzzle.getConnectedBridge(this.island, orientation);
+        if (connection == null) {
             return;
         }
 
-        if (canExec.apply(bridge)) {
-            exec.accept(bridge);
+        if (canExec.apply(connection)) {
+            exec.accept(connection);
         }
-        this.puzzle.emphasizeBridge(bridge);
+        this.puzzle.emphasizeBridge(connection);
 
         poly.fireEvent(new Event(MainController.FILE_CHANGED));
         poly.fireEvent(new Event(EVAL_STATE));

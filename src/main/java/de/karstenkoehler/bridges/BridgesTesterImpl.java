@@ -6,8 +6,8 @@ import de.karstenkoehler.bridges.io.BridgesFileWriter;
 import de.karstenkoehler.bridges.io.parser.ParseException;
 import de.karstenkoehler.bridges.io.validator.DefaultValidator;
 import de.karstenkoehler.bridges.io.validator.ValidateException;
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.PuzzleSpecification;
 import de.karstenkoehler.bridges.model.generator.Generator;
 import de.karstenkoehler.bridges.model.generator.GeneratorImpl;
@@ -62,7 +62,7 @@ public class BridgesTesterImpl implements BridgesTester {
             puzzle.fillMissingBridges();
 
             while (true) {
-                Bridge next = solver.nextSafeBridge(puzzle);
+                Connection next = solver.nextSafeBridge(puzzle);
                 if (next == null) {
                     break;
                 }

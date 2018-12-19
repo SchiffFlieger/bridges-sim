@@ -2,18 +2,18 @@ package de.karstenkoehler.bridges.model;
 
 import java.util.Objects;
 
-public class Bridge {
+public class Connection {
     private int bridgeCount;
     private final Island startIsland;
     private final Island endIsland;
     private boolean valid;
     private boolean emphasized;
 
-    public Bridge(Island startIsland, Island endIsland) {
+    public Connection(Island startIsland, Island endIsland) {
         this(startIsland, endIsland, 0);
     }
 
-    public Bridge(Island startIsland, Island endIsland, int bridgeCount) {
+    public Connection(Island startIsland, Island endIsland, int bridgeCount) {
         this.bridgeCount = bridgeCount;
         this.startIsland = startIsland;
         this.endIsland = endIsland;
@@ -53,10 +53,10 @@ public class Bridge {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Bridge bridge = (Bridge) o;
-        return bridgeCount == bridge.bridgeCount &&
-                Objects.equals(startIsland, bridge.startIsland) &&
-                Objects.equals(endIsland, bridge.endIsland);
+        Connection connection = (Connection) o;
+        return bridgeCount == connection.bridgeCount &&
+                Objects.equals(startIsland, connection.startIsland) &&
+                Objects.equals(endIsland, connection.endIsland);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class Bridge {
 
     @Override
     public String toString() {
-        return "Bridge{" +
+        return "Connection{" +
                 "bridgeCount=" + bridgeCount +
                 ", startIsland=" + startIsland +
                 ", endIsland=" + endIsland +

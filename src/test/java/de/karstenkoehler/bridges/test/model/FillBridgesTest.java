@@ -1,7 +1,7 @@
 package de.karstenkoehler.bridges.test.model;
 
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -65,20 +65,20 @@ public class FillBridgesTest {
     public void testFillBridges() {
         this.input.fillMissingBridges();
 
-        assertEquals(bridgeCount, input.getBridges().size());
+        assertEquals(bridgeCount, input.getConnections().size());
 
         int prevN1 = -1;
         int prevN2 = -1;
-        for (Bridge bridge : input.getBridges()) {
-            assertFalse(bridge.getStartIsland().getId() < prevN1);
-            if (bridge.getStartIsland().getId() > prevN1) {
-                prevN1 = bridge.getStartIsland().getId();
+        for (Connection connection : input.getConnections()) {
+            assertFalse(connection.getStartIsland().getId() < prevN1);
+            if (connection.getStartIsland().getId() > prevN1) {
+                prevN1 = connection.getStartIsland().getId();
                 prevN2 = -1;
             }
 
-            assertFalse(bridge.getEndIsland().getId() < prevN2);
-            if (bridge.getEndIsland().getId() >= prevN2) {
-                prevN2 = bridge.getEndIsland().getId();
+            assertFalse(connection.getEndIsland().getId() < prevN2);
+            if (connection.getEndIsland().getId() >= prevN2) {
+                prevN2 = connection.getEndIsland().getId();
             }
         }
     }

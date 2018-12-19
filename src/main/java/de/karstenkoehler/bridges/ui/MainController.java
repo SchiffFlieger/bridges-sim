@@ -1,7 +1,7 @@
 package de.karstenkoehler.bridges.ui;
 
-import de.karstenkoehler.bridges.model.Bridge;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
+import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.PuzzleState;
 import de.karstenkoehler.bridges.model.solver.Solver;
 import de.karstenkoehler.bridges.model.solver.SolverImpl;
@@ -233,7 +233,7 @@ public class MainController {
 
     @FXML
     private void onNextBridge() {
-        Bridge next = getNextSafeBridge();
+        Connection next = getNextSafeBridge();
         if (next == null) return;
 
         this.canvasController.getPuzzle().emphasizeBridge(next);
@@ -246,7 +246,7 @@ public class MainController {
 
     @FXML
     private void onSolve() {
-        Bridge next = getNextSafeBridge();
+        Connection next = getNextSafeBridge();
         if (next == null) return;
 
         if (!service.isRunning()) {
@@ -256,14 +256,14 @@ public class MainController {
         }
     }
 
-    private Bridge getNextSafeBridge() {
+    private Connection getNextSafeBridge() {
         PuzzleState state = canvasController.getPuzzle().getState();
         if (state != PuzzleState.NOT_SOLVED) {
             showError(state);
             return null;
         }
 
-        Bridge next = puzzleSolver.nextSafeBridge(canvasController.getPuzzle());
+        Connection next = puzzleSolver.nextSafeBridge(canvasController.getPuzzle());
         if (next == null) {
             ToastMessage.show(this.stage, ToastMessage.Type.INFO, "There are no more safe bridges");
             return null;
