@@ -87,7 +87,7 @@ public class GeneratorImpl implements Generator {
             puzzle = tryNextIsland(spec);
         }
 
-        puzzle.fillMissingBridges();
+        puzzle.fillMissingConnections();
         return puzzle;
     }
 
@@ -108,7 +108,7 @@ public class GeneratorImpl implements Generator {
 
         setRequiredBridgesForAllIslands();
         BridgesPuzzle puzzle = new BridgesPuzzle(getIslandList(), getBridgeList(), spec.getWidth(), spec.getHeight());
-        puzzle.fillMissingBridges();
+        puzzle.fillMissingConnections();
 
         if (isInvalid(puzzle)) {
             this.islands.remove(newIsland);

@@ -101,7 +101,7 @@ public class PuzzleStateTest {
 
     @Test
     public void testFillBridges() {
-        input.fillMissingBridges();
+        input.fillMissingConnections();
         assertEquals(expectedState, input.getState());
     }
 }

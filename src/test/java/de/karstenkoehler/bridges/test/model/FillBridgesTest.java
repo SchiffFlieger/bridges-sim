@@ -63,7 +63,7 @@ public class FillBridgesTest {
 
     @Test
     public void testFillBridges() {
-        this.input.fillMissingBridges();
+        this.input.fillMissingConnections();
 
         assertEquals(bridgeCount, input.getConnections().size());
 

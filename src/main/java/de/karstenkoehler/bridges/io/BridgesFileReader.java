@@ -33,7 +33,7 @@ public class BridgesFileReader {
      */
     public BridgesPuzzle readFile(File file) throws ParseException, ValidateException, IOException {
         BridgesPuzzle puzzle = readAndParse(file);
-        puzzle.fillMissingBridges();
+        puzzle.fillMissingConnections();
         return puzzle;
     }
 

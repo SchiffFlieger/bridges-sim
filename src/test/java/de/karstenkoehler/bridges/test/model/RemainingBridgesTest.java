@@ -94,7 +94,7 @@ public class RemainingBridgesTest {
 
     @Test
     public void testFillBridges() {
-        this.input.fillMissingBridges();
+        this.input.fillMissingConnections();
         assertEquals(remaining, input.getRemainingBridgeCount(island));
     }
 }

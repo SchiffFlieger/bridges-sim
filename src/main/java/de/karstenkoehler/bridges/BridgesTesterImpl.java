@@ -59,7 +59,7 @@ public class BridgesTesterImpl implements BridgesTester {
 
         try {
             BridgesPuzzle puzzle = reader.readFile(inFile);
-            puzzle.fillMissingBridges();
+            puzzle.fillMissingConnections();
 
             while (true) {
                 Connection next = solver.nextSafeBridge(puzzle);

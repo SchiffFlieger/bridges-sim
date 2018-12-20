@@ -57,7 +57,7 @@ public class ResetBridgesTest {
         );
 
         BridgesPuzzle puzzle = new BridgesPuzzle(islands, bridges, 6, 6);
-        puzzle.fillMissingBridges();
+        puzzle.fillMissingConnections();
         puzzle.restart();
 
         for (Island island : islands) {

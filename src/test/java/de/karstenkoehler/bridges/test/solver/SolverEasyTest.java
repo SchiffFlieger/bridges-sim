@@ -66,7 +66,7 @@ public class SolverEasyTest {
 
     @Test
     public void testFillBridges() {
-        this.input.fillMissingBridges();
+        this.input.fillMissingConnections();
         int bridgesBuilt = 0;
 
         Connection next;

@@ -48,7 +48,7 @@ public class SolverIsolationTest {
 
     @Test
     public void testFillBridges() {
-        this.input.fillMissingBridges();
+        this.input.fillMissingConnections();
         Connection next = solver.nextSafeBridge(this.input);
         next.setBridgeCount(next.getBridgeCount() + 1);
 
