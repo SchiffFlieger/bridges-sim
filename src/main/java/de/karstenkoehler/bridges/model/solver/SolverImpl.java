@@ -2,8 +2,8 @@ package de.karstenkoehler.bridges.model.solver;
 
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.Connection;
+import de.karstenkoehler.bridges.model.Direction;
 import de.karstenkoehler.bridges.model.Island;
-import de.karstenkoehler.bridges.model.Orientation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,8 +74,8 @@ public class SolverImpl implements Solver {
     private List<Connection> getPossibleNeighborBridges(Island island, BridgesPuzzle puzzle) {
         List<Connection> result = new ArrayList<>(4);
 
-        for (Orientation orientation : Orientation.values()) {
-            Connection connection = puzzle.getConnectedBridge(island, orientation);
+        for (Direction direction : Direction.values()) {
+            Connection connection = puzzle.getConnectedBridge(island, direction);
             if (isConsideredSafe(connection, puzzle)) {
                 result.add(connection);
             }

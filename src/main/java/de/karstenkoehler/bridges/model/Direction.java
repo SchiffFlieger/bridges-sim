@@ -1,5 +1,5 @@
 package de.karstenkoehler.bridges.model;
 
-public enum Orientation {
+public enum Direction {
     NORTH, EAST, SOUTH, WEST
 }

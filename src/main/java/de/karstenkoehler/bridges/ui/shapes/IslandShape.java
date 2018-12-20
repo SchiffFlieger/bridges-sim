@@ -2,8 +2,8 @@ package de.karstenkoehler.bridges.ui.shapes;
 
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.Connection;
+import de.karstenkoehler.bridges.model.Direction;
 import de.karstenkoehler.bridges.model.Island;
-import de.karstenkoehler.bridges.model.Orientation;
 import de.karstenkoehler.bridges.ui.CanvasController;
 import de.karstenkoehler.bridges.ui.CanvasDimensions;
 import de.karstenkoehler.bridges.ui.MainController;
@@ -84,13 +84,13 @@ public class IslandShape {
         final double y0 = y - dimensions.getClickAreaSize();
         final double y1 = y + dimensions.getClickAreaSize();
 
-        createTriangle(Orientation.NORTH, x, y, x1, y0, x0, y0);
-        createTriangle(Orientation.EAST, x, y, x1, y0, x1, y1);
-        createTriangle(Orientation.SOUTH, x, y, x1, y1, x0, y1);
-        createTriangle(Orientation.WEST, x, y, x0, y1, x0, y0);
+        createTriangle(Direction.NORTH, x, y, x1, y0, x0, y0);
+        createTriangle(Direction.EAST, x, y, x1, y0, x1, y1);
+        createTriangle(Direction.SOUTH, x, y, x1, y1, x0, y1);
+        createTriangle(Direction.WEST, x, y, x0, y1, x0, y0);
     }
 
-    private void createTriangle(Orientation orientation, double x0, double y0, double x1, double y1, double x2, double y2) {
+    private void createTriangle(Direction direction, double x0, double y0, double x1, double y1, double x2, double y2) {
         Polygon poly = new Polygon(x0, y0, x1, y1, x2, y2);
         poly.setStroke(Color.TRANSPARENT);
         poly.setFill(Color.TRANSPARENT);
@@ -98,24 +98,24 @@ public class IslandShape {
         poly.setOnMouseExited(event -> poly.setFill(Color.TRANSPARENT));
         poly.setOnMouseClicked(event -> {
             if (event.getButton().equals(MouseButton.PRIMARY)) {
-                onLeftClick(poly, orientation);
+                onLeftClick(poly, direction);
             } else {
-                onRightClick(poly, orientation);
+                onRightClick(poly, direction);
             }
         });
         this.controlPane.getChildren().add(0, poly);
     }
 
-    private void onLeftClick(Polygon poly, Orientation orientation) {
-        onClick(poly, orientation, Connection::canAddBridge, Connection::addBridge);
+    private void onLeftClick(Polygon poly, Direction direction) {
+        onClick(poly, direction, Connection::canAddBridge, Connection::addBridge);
     }
 
-    private void onRightClick(Polygon poly, Orientation orientation) {
-        onClick(poly, orientation, Connection::canRemoveBridge, Connection::removeBridge);
+    private void onRightClick(Polygon poly, Direction direction) {
+        onClick(poly, direction, Connection::canRemoveBridge, Connection::removeBridge);
     }
 
-    private void onClick(Polygon poly, Orientation orientation, Function<Connection, Boolean> canExec, Consumer<Connection> exec) {
-        Connection connection = this.puzzle.getConnectedBridge(this.island, orientation);
+    private void onClick(Polygon poly, Direction direction, Function<Connection, Boolean> canExec, Consumer<Connection> exec) {
+        Connection connection = this.puzzle.getConnectedBridge(this.island, direction);
         if (connection == null) {
             return;
         }

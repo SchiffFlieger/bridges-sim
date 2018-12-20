@@ -9,7 +9,7 @@ import java.util.*;
 public class BridgesPuzzle {
     private final IslandStore islands;
     private final List<Connection> connections;
-    private final Map<Integer, Map<Orientation, Connection>> bridgeConnections;
+    private final Map<Integer, Map<Direction, Connection>> bridgeConnections;
     private final int width;
     private final int height;
 
@@ -70,8 +70,8 @@ public class BridgesPuzzle {
      *
      * @return the connection
      */
-    public Connection getConnectedBridge(Island island, Orientation orientation) {
-        return this.bridgeConnections.get(island.getId()).get(orientation);
+    public Connection getConnectedBridge(Island island, Direction direction) {
+        return this.bridgeConnections.get(island.getId()).get(direction);
     }
 
     /**
@@ -212,10 +212,10 @@ public class BridgesPuzzle {
         }
         visited.add(start);
 
-        final List<Orientation> orientations = Arrays.asList(Orientation.NORTH, Orientation.EAST, Orientation.SOUTH, Orientation.WEST);
+        final List<Direction> directions = Arrays.asList(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST);
 
-        for (Orientation orientation : orientations) {
-            Island other = getConnectedIsland(start, orientation);
+        for (Direction direction : directions) {
+            Island other = getConnectedIsland(start, direction);
             if (other == null) {
                 continue;
             }
@@ -233,8 +233,8 @@ public class BridgesPuzzle {
     /**
      * Returns the island relative to the given island in the given direction.
      */
-    private Island getConnectedIsland(Island island, Orientation orientation) {
-        Connection connection = getConnectedBridge(island, orientation);
+    private Island getConnectedIsland(Island island, Direction direction) {
+        Connection connection = getConnectedBridge(island, direction);
         if (connection == null || connection.getBridgeCount() == 0) {
             return null;
         }
@@ -279,12 +279,12 @@ public class BridgesPuzzle {
      */
     public void fillMissingConnections() {
         for (Island island : this.islands.getAsList()) {
-            Map<Orientation, Connection> connections = new EnumMap<>(Orientation.class);
+            Map<Direction, Connection> connections = new EnumMap<>(Direction.class);
 
-            connections.put(Orientation.NORTH, findConnectionInDirection(island, 0, -1));
-            connections.put(Orientation.EAST, findConnectionInDirection(island, 1, 0));
-            connections.put(Orientation.SOUTH, findConnectionInDirection(island, 0, 1));
-            connections.put(Orientation.WEST, findConnectionInDirection(island, -1, 0));
+            connections.put(Direction.NORTH, findConnectionInDirection(island, 0, -1));
+            connections.put(Direction.EAST, findConnectionInDirection(island, 1, 0));
+            connections.put(Direction.SOUTH, findConnectionInDirection(island, 0, 1));
+            connections.put(Direction.WEST, findConnectionInDirection(island, -1, 0));
 
             this.bridgeConnections.put(island.getId(), connections);
         }
