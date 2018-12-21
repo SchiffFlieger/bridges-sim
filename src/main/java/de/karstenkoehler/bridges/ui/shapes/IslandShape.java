@@ -4,10 +4,9 @@ import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Direction;
 import de.karstenkoehler.bridges.model.Island;
-import de.karstenkoehler.bridges.ui.CanvasController;
 import de.karstenkoehler.bridges.ui.CanvasDimensions;
-import de.karstenkoehler.bridges.ui.MainController;
 import de.karstenkoehler.bridges.ui.NumberDisplay;
+import de.karstenkoehler.bridges.ui.events.EventTypes;
 import javafx.event.Event;
 import javafx.geometry.VPos;
 import javafx.scene.canvas.GraphicsContext;
@@ -21,7 +20,7 @@ import javafx.scene.text.TextAlignment;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
-import static de.karstenkoehler.bridges.ui.CanvasController.EVAL_STATE;
+import static de.karstenkoehler.bridges.ui.events.EventTypes.EVAL_STATE;
 
 public class IslandShape {
     private static final Color FILL_COLOR = Color.BLACK;
@@ -125,9 +124,9 @@ public class IslandShape {
         }
         this.puzzle.emphasizeBridge(connection);
 
-        poly.fireEvent(new Event(MainController.FILE_CHANGED));
+        poly.fireEvent(new Event(EventTypes.FILE_MODIFIED));
         poly.fireEvent(new Event(EVAL_STATE));
-        poly.fireEvent(new Event(CanvasController.REDRAW));
+        poly.fireEvent(new Event(EventTypes.REDRAW));
     }
 
     private void drawClickArea() {

@@ -2,8 +2,8 @@ package de.karstenkoehler.bridges.ui;
 
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.PuzzleSpecification;
-import de.karstenkoehler.bridges.ui.components.PuzzleChangeEvent;
 import de.karstenkoehler.bridges.ui.components.toast.ToastMessage;
+import de.karstenkoehler.bridges.ui.events.PuzzleChangeEvent;
 import de.karstenkoehler.bridges.ui.tasks.GeneratePuzzleTask;
 import javafx.beans.value.ChangeListener;
 import javafx.concurrent.Task;
@@ -95,7 +95,7 @@ public class NewPuzzleController {
 
         Task<BridgesPuzzle> task = new GeneratePuzzleTask(specs);
         task.onSucceededProperty().set(event -> {
-            this.node.fireEvent(new PuzzleChangeEvent(MainController.CHANGE_PUZZLE, task.getValue()));
+            this.node.fireEvent(new PuzzleChangeEvent(task.getValue()));
             this.stage.close();
             enableControls();
         });

@@ -3,10 +3,10 @@ package de.karstenkoehler.bridges.ui;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
+import de.karstenkoehler.bridges.ui.events.EventTypes;
 import de.karstenkoehler.bridges.ui.shapes.BridgeShape;
 import de.karstenkoehler.bridges.ui.shapes.IslandShape;
 import javafx.event.Event;
-import javafx.event.EventType;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.Pane;
@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CanvasController {
-    public static final EventType<Event> REDRAW = new EventType<>("REDRAW");
-    public static final EventType<Event> EVAL_STATE = new EventType<>("EVAL_STATE");
 
     private final Canvas canvas;
     private final Pane controlPane;
@@ -108,8 +106,8 @@ public class CanvasController {
 
     public void restartPuzzle() {
         this.puzzle.restart();
-        canvas.fireEvent(new Event(EVAL_STATE));
-        canvas.fireEvent(new Event(MainController.FILE_CHANGED));
+        canvas.fireEvent(new Event(EventTypes.EVAL_STATE));
+        canvas.fireEvent(new Event(EventTypes.FILE_MODIFIED));
         this.drawThings();
     }
 
@@ -128,7 +126,7 @@ public class CanvasController {
         }
         drawThings();
 
-        this.canvas.fireEvent(new Event(EVAL_STATE));
+        this.canvas.fireEvent(new Event(EventTypes.EVAL_STATE));
     }
 
     public BridgesPuzzle getPuzzle() {

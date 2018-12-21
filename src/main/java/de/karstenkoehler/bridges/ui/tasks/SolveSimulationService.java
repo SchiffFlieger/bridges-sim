@@ -3,7 +3,7 @@ package de.karstenkoehler.bridges.ui.tasks;
 import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.solver.Solver;
 import de.karstenkoehler.bridges.ui.CanvasController;
-import de.karstenkoehler.bridges.ui.MainController;
+import de.karstenkoehler.bridges.ui.events.EventTypes;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
@@ -90,9 +90,9 @@ public class SolveSimulationService extends Service<Void> {
                 next.setBridgeCount(next.getBridgeCount() + 1);
 
                 Platform.runLater(() -> {
-                    this.eventNode.fireEvent(new Event(CanvasController.EVAL_STATE));
-                    this.eventNode.fireEvent(new Event(CanvasController.REDRAW));
-                    this.eventNode.fireEvent(new Event(MainController.FILE_CHANGED));
+                    this.eventNode.fireEvent(new Event(EventTypes.EVAL_STATE));
+                    this.eventNode.fireEvent(new Event(EventTypes.REDRAW));
+                    this.eventNode.fireEvent(new Event(EventTypes.FILE_MODIFIED));
                 });
 
                 for (int i = 0; i < sleepCount.get(); i++) {

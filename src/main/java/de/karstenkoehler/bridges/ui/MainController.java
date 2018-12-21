@@ -7,16 +7,15 @@ import de.karstenkoehler.bridges.model.solver.Solver;
 import de.karstenkoehler.bridges.model.solver.SolverImpl;
 import de.karstenkoehler.bridges.ui.components.AboutDialog;
 import de.karstenkoehler.bridges.ui.components.NewPuzzleStage;
-import de.karstenkoehler.bridges.ui.components.PuzzleChangeEvent;
 import de.karstenkoehler.bridges.ui.components.SaveAction;
 import de.karstenkoehler.bridges.ui.components.toast.ToastMessage;
+import de.karstenkoehler.bridges.ui.events.EventTypes;
 import de.karstenkoehler.bridges.ui.tasks.SolveSimulationService;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
 import javafx.concurrent.Service;
 import javafx.event.Event;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.*;
@@ -28,12 +27,10 @@ import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static de.karstenkoehler.bridges.ui.CanvasController.EVAL_STATE;
-import static de.karstenkoehler.bridges.ui.CanvasController.REDRAW;
+import static de.karstenkoehler.bridges.ui.events.EventTypes.EVAL_STATE;
+import static de.karstenkoehler.bridges.ui.events.EventTypes.REDRAW;
 
 public class MainController {
-    public static final EventType<Event> FILE_CHANGED = new EventType<>("FILE_CHANGED");
-    public static final EventType<PuzzleChangeEvent> CHANGE_PUZZLE = new EventType<>("CHANGE_PUZZLE");
 
     @FXML
     private Button btnNextBridge;
@@ -145,9 +142,9 @@ public class MainController {
 
     public void setMainStage(Stage mainStage) throws IOException {
         this.stage = mainStage;
-        mainStage.addEventHandler(FILE_CHANGED, event -> this.fileHelper.fileModified());
+        mainStage.addEventHandler(EventTypes.FILE_MODIFIED, event -> this.fileHelper.fileModified());
         mainStage.addEventHandler(REDRAW, event -> this.canvasController.drawThings());
-        mainStage.addEventHandler(CHANGE_PUZZLE, event -> {
+        mainStage.addEventHandler(EventTypes.CHANGE_PUZZLE, event -> {
             this.canvasController.setPuzzle(event.getPuzzle());
             this.fileHelper.resetFile();
         });
@@ -242,7 +239,7 @@ public class MainController {
 
         this.canvas.fireEvent(new Event(EVAL_STATE));
         this.canvas.fireEvent(new Event(REDRAW));
-        this.canvas.fireEvent(new Event(FILE_CHANGED));
+        this.canvas.fireEvent(new Event(EventTypes.FILE_MODIFIED));
     }
 
     @FXML
