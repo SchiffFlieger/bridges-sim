@@ -31,6 +31,8 @@ public class BridgesPuzzle {
     }
 
     /**
+     * Returns an unmodifiable list of all islands in the puzzle.
+     *
      * @return a list of all islands in the puzzle
      */
     public List<Island> getIslands() {
@@ -38,6 +40,8 @@ public class BridgesPuzzle {
     }
 
     /**
+     * Returns a list of all connections in the puzzle.
+     *
      * @return a list of all connections in the puzzle
      */
     public List<Connection> getConnections() {
@@ -45,6 +49,8 @@ public class BridgesPuzzle {
     }
 
     /**
+     * Returns the width of the puzzle.
+     *
      * @return the width of the puzzle
      */
     public int getWidth() {
@@ -52,12 +58,19 @@ public class BridgesPuzzle {
     }
 
     /**
+     * Returns the height of the puzzle.
+     *
      * @return the height of the puzzle
      */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * Marks the bridges of the given connection as emphasized.
+     *
+     * @param connection the bridges to emphasize
+     */
     public void emphasizeBridge(Connection connection) {
         this.connections.forEach(b -> b.setEmphasized(false));
         if (connection != null) {
@@ -68,6 +81,8 @@ public class BridgesPuzzle {
     /**
      * Returns the connection attached to the island in the specified direction.
      *
+     * @param island    the island to get the connection from
+     * @param direction the direction to look for the connection
      * @return the connection
      */
     public Connection getConnectedBridge(Island island, Direction direction) {
@@ -76,6 +91,9 @@ public class BridgesPuzzle {
 
     /**
      * Returns the remaining number of bridges to complete the given island.
+     *
+     * @param island the island to calculate the remaining number of bridges from
+     * @return the remaining number of bridges
      */
     public int getRemainingBridgeCount(Island island) {
         int bridgeCount = 0;
@@ -126,6 +144,8 @@ public class BridgesPuzzle {
 
     /**
      * Evaluates the current state of the puzzle.
+     *
+     * @return the current state of the puzzle
      */
     public PuzzleState getState() {
         if (anyBridgesCrossing() || anyIslandsTooManyBridges()) {
@@ -150,6 +170,9 @@ public class BridgesPuzzle {
         return this.connections.stream().anyMatch(this::hasPossibleBridges);
     }
 
+    /**
+     * @return true if the given connection can take at least one additional bridge, false otherwise
+     */
     private boolean hasPossibleBridges(Connection connection) {
         if (getRemainingBridgeCount(connection.getStartIsland()) <= 0 || getRemainingBridgeCount(connection.getEndIsland()) <= 0) {
             return false;
@@ -166,6 +189,9 @@ public class BridgesPuzzle {
     }
 
     /**
+     * Checks if adding a bridge to the given connection would result in a crossing.
+     *
+     * @param bridge the connection to check for crossings
      * @return true if adding a bridge to the connection would result in a crossing, false otherwise
      */
     public boolean causesCrossing(Connection bridge) {

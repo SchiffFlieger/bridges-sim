@@ -1,7 +1,14 @@
 package de.karstenkoehler.bridges.model;
 
+import de.karstenkoehler.bridges.model.generator.Generator;
+
 import java.util.Random;
 
+/**
+ * This class stores the specification for creating a new random {@link BridgesPuzzle} using the
+ * {@link Generator} interface. It offers no public constructor and thus can only be instantiated
+ * by its static methods.
+ */
 public class PuzzleSpecification {
     private static final int MIN_SIZE = 4;
     private static final int MAX_SIZE = 25;
@@ -13,6 +20,12 @@ public class PuzzleSpecification {
 
     private static final Random random = new Random(System.nanoTime());
 
+    /**
+     * Creates a new specification where the width, height and number of islands are chosen randomly.
+     *
+     * @param solution true if the generated bridges puzzle should be solved
+     * @return a new specification instance
+     */
     public static PuzzleSpecification random(boolean solution) {
         int width = intBetween(MIN_SIZE, MAX_SIZE);
         int height = intBetween(MIN_SIZE, MAX_SIZE);
@@ -20,12 +33,33 @@ public class PuzzleSpecification {
         return new PuzzleSpecification(solution, width, height, randomIslandCount(width, height));
     }
 
+    /**
+     * Creates a new specification with the given width and height properties. The number of islands is chosen
+     * randomly.
+     *
+     * @param solution true if the generated bridges puzzle should be solved
+     * @param width    the width of the puzzle
+     * @param height   the height of the puzzle
+     * @return a new specification instance
+     * @throws IllegalArgumentException if the given width and height are out of bounds
+     */
     public static PuzzleSpecification withBounds(boolean solution, int width, int height) {
         checkBounds(width, height);
 
         return new PuzzleSpecification(solution, width, height, randomIslandCount(width, height));
     }
 
+    /**
+     * Creates a new specification with the given width, height and number of island properties.
+     *
+     * @param solution    true if the generated bridges puzzle should be solved
+     * @param width       the width of the puzzle
+     * @param height      the height of the puzzle
+     * @param islandCount the number of islands in the puzzle
+     * @return a new specification instance
+     * @throws IllegalArgumentException if the given width and height are out of bounds or the number
+     *                                  of islands does not fit the puzzle size
+     */
     public static PuzzleSpecification withSpecs(boolean solution, int width, int height, int islandCount) {
         checkBounds(width, height);
 
@@ -36,6 +70,9 @@ public class PuzzleSpecification {
         return new PuzzleSpecification(solution, width, height, islandCount);
     }
 
+    /**
+     * A private constructor, so that this class can only be instantiated by its static methods.
+     */
     private PuzzleSpecification(boolean solution, int width, int height, int islandCount) {
         this.solution = solution;
         this.width = width;
@@ -43,18 +80,38 @@ public class PuzzleSpecification {
         this.islandCount = islandCount;
     }
 
+    /**
+     * Returns true if the generated puzzle should be solved.
+     *
+     * @return true if the generated puzzle should be solved
+     */
     public boolean generateSolution() {
         return this.solution;
     }
 
+    /**
+     * Returns the desired width of the puzzle to generate.
+     *
+     * @return the desired width of the puzzle to generate
+     */
     public int getWidth() {
         return width;
     }
 
+    /**
+     * Returns the desired height of the puzzle to generate.
+     *
+     * @return the desired height of the puzzle to generate
+     */
     public int getHeight() {
         return height;
     }
 
+    /**
+     * Returns the desired number of islands of the puzzle to generate.
+     *
+     * @return the desired number of islands of the puzzle to generate
+     */
     public int getIslandCount() {
         return islandCount;
     }
