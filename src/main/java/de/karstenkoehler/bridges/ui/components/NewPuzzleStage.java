@@ -11,10 +11,18 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * The stage for the 'new puzzle' dialog.
+ */
 public class NewPuzzleStage {
 
     private final Stage dialogStage;
 
+    /**
+     * Creates a new instance of the dialog stage and sets all required properties.
+     *
+     * @param mainStage the parent stage
+     */
     public NewPuzzleStage(Stage mainStage) {
         this.dialogStage = new Stage();
         this.dialogStage.initOwner(mainStage);
@@ -24,14 +32,26 @@ public class NewPuzzleStage {
         this.dialogStage.setTitle("Create New Puzzle");
     }
 
-    public void init(Node node) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/new.fxml"));
-        Parent root = loader.load();
-        NewPuzzleController controller = loader.getController();
-        controller.setDependencies(dialogStage, node);
-        dialogStage.setScene(new Scene(root));
+    /**
+     * Initializes the dialog stage with the FXML controls and binds them to the controller.
+     *
+     * @param node a node of the scene to fire events to
+     */
+    public void init(Node node) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/new.fxml"));
+            Parent root = loader.load();
+            NewPuzzleController controller = loader.getController();
+            controller.setDependencies(dialogStage, node);
+            dialogStage.setScene(new Scene(root));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
+    /**
+     * Display the dialog stage.
+     */
     public void showAndWait() {
         dialogStage.showAndWait();
     }

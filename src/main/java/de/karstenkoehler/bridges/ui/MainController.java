@@ -7,7 +7,7 @@ import de.karstenkoehler.bridges.model.solver.Solver;
 import de.karstenkoehler.bridges.model.solver.SolverImpl;
 import de.karstenkoehler.bridges.ui.components.AboutDialog;
 import de.karstenkoehler.bridges.ui.components.NewPuzzleStage;
-import de.karstenkoehler.bridges.ui.components.SaveAction;
+import de.karstenkoehler.bridges.ui.components.SaveRequest;
 import de.karstenkoehler.bridges.ui.components.toast.ToastMessage;
 import de.karstenkoehler.bridges.ui.events.EventTypes;
 import de.karstenkoehler.bridges.ui.tasks.SolveSimulationService;
@@ -23,7 +23,6 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -140,7 +139,7 @@ public class MainController {
         puzzle.ifPresent(bridgesPuzzle -> this.canvasController.setPuzzle(bridgesPuzzle));
     }
 
-    public void setMainStage(Stage mainStage) throws IOException {
+    public void setMainStage(Stage mainStage) {
         this.stage = mainStage;
         mainStage.addEventHandler(EventTypes.FILE_MODIFIED, event -> this.fileHelper.fileModified());
         mainStage.addEventHandler(REDRAW, event -> this.canvasController.drawThings());
@@ -155,8 +154,8 @@ public class MainController {
         });
 
         mainStage.setOnCloseRequest(event -> {
-            SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
-            if (action == SaveAction.CANCEL) {
+            SaveRequest.SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
+            if (action == SaveRequest.SaveAction.CANCEL) {
                 event.consume();
             }
         });
@@ -175,8 +174,8 @@ public class MainController {
 
     @FXML
     private void onNewPuzzle() {
-        SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
-        if (action == SaveAction.CANCEL) {
+        SaveRequest.SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
+        if (action == SaveRequest.SaveAction.CANCEL) {
             return;
         }
 
@@ -185,8 +184,8 @@ public class MainController {
 
     @FXML
     private void onRestartPuzzle() {
-        SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
-        if (action == SaveAction.CANCEL) {
+        SaveRequest.SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
+        if (action == SaveRequest.SaveAction.CANCEL) {
             return;
         }
 
@@ -195,8 +194,8 @@ public class MainController {
 
     @FXML
     private void onOpenPuzzle() {
-        SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
-        if (action == SaveAction.CANCEL) {
+        SaveRequest.SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
+        if (action == SaveRequest.SaveAction.CANCEL) {
             return;
         }
 
@@ -216,8 +215,8 @@ public class MainController {
 
     @FXML
     private void onClose() {
-        SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
-        if (action == SaveAction.CANCEL) {
+        SaveRequest.SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
+        if (action == SaveRequest.SaveAction.CANCEL) {
             return;
         }
 

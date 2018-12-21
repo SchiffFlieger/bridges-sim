@@ -4,6 +4,10 @@ import javafx.scene.control.Alert;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
+/**
+ * A class that encapsulates the about dialog of the application. Use the static method
+ * {@link AboutDialog#showAndWait()} to display the dialog.
+ */
 public class AboutDialog {
 
     private static Alert alert;
@@ -21,6 +25,9 @@ public class AboutDialog {
         return alert;
     }
 
+    /**
+     * Display the about information of the application.
+     */
     public static void showAndWait() {
         if (alert == null) {
             alert = create();

@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -16,7 +17,7 @@ public class Main_Koehler_Karsten extends Application {
     }
 
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         Parent root = createRootPane(stage);
         Scene scene = new Scene(root);
 
@@ -25,11 +26,17 @@ public class Main_Koehler_Karsten extends Application {
         stage.show();
     }
 
-    private Parent createRootPane(Stage stage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/main.fxml"));
-        Parent root = loader.load();
-        MainController controller = loader.getController();
-        controller.setMainStage(stage);
-        return root;
+    private Parent createRootPane(Stage stage) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource("ui/main.fxml"));
+            Parent root = loader.load();
+            MainController controller = loader.getController();
+            controller.setMainStage(stage);
+            return root;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new Pane();
     }
 }

@@ -6,8 +6,7 @@ import de.karstenkoehler.bridges.io.parser.ParseException;
 import de.karstenkoehler.bridges.io.validator.ValidateException;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.ui.components.RetentionFileChooser;
-import de.karstenkoehler.bridges.ui.components.SaveAction;
-import de.karstenkoehler.bridges.ui.components.YesNoCancelAlert;
+import de.karstenkoehler.bridges.ui.components.SaveRequest;
 import de.karstenkoehler.bridges.ui.components.toast.ToastMessage;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
@@ -20,7 +19,7 @@ import java.util.Optional;
 
 public class FileHelper {
     private final RetentionFileChooser chooser;
-    private final YesNoCancelAlert saveRequest;
+    private final SaveRequest saveRequest;
     private final StringProperty titleFilename;
     private final StringProperty filename;
     private final ObjectProperty<File> file;
@@ -34,7 +33,7 @@ public class FileHelper {
 
     public FileHelper() {
         this.chooser = new RetentionFileChooser();
-        this.saveRequest = new YesNoCancelAlert();
+        this.saveRequest = new SaveRequest();
         this.file = new SimpleObjectProperty<>();
 
         this.reader = new BridgesFileReader();
@@ -97,12 +96,12 @@ public class FileHelper {
      *
      * @param puzzle the puzzle to save
      */
-    public SaveAction saveIfNecessary(BridgesPuzzle puzzle) {
+    public SaveRequest.SaveAction saveIfNecessary(BridgesPuzzle puzzle) {
         if (this.modified.get()) {
-            SaveAction action = this.saveRequest.showAndWait(this.filename.get());
-            if (action == SaveAction.SAVE) {
+            SaveRequest.SaveAction action = this.saveRequest.showAndWait(this.filename.get());
+            if (action == SaveRequest.SaveAction.SAVE) {
                 saveToCurrentFile(puzzle);
-            } else if (action == SaveAction.CANCEL) {
+            } else if (action == SaveRequest.SaveAction.CANCEL) {
                 return action;
             }
         }
@@ -196,4 +195,5 @@ public class FileHelper {
             return file.get() != null ? file.get().getName() : "New file";
         }
     }
+
 }
