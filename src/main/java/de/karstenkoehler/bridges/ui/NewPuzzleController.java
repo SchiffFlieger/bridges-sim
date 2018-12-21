@@ -2,9 +2,9 @@ package de.karstenkoehler.bridges.ui;
 
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.PuzzleSpecification;
-import de.karstenkoehler.bridges.ui.components.GeneratePuzzleTask;
 import de.karstenkoehler.bridges.ui.components.PuzzleChangeEvent;
 import de.karstenkoehler.bridges.ui.components.toast.ToastMessage;
+import de.karstenkoehler.bridges.ui.tasks.GeneratePuzzleTask;
 import javafx.beans.value.ChangeListener;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;

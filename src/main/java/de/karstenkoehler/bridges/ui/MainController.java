@@ -10,6 +10,7 @@ import de.karstenkoehler.bridges.ui.components.NewPuzzleStage;
 import de.karstenkoehler.bridges.ui.components.PuzzleChangeEvent;
 import de.karstenkoehler.bridges.ui.components.SaveAction;
 import de.karstenkoehler.bridges.ui.components.toast.ToastMessage;
+import de.karstenkoehler.bridges.ui.tasks.SolveSimulationService;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.value.ChangeListener;
