@@ -5,6 +5,9 @@ import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * Controller class for the view defined in toast.fxml.
+ */
 public class ToastController {
 
     @FXML
@@ -12,11 +15,21 @@ public class ToastController {
     @FXML
     private Label lblMessage;
 
-    public void setImage(Image image) {
+    /**
+     * Sets the icon for the toast message.
+     *
+     * @param image the new icon
+     */
+    void setImage(Image image) {
         this.image.setImage(image);
     }
 
-    public void setMessage(final String message) {
+    /**
+     * Sets the message for the toast message.
+     *
+     * @param message the new message
+     */
+    void setMessage(final String message) {
         lblMessage.setText(message);
     }
 }
