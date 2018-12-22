@@ -8,6 +8,10 @@ import de.karstenkoehler.bridges.ui.CanvasDimensions;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 
+/**
+ * The graphical representation of a single or double bridge. Every instance of this class is tied to
+ * an instance of {@link Connection}. Bridges are drawn on a canvas.
+ */
 public class BridgeShape {
 
     private final Connection connection;
@@ -15,6 +19,14 @@ public class BridgeShape {
     private final CanvasDimensions dimensions;
     private final BridgesPuzzle puzzle;
 
+    /**
+     * Creates a new bridge shape and ties it to a connection.
+     *
+     * @param connection the connection to bind to
+     * @param cg         the graphics context of the canvas to draw on
+     * @param dimensions the calculated dimensions for the puzzle
+     * @param puzzle     the puzzle of the connection
+     */
     public BridgeShape(Connection connection, GraphicsContext cg, CanvasDimensions dimensions, BridgesPuzzle puzzle) {
         this.connection = connection;
         this.cg = cg;
@@ -22,6 +34,13 @@ public class BridgeShape {
         this.puzzle = puzzle;
     }
 
+    /**
+     * Redraws a single or a double bridge on the canvas, depending on the number of bridges in
+     * the underlying connection. If there is no bridge in the connection there may be drawn
+     * bridge hints.
+     *
+     * @param hintsVisible the configuration for bridge hints
+     */
     public void draw(BridgeHintsVisible hintsVisible) {
         if (connection.getBridgeCount() <= 1) {
             drawBridge(0, hintsVisible);
@@ -31,6 +50,12 @@ public class BridgeShape {
         }
     }
 
+    /**
+     * Redraws a single bridge line on the canvas.
+     *
+     * @param offset       the offset of the bridge
+     * @param hintsVisible the configuration for bridge hints
+     */
     private void drawBridge(final double offset, BridgeHintsVisible hintsVisible) {
         if (this.connection.getBridgeCount() == 0 && hintsVisible == BridgeHintsVisible.NEVER) {
             return;
@@ -50,6 +75,15 @@ public class BridgeShape {
         }
     }
 
+    /**
+     * Draws a single line on the canvas.
+     *
+     * @param x0           the starting x coordinate
+     * @param y0           the starting y coordinate
+     * @param x1           the ending x coordinate
+     * @param y1           the ending y coordinate
+     * @param hintsVisible the configuration for bridge hints
+     */
     private void createLine(double x0, double y0, double x1, double y1, BridgeHintsVisible hintsVisible) {
         cg.setLineWidth(dimensions.getBridgeLineSize());
 
@@ -74,11 +108,23 @@ public class BridgeShape {
         }
     }
 
+    /**
+     * Returns true if bridge hints should be drawn.
+     *
+     * @param hintsVisible the configuration for bridge hints
+     * @return true if bridge hints should be drawn
+     */
     private boolean showBridgeHint(BridgeHintsVisible hintsVisible) {
         return hintsVisible == BridgeHintsVisible.ALWAYS
                 || (!puzzle.causesCrossing(this.connection) && needsMoreBridges(connection.getStartIsland()) && needsMoreBridges(connection.getEndIsland()));
     }
 
+    /**
+     * Returns true if the given island has not enough bridges.
+     *
+     * @param island the island to check
+     * @return true if the given island has not enough bridges.
+     */
     private boolean needsMoreBridges(Island island) {
         return puzzle.getRemainingBridgeCount(island) != 0;
     }

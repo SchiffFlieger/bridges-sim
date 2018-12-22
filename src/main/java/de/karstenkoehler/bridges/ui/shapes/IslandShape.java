@@ -22,6 +22,11 @@ import java.util.function.Function;
 
 import static de.karstenkoehler.bridges.ui.events.EventTypes.EVAL_STATE;
 
+/**
+ * The graphical representation of an island. Every instance of this class is tied to
+ * an instance of {@link Island}. The island itself is drawn on the canvas. The click
+ * area to build bridges is a separate shape on a invisible plane in front of the canvas.
+ */
 public class IslandShape {
     private static final Color FILL_COLOR = Color.BLACK;
 
@@ -31,6 +36,15 @@ public class IslandShape {
     private final CanvasDimensions dimensions;
     private final BridgesPuzzle puzzle;
 
+    /**
+     * Creates a new island shape and binds it to an island.
+     *
+     * @param island      the island to bind to
+     * @param controlPane the pane to hold the click area shape
+     * @param gc          the graphics context of the canvas to draw on
+     * @param dimensions  the calculated dimensions for the puzzle
+     * @param puzzle      the puzzle of the connection
+     */
     public IslandShape(Island island, Pane controlPane, GraphicsContext gc, CanvasDimensions dimensions, BridgesPuzzle puzzle) {
         this.island = island;
         this.controlPane = controlPane;
@@ -41,7 +55,13 @@ public class IslandShape {
         initControls(dimensions.coordinate(island.getX()), dimensions.coordinate(island.getY()));
     }
 
-    public void draw(NumberDisplay numberDisplay, boolean drawClickArea) {
+    /**
+     * Redraws the island on the canvas.
+     *
+     * @param numberDisplay        the configuration for displaying numbers
+     * @param drawClickAreaOutline the configuration for outlining the click area
+     */
+    public void draw(NumberDisplay numberDisplay, boolean drawClickAreaOutline) {
         double x = dimensions.coordinate(island.getX());
         double y = dimensions.coordinate(island.getY());
 
@@ -61,12 +81,18 @@ public class IslandShape {
         gc.setFill(Color.BLACK);
         gc.fillText(getDisplayNumber(numberDisplay), x, y);
 
-        if (drawClickArea) {
-            drawClickArea();
+        if (drawClickAreaOutline) {
+            drawClickAreaOutline();
         }
 
     }
 
+    /**
+     * Returns the number to display depending on the given configuration.
+     *
+     * @param display the configuration for displaying numbers
+     * @return the number to display depending on the configuration
+     */
     private String getDisplayNumber(NumberDisplay display) {
         if (display == NumberDisplay.SHOW_REQUIRED) {
             return String.valueOf(island.getRequiredBridges());
@@ -77,6 +103,12 @@ public class IslandShape {
         throw new RuntimeException("IslandShape#getDisplayNumber: found invalid enum value");
     }
 
+    /**
+     * Initializes the triangle shapes that handle user input.
+     *
+     * @param x the x coordinate of the island
+     * @param y the y coordinate of the island
+     */
     private void initControls(double x, double y) {
         final double x0 = x - dimensions.getClickAreaSize();
         final double x1 = x + dimensions.getClickAreaSize();
@@ -89,6 +121,17 @@ public class IslandShape {
         createTriangle(Direction.WEST, x, y, x0, y1, x0, y0);
     }
 
+    /**
+     * Create a single triangle shape to handle user input.
+     *
+     * @param direction the direction of the shape relative to the island
+     * @param x0        the first point's x coordinate
+     * @param y0        the first point's y coordinate
+     * @param x1        the second point's x coordinate
+     * @param y1        the second point's y coordinate
+     * @param x2        the third point's x coordinate
+     * @param y2        the third point's y coordinate
+     */
     private void createTriangle(Direction direction, double x0, double y0, double x1, double y1, double x2, double y2) {
         Polygon poly = new Polygon(x0, y0, x1, y1, x2, y2);
         poly.setStroke(Color.TRANSPARENT);
@@ -105,14 +148,35 @@ public class IslandShape {
         this.controlPane.getChildren().add(0, poly);
     }
 
+    /**
+     * Handles a left click on a click area. A bridge is added to the connection.
+     *
+     * @param poly      the triangle clicked
+     * @param direction the direction of the triangle
+     */
     private void onLeftClick(Polygon poly, Direction direction) {
         onClick(poly, direction, Connection::canAddBridge, Connection::addBridge);
     }
 
+    /**
+     * Handles a right click on a click area. A bridge is removed from the connection.
+     *
+     * @param poly      the triangle clicked
+     * @param direction the direction of the triangle
+     */
     private void onRightClick(Polygon poly, Direction direction) {
         onClick(poly, direction, Connection::canRemoveBridge, Connection::removeBridge);
     }
 
+    /**
+     * Generic handler for both left and right click. Checks if there exists a connection
+     * for the clicked direction and executes the appropriate bridge operation.
+     *
+     * @param poly      the triangle clicked
+     * @param direction the direction of the triangle
+     * @param canExec   a method that checks if the bridge operation can be executed
+     * @param exec      a method that executes the bridge operation
+     */
     private void onClick(Polygon poly, Direction direction, Function<Connection, Boolean> canExec, Consumer<Connection> exec) {
         Connection connection = this.puzzle.getConnectedBridge(this.island, direction);
         if (connection == null) {
@@ -129,7 +193,10 @@ public class IslandShape {
         poly.fireEvent(new Event(EventTypes.REDRAW));
     }
 
-    private void drawClickArea() {
+    /**
+     * Draws the outlines of all click areas of the underlying island to the canvas.
+     */
+    private void drawClickAreaOutline() {
         final double x = dimensions.coordinate(island.getX());
         final double y = dimensions.coordinate(island.getY());
 
