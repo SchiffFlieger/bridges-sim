@@ -27,7 +27,7 @@ public class CanvasController {
     private List<BridgeShape> bridges;
     private CanvasDimensions dimensions;
     private BridgesPuzzle puzzle;
-    private BridgeHintsVisible bridgeHintsVisible;
+    private BridgeShape.BridgeHintsVisible bridgeHintsVisible;
     private NumberDisplay numberDisplay;
 
     public CanvasController(Canvas canvas, Pane controlPane, NumberDisplay currentDisplay) {
@@ -133,7 +133,7 @@ public class CanvasController {
         return this.puzzle;
     }
 
-    public void setBridgeHintsVisible(BridgeHintsVisible visible) {
+    public void setBridgeHintsVisible(BridgeShape.BridgeHintsVisible visible) {
         this.bridgeHintsVisible = visible;
     }
 }

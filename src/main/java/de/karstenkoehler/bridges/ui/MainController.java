@@ -10,6 +10,7 @@ import de.karstenkoehler.bridges.ui.components.NewPuzzleStage;
 import de.karstenkoehler.bridges.ui.components.SaveRequest;
 import de.karstenkoehler.bridges.ui.components.toast.ToastMessage;
 import de.karstenkoehler.bridges.ui.events.EventTypes;
+import de.karstenkoehler.bridges.ui.shapes.BridgeShape;
 import de.karstenkoehler.bridges.ui.tasks.SolveSimulationService;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -102,25 +103,25 @@ public class MainController {
 
         rbtnBridgeHintsAlways.selectedProperty().addListener((observable, oldValue, selected) -> {
             if (selected) {
-                this.canvasController.setBridgeHintsVisible(BridgeHintsVisible.ALWAYS);
+                this.canvasController.setBridgeHintsVisible(BridgeShape.BridgeHintsVisible.ALWAYS);
                 this.canvasController.drawThings();
             }
         });
 
         rbtnBridgeHintsPossible.selectedProperty().addListener((observable, oldValue, selected) -> {
             if (selected) {
-                this.canvasController.setBridgeHintsVisible(BridgeHintsVisible.IF_POSSIBLE);
+                this.canvasController.setBridgeHintsVisible(BridgeShape.BridgeHintsVisible.IF_POSSIBLE);
                 this.canvasController.drawThings();
             }
         });
 
         rbtnBridgeHintsNever.selectedProperty().addListener((observable, oldValue, selected) -> {
             if (selected) {
-                this.canvasController.setBridgeHintsVisible(BridgeHintsVisible.NEVER);
+                this.canvasController.setBridgeHintsVisible(BridgeShape.BridgeHintsVisible.NEVER);
                 this.canvasController.drawThings();
             }
         });
-        this.canvasController.setBridgeHintsVisible(BridgeHintsVisible.NEVER);
+        this.canvasController.setBridgeHintsVisible(BridgeShape.BridgeHintsVisible.NEVER);
 
         System.out.println(slSpeed.valueProperty().intValue());
         AtomicInteger sleepCount = new AtomicInteger(slSpeed.valueProperty().intValue());

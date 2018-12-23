@@ -3,7 +3,6 @@ package de.karstenkoehler.bridges.ui.shapes;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
-import de.karstenkoehler.bridges.ui.BridgeHintsVisible;
 import de.karstenkoehler.bridges.ui.CanvasDimensions;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
@@ -127,5 +126,12 @@ public class BridgeShape {
      */
     private boolean needsMoreBridges(Island island) {
         return puzzle.getRemainingBridgeCount(island) != 0;
+    }
+
+    /**
+     * Represents the three possible configurations for showing bridge hints.
+     */
+    public enum BridgeHintsVisible {
+        ALWAYS, IF_POSSIBLE, NEVER
     }
 }
