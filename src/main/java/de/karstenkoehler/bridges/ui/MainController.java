@@ -69,7 +69,7 @@ public class MainController {
 
     private Service<Void> service;
 
-    private CanvasController canvasController;
+    private PlayingFieldController fieldController;
 
     private final Solver puzzleSolver;
     private final FileHelper fileHelper;
@@ -91,44 +91,44 @@ public class MainController {
         cbxShowClickArea.selectedProperty().addListener(setClickAreaVisibility());
 
         this.rbtnShowRequired.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            this.canvasController.setNumberDisplay(IslandShape.NumberDisplay.SHOW_REQUIRED);
-            this.canvasController.drawThings();
+            this.fieldController.setNumberDisplay(IslandShape.NumberDisplay.SHOW_REQUIRED);
+            this.fieldController.draw();
         });
 
         this.rbtnShowRemaining.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            this.canvasController.setNumberDisplay(IslandShape.NumberDisplay.SHOW_REMAINING);
-            this.canvasController.drawThings();
+            this.fieldController.setNumberDisplay(IslandShape.NumberDisplay.SHOW_REMAINING);
+            this.fieldController.draw();
         });
 
-        this.canvasController = new CanvasController(this.canvas, this.controlPane, IslandShape.NumberDisplay.SHOW_REQUIRED);
+        this.fieldController = new PlayingFieldController(this.canvas, this.controlPane, IslandShape.NumberDisplay.SHOW_REQUIRED);
 
         rbtnBridgeHintsAlways.selectedProperty().addListener((observable, oldValue, selected) -> {
             if (selected) {
-                this.canvasController.setBridgeHintsVisible(BridgeShape.BridgeHintsVisible.ALWAYS);
-                this.canvasController.drawThings();
+                this.fieldController.setBridgeHintsVisible(BridgeShape.BridgeHintsVisible.ALWAYS);
+                this.fieldController.draw();
             }
         });
 
         rbtnBridgeHintsPossible.selectedProperty().addListener((observable, oldValue, selected) -> {
             if (selected) {
-                this.canvasController.setBridgeHintsVisible(BridgeShape.BridgeHintsVisible.IF_POSSIBLE);
-                this.canvasController.drawThings();
+                this.fieldController.setBridgeHintsVisible(BridgeShape.BridgeHintsVisible.IF_POSSIBLE);
+                this.fieldController.draw();
             }
         });
 
         rbtnBridgeHintsNever.selectedProperty().addListener((observable, oldValue, selected) -> {
             if (selected) {
-                this.canvasController.setBridgeHintsVisible(BridgeShape.BridgeHintsVisible.NEVER);
-                this.canvasController.drawThings();
+                this.fieldController.setBridgeHintsVisible(BridgeShape.BridgeHintsVisible.NEVER);
+                this.fieldController.draw();
             }
         });
-        this.canvasController.setBridgeHintsVisible(BridgeShape.BridgeHintsVisible.NEVER);
+        this.fieldController.setBridgeHintsVisible(BridgeShape.BridgeHintsVisible.NEVER);
 
         System.out.println(slSpeed.valueProperty().intValue());
         AtomicInteger sleepCount = new AtomicInteger(slSpeed.valueProperty().intValue());
         slSpeed.valueProperty().addListener((observable, oldValue, newValue) -> sleepCount.set(slSpeed.maxProperty().intValue() + 1 - newValue.intValue()));
 
-        this.service = new SolveSimulationService(puzzleSolver, canvas, canvasController, sleepCount);
+        this.service = new SolveSimulationService(puzzleSolver, canvas, fieldController, sleepCount);
 
         this.service.setOnCancelled(event -> enableControls());
         this.service.setOnFailed(event -> enableControls());
@@ -138,25 +138,25 @@ public class MainController {
         this.service.setOnScheduled(event -> disableControls());
 
         Optional<BridgesPuzzle> puzzle = this.fileHelper.openInitialFile(new File("src\\main\\resources\\data\\bsp_25x25.bgs"));
-        puzzle.ifPresent(bridgesPuzzle -> this.canvasController.setPuzzle(bridgesPuzzle));
+        puzzle.ifPresent(bridgesPuzzle -> this.fieldController.setPuzzle(bridgesPuzzle));
     }
 
     public void setMainStage(Stage mainStage) {
         this.stage = mainStage;
         mainStage.addEventHandler(EventTypes.FILE_MODIFIED, event -> this.fileHelper.fileModified());
-        mainStage.addEventHandler(REDRAW, event -> this.canvasController.drawThings());
+        mainStage.addEventHandler(REDRAW, event -> this.fieldController.draw());
         mainStage.addEventHandler(EventTypes.CHANGE_PUZZLE, event -> {
-            this.canvasController.setPuzzle(event.getPuzzle());
+            this.fieldController.setPuzzle(event.getPuzzle());
             this.fileHelper.resetFile();
         });
 
         mainStage.addEventHandler(EVAL_STATE, event -> {
-            PuzzleState state = this.canvasController.getPuzzle().getState();
+            PuzzleState state = this.fieldController.getPuzzle().getState();
             lblState.setText(state.toString());
         });
 
         mainStage.setOnCloseRequest(event -> {
-            SaveRequest.SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
+            SaveRequest.SaveAction action = this.fileHelper.saveIfNecessary(this.fieldController.getPuzzle());
             if (action == SaveRequest.SaveAction.CANCEL) {
                 event.consume();
             }
@@ -176,7 +176,7 @@ public class MainController {
 
     @FXML
     private void onNewPuzzle() {
-        SaveRequest.SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
+        SaveRequest.SaveAction action = this.fileHelper.saveIfNecessary(this.fieldController.getPuzzle());
         if (action == SaveRequest.SaveAction.CANCEL) {
             return;
         }
@@ -186,38 +186,38 @@ public class MainController {
 
     @FXML
     private void onRestartPuzzle() {
-        SaveRequest.SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
+        SaveRequest.SaveAction action = this.fileHelper.saveIfNecessary(this.fieldController.getPuzzle());
         if (action == SaveRequest.SaveAction.CANCEL) {
             return;
         }
 
-        this.canvasController.restartPuzzle();
+        this.fieldController.restartPuzzle();
     }
 
     @FXML
     private void onOpenPuzzle() {
-        SaveRequest.SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
+        SaveRequest.SaveAction action = this.fileHelper.saveIfNecessary(this.fieldController.getPuzzle());
         if (action == SaveRequest.SaveAction.CANCEL) {
             return;
         }
 
         Optional<BridgesPuzzle> puzzle = this.fileHelper.openFile();
-        puzzle.ifPresent(bridgesPuzzle -> this.canvasController.setPuzzle(bridgesPuzzle));
+        puzzle.ifPresent(bridgesPuzzle -> this.fieldController.setPuzzle(bridgesPuzzle));
     }
 
     @FXML
     private void onSavePuzzle() {
-        this.fileHelper.saveToCurrentFile(this.canvasController.getPuzzle());
+        this.fileHelper.saveToCurrentFile(this.fieldController.getPuzzle());
     }
 
     @FXML
     private void onSaveAs() {
-        this.fileHelper.saveToNewFile(this.canvasController.getPuzzle());
+        this.fileHelper.saveToNewFile(this.fieldController.getPuzzle());
     }
 
     @FXML
     private void onClose() {
-        SaveRequest.SaveAction action = this.fileHelper.saveIfNecessary(this.canvasController.getPuzzle());
+        SaveRequest.SaveAction action = this.fileHelper.saveIfNecessary(this.fieldController.getPuzzle());
         if (action == SaveRequest.SaveAction.CANCEL) {
             return;
         }
@@ -235,7 +235,7 @@ public class MainController {
         Connection next = getNextSafeBridge();
         if (next == null) return;
 
-        this.canvasController.getPuzzle().emphasizeBridge(next);
+        this.fieldController.getPuzzle().emphasizeBridge(next);
         next.setBridgeCount(next.getBridgeCount() + 1);
 
         this.canvas.fireEvent(new Event(EVAL_STATE));
@@ -256,13 +256,13 @@ public class MainController {
     }
 
     private Connection getNextSafeBridge() {
-        PuzzleState state = canvasController.getPuzzle().getState();
+        PuzzleState state = fieldController.getPuzzle().getState();
         if (state != PuzzleState.NOT_SOLVED) {
             showError(state);
             return null;
         }
 
-        Connection next = puzzleSolver.nextSafeBridge(canvasController.getPuzzle());
+        Connection next = puzzleSolver.nextSafeBridge(fieldController.getPuzzle());
         if (next == null) {
             ToastMessage.show(this.stage, ToastMessage.Type.INFO, "There are no more safe bridges");
             return null;
@@ -293,10 +293,10 @@ public class MainController {
     }
 
     private ChangeListener<Boolean> setGridVisibility() {
-        return (observable, old, selected) -> canvasController.setGridVisible(selected);
+        return (observable, old, selected) -> fieldController.setGridVisible(selected);
     }
 
     private ChangeListener<Boolean> setClickAreaVisibility() {
-        return (observable, old, selected) -> canvasController.setClickAreaVisible(selected);
+        return (observable, old, selected) -> fieldController.setClickAreaVisible(selected);
     }
 }

@@ -2,7 +2,7 @@ package de.karstenkoehler.bridges.ui.tasks;
 
 import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.solver.Solver;
-import de.karstenkoehler.bridges.ui.CanvasController;
+import de.karstenkoehler.bridges.ui.PlayingFieldController;
 import de.karstenkoehler.bridges.ui.events.EventTypes;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
@@ -20,21 +20,21 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class SolveSimulationService extends Service<Void> {
     private final Solver puzzleSolver;
     private final Node eventNode;
-    private final CanvasController canvasController;
+    private final PlayingFieldController fieldController;
     private final AtomicInteger sleepCount;
 
     /**
      * Creates a new reusable service for the automatic solve simulation.
      *
-     * @param puzzleSolver     the solver to use
-     * @param eventNode        a node of the scene to fire events to
-     * @param canvasController the controller of the canvas
-     * @param sleepCount       a counter for the speed of the simulation
+     * @param puzzleSolver    the solver to use
+     * @param eventNode       a node of the scene to fire events to
+     * @param fieldController the controller of the playing field
+     * @param sleepCount      a counter for the speed of the simulation
      */
-    public SolveSimulationService(Solver puzzleSolver, Node eventNode, CanvasController canvasController, AtomicInteger sleepCount) {
+    public SolveSimulationService(Solver puzzleSolver, Node eventNode, PlayingFieldController fieldController, AtomicInteger sleepCount) {
         this.puzzleSolver = puzzleSolver;
         this.eventNode = eventNode;
-        this.canvasController = canvasController;
+        this.fieldController = fieldController;
         this.sleepCount = sleepCount;
     }
 
@@ -43,7 +43,7 @@ public class SolveSimulationService extends Service<Void> {
      */
     @Override
     protected Task<Void> createTask() {
-        return new SimulationTask(puzzleSolver, eventNode, canvasController, sleepCount);
+        return new SimulationTask(puzzleSolver, eventNode, fieldController, sleepCount);
     }
 
     /**
@@ -52,21 +52,21 @@ public class SolveSimulationService extends Service<Void> {
     private static class SimulationTask extends Task<Void> {
         private final Solver puzzleSolver;
         private final Node eventNode;
-        private final CanvasController canvasController;
+        private final PlayingFieldController fieldController;
         private final AtomicInteger sleepCount;
 
         /**
          * Creates a single use background task for the automatic solve simulation.
          *
-         * @param puzzleSolver     the solver to use
-         * @param eventNode        a node of the scene to fire events to
-         * @param canvasController the controller of the canvas
-         * @param sleepCount       a counter for the speed of the simulation
+         * @param puzzleSolver    the solver to use
+         * @param eventNode       a node of the scene to fire events to
+         * @param fieldController the controller of the playing field
+         * @param sleepCount      a counter for the speed of the simulation
          */
-        SimulationTask(Solver puzzleSolver, Node eventNode, CanvasController canvasController, AtomicInteger sleepCount) {
+        SimulationTask(Solver puzzleSolver, Node eventNode, PlayingFieldController fieldController, AtomicInteger sleepCount) {
             this.puzzleSolver = puzzleSolver;
             this.eventNode = eventNode;
-            this.canvasController = canvasController;
+            this.fieldController = fieldController;
             this.sleepCount = sleepCount;
         }
 
@@ -81,12 +81,12 @@ public class SolveSimulationService extends Service<Void> {
         @Override
         protected Void call() throws InterruptedException {
             while (!isCancelled()) {
-                Connection next = puzzleSolver.nextSafeBridge(canvasController.getPuzzle());
+                Connection next = puzzleSolver.nextSafeBridge(fieldController.getPuzzle());
                 if (next == null) {
                     return null;
                 }
 
-                this.canvasController.getPuzzle().emphasizeBridge(next);
+                this.fieldController.getPuzzle().emphasizeBridge(next);
                 next.setBridgeCount(next.getBridgeCount() + 1);
 
                 Platform.runLater(() -> {
