@@ -28,9 +28,9 @@ public class CanvasController {
     private CanvasDimensions dimensions;
     private BridgesPuzzle puzzle;
     private BridgeShape.BridgeHintsVisible bridgeHintsVisible;
-    private NumberDisplay numberDisplay;
+    private IslandShape.NumberDisplay numberDisplay;
 
-    public CanvasController(Canvas canvas, Pane controlPane, NumberDisplay currentDisplay) {
+    public CanvasController(Canvas canvas, Pane controlPane, IslandShape.NumberDisplay currentDisplay) {
         this.canvas = canvas;
         this.controlPane = controlPane;
         this.numberDisplay = currentDisplay;
@@ -100,7 +100,7 @@ public class CanvasController {
         this.bridges.clear();
     }
 
-    public void setNumberDisplay(NumberDisplay display) {
+    public void setNumberDisplay(IslandShape.NumberDisplay display) {
         this.numberDisplay = display;
     }
 

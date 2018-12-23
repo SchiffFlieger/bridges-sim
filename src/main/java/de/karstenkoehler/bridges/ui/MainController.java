@@ -11,6 +11,7 @@ import de.karstenkoehler.bridges.ui.components.SaveRequest;
 import de.karstenkoehler.bridges.ui.components.toast.ToastMessage;
 import de.karstenkoehler.bridges.ui.events.EventTypes;
 import de.karstenkoehler.bridges.ui.shapes.BridgeShape;
+import de.karstenkoehler.bridges.ui.shapes.IslandShape;
 import de.karstenkoehler.bridges.ui.tasks.SolveSimulationService;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -90,16 +91,16 @@ public class MainController {
         cbxShowClickArea.selectedProperty().addListener(setClickAreaVisibility());
 
         this.rbtnShowRequired.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            this.canvasController.setNumberDisplay(NumberDisplay.SHOW_REQUIRED);
+            this.canvasController.setNumberDisplay(IslandShape.NumberDisplay.SHOW_REQUIRED);
             this.canvasController.drawThings();
         });
 
         this.rbtnShowRemaining.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            this.canvasController.setNumberDisplay(NumberDisplay.SHOW_REMAINING);
+            this.canvasController.setNumberDisplay(IslandShape.NumberDisplay.SHOW_REMAINING);
             this.canvasController.drawThings();
         });
 
-        this.canvasController = new CanvasController(this.canvas, this.controlPane, NumberDisplay.SHOW_REQUIRED);
+        this.canvasController = new CanvasController(this.canvas, this.controlPane, IslandShape.NumberDisplay.SHOW_REQUIRED);
 
         rbtnBridgeHintsAlways.selectedProperty().addListener((observable, oldValue, selected) -> {
             if (selected) {

@@ -5,7 +5,6 @@ import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Direction;
 import de.karstenkoehler.bridges.model.Island;
 import de.karstenkoehler.bridges.ui.CanvasDimensions;
-import de.karstenkoehler.bridges.ui.NumberDisplay;
 import de.karstenkoehler.bridges.ui.events.EventTypes;
 import javafx.event.Event;
 import javafx.geometry.VPos;
@@ -217,5 +216,12 @@ public class IslandShape {
         gc.strokeLine(x0, y0, x0, y1);
         gc.strokeLine(x0, y1, x1, y1);
         gc.strokeLine(x1, y1, x1, y0);
+    }
+
+    /**
+     * Represents the two possible configurations for the numbers to draw on islands.
+     */
+    public enum NumberDisplay {
+        SHOW_REQUIRED, SHOW_REMAINING
     }
 }
