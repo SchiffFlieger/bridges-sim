@@ -72,12 +72,12 @@ public class MainController {
     private PlayingFieldController fieldController;
 
     private final Solver puzzleSolver;
-    private final FileHelper fileHelper;
+    private final FileUtils fileUtils;
     private NewPuzzleStage newPuzzleStage;
     private Stage stage;
 
     public MainController() {
-        this.fileHelper = new FileHelper();
+        this.fileUtils = new FileUtils();
         this.puzzleSolver = new SolverImpl();
     }
 
@@ -137,17 +137,17 @@ public class MainController {
         this.service.setOnRunning(event -> disableControls());
         this.service.setOnScheduled(event -> disableControls());
 
-        Optional<BridgesPuzzle> puzzle = this.fileHelper.openInitialFile(new File("src\\main\\resources\\data\\bsp_25x25.bgs"));
+        Optional<BridgesPuzzle> puzzle = this.fileUtils.openInitialFile(new File("src\\main\\resources\\data\\bsp_25x25.bgs"));
         puzzle.ifPresent(bridgesPuzzle -> this.fieldController.setPuzzle(bridgesPuzzle));
     }
 
     public void setMainStage(Stage mainStage) {
         this.stage = mainStage;
-        mainStage.addEventHandler(EventTypes.FILE_MODIFIED, event -> this.fileHelper.fileModified());
+        mainStage.addEventHandler(EventTypes.FILE_MODIFIED, event -> this.fileUtils.fileModified());
         mainStage.addEventHandler(REDRAW, event -> this.fieldController.draw());
         mainStage.addEventHandler(EventTypes.CHANGE_PUZZLE, event -> {
             this.fieldController.setPuzzle(event.getPuzzle());
-            this.fileHelper.resetFile();
+            this.fileUtils.setNewFile();
         });
 
         mainStage.addEventHandler(EVAL_STATE, event -> {
@@ -156,7 +156,7 @@ public class MainController {
         });
 
         mainStage.setOnCloseRequest(event -> {
-            SaveRequest.SaveAction action = this.fileHelper.saveIfNecessary(this.fieldController.getPuzzle());
+            SaveRequest.SaveAction action = this.fileUtils.saveIfNecessary(this.fieldController.getPuzzle());
             if (action == SaveRequest.SaveAction.CANCEL) {
                 event.consume();
             }
@@ -164,10 +164,10 @@ public class MainController {
 
         mainStage.titleProperty().bind(Bindings.concat(
                 "Bridges Simulator - Karsten Köhler - 8690570 - ",
-                this.fileHelper.titleFilenameProperty()
+                this.fileUtils.titleFilenameProperty()
         ));
 
-        this.fileHelper.setStage(mainStage);
+        this.fileUtils.setStage(mainStage);
         this.newPuzzleStage = new NewPuzzleStage(mainStage);
         this.newPuzzleStage.init(this.canvas);
 
@@ -176,7 +176,7 @@ public class MainController {
 
     @FXML
     private void onNewPuzzle() {
-        SaveRequest.SaveAction action = this.fileHelper.saveIfNecessary(this.fieldController.getPuzzle());
+        SaveRequest.SaveAction action = this.fileUtils.saveIfNecessary(this.fieldController.getPuzzle());
         if (action == SaveRequest.SaveAction.CANCEL) {
             return;
         }
@@ -186,7 +186,7 @@ public class MainController {
 
     @FXML
     private void onRestartPuzzle() {
-        SaveRequest.SaveAction action = this.fileHelper.saveIfNecessary(this.fieldController.getPuzzle());
+        SaveRequest.SaveAction action = this.fileUtils.saveIfNecessary(this.fieldController.getPuzzle());
         if (action == SaveRequest.SaveAction.CANCEL) {
             return;
         }
@@ -196,28 +196,28 @@ public class MainController {
 
     @FXML
     private void onOpenPuzzle() {
-        SaveRequest.SaveAction action = this.fileHelper.saveIfNecessary(this.fieldController.getPuzzle());
+        SaveRequest.SaveAction action = this.fileUtils.saveIfNecessary(this.fieldController.getPuzzle());
         if (action == SaveRequest.SaveAction.CANCEL) {
             return;
         }
 
-        Optional<BridgesPuzzle> puzzle = this.fileHelper.openFile();
+        Optional<BridgesPuzzle> puzzle = this.fileUtils.openFile();
         puzzle.ifPresent(bridgesPuzzle -> this.fieldController.setPuzzle(bridgesPuzzle));
     }
 
     @FXML
     private void onSavePuzzle() {
-        this.fileHelper.saveToCurrentFile(this.fieldController.getPuzzle());
+        this.fileUtils.saveToCurrentFile(this.fieldController.getPuzzle());
     }
 
     @FXML
     private void onSaveAs() {
-        this.fileHelper.saveToNewFile(this.fieldController.getPuzzle());
+        this.fileUtils.saveToNewFile(this.fieldController.getPuzzle());
     }
 
     @FXML
     private void onClose() {
-        SaveRequest.SaveAction action = this.fileHelper.saveIfNecessary(this.fieldController.getPuzzle());
+        SaveRequest.SaveAction action = this.fileUtils.saveIfNecessary(this.fieldController.getPuzzle());
         if (action == SaveRequest.SaveAction.CANCEL) {
             return;
         }
