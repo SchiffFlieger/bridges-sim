@@ -25,6 +25,10 @@ public class SolveSimulationService extends Service<Void> {
 
     /**
      * Creates a new reusable service for the automatic solve simulation.
+     * <p>
+     * The sleep count is NOT the duration how long the service waits before the next step. It
+     * indicates how many 50 millisecond sleep periods should be executed before the next step.
+     * This allows for a faster reaction speed when changing the speed of the simulation.
      *
      * @param puzzleSolver    the solver to use
      * @param eventNode       a node of the scene to fire events to

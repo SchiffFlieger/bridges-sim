@@ -9,13 +9,11 @@ import de.karstenkoehler.bridges.ui.components.AboutDialog;
 import de.karstenkoehler.bridges.ui.components.NewPuzzleStage;
 import de.karstenkoehler.bridges.ui.components.SaveRequest;
 import de.karstenkoehler.bridges.ui.components.toast.ToastMessage;
-import de.karstenkoehler.bridges.ui.events.EventTypes;
 import de.karstenkoehler.bridges.ui.shapes.BridgeShape;
 import de.karstenkoehler.bridges.ui.shapes.IslandShape;
 import de.karstenkoehler.bridges.ui.tasks.SolveSimulationService;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
-import javafx.beans.value.ChangeListener;
 import javafx.concurrent.Service;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -28,9 +26,11 @@ import java.io.File;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static de.karstenkoehler.bridges.ui.events.EventTypes.EVAL_STATE;
-import static de.karstenkoehler.bridges.ui.events.EventTypes.REDRAW;
+import static de.karstenkoehler.bridges.ui.events.EventTypes.*;
 
+/**
+ * The controller of the main window of the application.
+ */
 public class MainController {
 
     @FXML
@@ -76,31 +76,65 @@ public class MainController {
     private NewPuzzleStage newPuzzleStage;
     private Stage stage;
 
+    /**
+     * Creates a new controller instance.
+     */
     public MainController() {
         this.fileUtils = new FileUtils();
         this.puzzleSolver = new SolverImpl();
     }
 
+    /**
+     * Initializes the controls in the main window and prepares some dependencies.
+     */
     @FXML
     private void initialize() {
+        initializeTooltips();
+        initializeFieldController();
+        registerMenuSelectionListeners();
+        initializeSolveService();
+
+        Optional<BridgesPuzzle> puzzle = this.fileUtils.openInitialFile(new File("src\\main\\resources\\data\\bsp_25x25.bgs"));
+        puzzle.ifPresent(bridgesPuzzle -> this.fieldController.setPuzzle(bridgesPuzzle));
+    }
+
+    /**
+     * Initializes the tooltips of some controls.
+     */
+    private void initializeTooltips() {
         btnNextBridge.setTooltip(new Tooltip("Build a safe bridge in the current puzzle."));
         btnToggleSimulation.setTooltip(new Tooltip("Automatically build safe bridges with a slight delay."));
         slSpeed.setTooltip(new Tooltip("Adjust the speed of the automatic solver."));
+    }
 
-        cbxShowGrid.selectedProperty().addListener(setGridVisibility());
-        cbxShowClickArea.selectedProperty().addListener(setClickAreaVisibility());
-
-        this.rbtnShowRequired.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            this.fieldController.setNumberDisplay(IslandShape.NumberDisplay.SHOW_REQUIRED);
-            this.fieldController.draw();
-        });
-
-        this.rbtnShowRemaining.selectedProperty().addListener((observable, oldValue, newValue) -> {
-            this.fieldController.setNumberDisplay(IslandShape.NumberDisplay.SHOW_REMAINING);
-            this.fieldController.draw();
-        });
-
+    /**
+     * Creates and initializes the instance of the playing field controller.
+     */
+    private void initializeFieldController() {
         this.fieldController = new PlayingFieldController(this.canvas, this.controlPane, IslandShape.NumberDisplay.SHOW_REQUIRED);
+        this.fieldController.setBridgeHintsVisible(BridgeShape.BridgeHintsVisible.NEVER);
+    }
+
+    /**
+     * Registers event listeners to the selectable options in the view menu.
+     */
+    private void registerMenuSelectionListeners() {
+        cbxShowGrid.selectedProperty().addListener((observable, old, selected) -> fieldController.setGridVisible(selected));
+        cbxShowClickArea.selectedProperty().addListener((observable, old, selected) -> fieldController.setClickAreaVisible(selected));
+
+        this.rbtnShowRequired.selectedProperty().addListener((observable, oldValue, selected) -> {
+            if (selected) {
+                this.fieldController.setNumberDisplay(IslandShape.NumberDisplay.SHOW_REQUIRED);
+                this.fieldController.draw();
+            }
+        });
+
+        this.rbtnShowRemaining.selectedProperty().addListener((observable, oldValue, selected) -> {
+            if (selected) {
+                this.fieldController.setNumberDisplay(IslandShape.NumberDisplay.SHOW_REMAINING);
+                this.fieldController.draw();
+            }
+        });
 
         rbtnBridgeHintsAlways.selectedProperty().addListener((observable, oldValue, selected) -> {
             if (selected) {
@@ -122,9 +156,12 @@ public class MainController {
                 this.fieldController.draw();
             }
         });
-        this.fieldController.setBridgeHintsVisible(BridgeShape.BridgeHintsVisible.NEVER);
+    }
 
-        System.out.println(slSpeed.valueProperty().intValue());
+    /**
+     * Initializes the solve simulation service with its dependencies.
+     */
+    private void initializeSolveService() {
         AtomicInteger sleepCount = new AtomicInteger(slSpeed.valueProperty().intValue());
         slSpeed.valueProperty().addListener((observable, oldValue, newValue) -> sleepCount.set(slSpeed.maxProperty().intValue() + 1 - newValue.intValue()));
 
@@ -136,31 +173,16 @@ public class MainController {
 
         this.service.setOnRunning(event -> disableControls());
         this.service.setOnScheduled(event -> disableControls());
-
-        Optional<BridgesPuzzle> puzzle = this.fileUtils.openInitialFile(new File("src\\main\\resources\\data\\bsp_25x25.bgs"));
-        puzzle.ifPresent(bridgesPuzzle -> this.fieldController.setPuzzle(bridgesPuzzle));
     }
 
+    /**
+     * Sets the stage and registers some event listeners on it.
+     *
+     * @param mainStage the main stage of the application
+     */
     public void setMainStage(Stage mainStage) {
         this.stage = mainStage;
-        mainStage.addEventHandler(EventTypes.FILE_MODIFIED, event -> this.fileUtils.fileModified());
-        mainStage.addEventHandler(REDRAW, event -> this.fieldController.draw());
-        mainStage.addEventHandler(EventTypes.CHANGE_PUZZLE, event -> {
-            this.fieldController.setPuzzle(event.getPuzzle());
-            this.fileUtils.setNewFile();
-        });
-
-        mainStage.addEventHandler(EVAL_STATE, event -> {
-            PuzzleState state = this.fieldController.getPuzzle().getState();
-            lblState.setText(state.toString());
-        });
-
-        mainStage.setOnCloseRequest(event -> {
-            SaveRequest.SaveAction action = this.fileUtils.saveIfNecessary(this.fieldController.getPuzzle());
-            if (action == SaveRequest.SaveAction.CANCEL) {
-                event.consume();
-            }
-        });
+        registerMainStageEvents();
 
         mainStage.titleProperty().bind(Bindings.concat(
                 "Bridges Simulator - Karsten Köhler - 8690570 - ",
@@ -174,6 +196,33 @@ public class MainController {
         mainStage.fireEvent(new Event(EVAL_STATE));
     }
 
+    /**
+     * Registers some event handlers on the main stage.
+     */
+    private void registerMainStageEvents() {
+        this.stage.addEventHandler(FILE_MODIFIED, event -> this.fileUtils.fileModified());
+        this.stage.addEventHandler(REDRAW, event -> this.fieldController.draw());
+        this.stage.addEventHandler(CHANGE_PUZZLE, event -> {
+            this.fieldController.setPuzzle(event.getPuzzle());
+            this.fileUtils.setNewFile();
+        });
+
+        this.stage.addEventHandler(EVAL_STATE, event -> {
+            PuzzleState state = this.fieldController.getPuzzle().getState();
+            lblState.setText(state.toString());
+        });
+
+        this.stage.setOnCloseRequest(event -> {
+            SaveRequest.SaveAction action = this.fileUtils.saveIfNecessary(this.fieldController.getPuzzle());
+            if (action == SaveRequest.SaveAction.CANCEL) {
+                event.consume();
+            }
+        });
+    }
+
+    /**
+     * Displays the dialog stage for creating a new random puzzle.
+     */
     @FXML
     private void onNewPuzzle() {
         SaveRequest.SaveAction action = this.fileUtils.saveIfNecessary(this.fieldController.getPuzzle());
@@ -184,6 +233,9 @@ public class MainController {
         newPuzzleStage.showAndWait();
     }
 
+    /**
+     * Restart the currently active puzzle.
+     */
     @FXML
     private void onRestartPuzzle() {
         SaveRequest.SaveAction action = this.fileUtils.saveIfNecessary(this.fieldController.getPuzzle());
@@ -194,6 +246,9 @@ public class MainController {
         this.fieldController.restartPuzzle();
     }
 
+    /**
+     * Displays a file chooser for opening a puzzle from file.
+     */
     @FXML
     private void onOpenPuzzle() {
         SaveRequest.SaveAction action = this.fileUtils.saveIfNecessary(this.fieldController.getPuzzle());
@@ -205,16 +260,26 @@ public class MainController {
         puzzle.ifPresent(bridgesPuzzle -> this.fieldController.setPuzzle(bridgesPuzzle));
     }
 
+    /**
+     * Saves the current puzzle state to the known file. If there is no file associated with
+     * the puzzle, a file chooser is shown to chose a new file.
+     */
     @FXML
     private void onSavePuzzle() {
         this.fileUtils.saveToCurrentFile(this.fieldController.getPuzzle());
     }
 
+    /**
+     * Shows a file chooser for choosing the file to save to.
+     */
     @FXML
     private void onSaveAs() {
         this.fileUtils.saveToNewFile(this.fieldController.getPuzzle());
     }
 
+    /**
+     * Closes the application.
+     */
     @FXML
     private void onClose() {
         SaveRequest.SaveAction action = this.fileUtils.saveIfNecessary(this.fieldController.getPuzzle());
@@ -225,11 +290,17 @@ public class MainController {
         Platform.exit();
     }
 
+    /**
+     * Displays some basic information about this application.
+     */
     @FXML
     private void onAbout() {
         AboutDialog.showAndWait();
     }
 
+    /**
+     * Calculates and draws a safe bridge to the puzzle.
+     */
     @FXML
     private void onNextBridge() {
         Connection next = getNextSafeBridge();
@@ -240,9 +311,12 @@ public class MainController {
 
         this.canvas.fireEvent(new Event(EVAL_STATE));
         this.canvas.fireEvent(new Event(REDRAW));
-        this.canvas.fireEvent(new Event(EventTypes.FILE_MODIFIED));
+        this.canvas.fireEvent(new Event(FILE_MODIFIED));
     }
 
+    /**
+     * Starts or stops the solve simulation.
+     */
     @FXML
     private void onSolve() {
         Connection next = getNextSafeBridge();
@@ -255,6 +329,11 @@ public class MainController {
         }
     }
 
+    /**
+     * Searches for a safe bridge in the puzzle. If there is no safe bridge an error message is shown.
+     *
+     * @return the connection that holds the safe bridge, null if there are no more safe bridges
+     */
     private Connection getNextSafeBridge() {
         PuzzleState state = fieldController.getPuzzle().getState();
         if (state != PuzzleState.NOT_SOLVED) {
@@ -270,6 +349,11 @@ public class MainController {
         return next;
     }
 
+    /**
+     * Displays an suitable error message for the current puzzle state.
+     *
+     * @param state the current state of the puzzle
+     */
     private void showError(PuzzleState state) {
         if (state == PuzzleState.SOLVED) {
             ToastMessage.show(this.stage, ToastMessage.Type.INFO, "The puzzle is already solved");
@@ -280,23 +364,21 @@ public class MainController {
         }
     }
 
+    /**
+     * Enables the controls of this stage.
+     */
     private void enableControls() {
         btnToggleSimulation.setText("Auto Step");
         btnNextBridge.setDisable(false);
         menubar.setDisable(false);
     }
 
+    /**
+     * Disables the controls of this stage.
+     */
     private void disableControls() {
         btnToggleSimulation.setText("Stop");
         btnNextBridge.setDisable(true);
         menubar.setDisable(true);
-    }
-
-    private ChangeListener<Boolean> setGridVisibility() {
-        return (observable, old, selected) -> fieldController.setGridVisible(selected);
-    }
-
-    private ChangeListener<Boolean> setClickAreaVisibility() {
-        return (observable, old, selected) -> fieldController.setClickAreaVisible(selected);
     }
 }
