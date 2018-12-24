@@ -11,6 +11,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Main class of the application. Initializes the JavaFx framework and starts the application lifecycle.
+ */
 public class Main_Koehler_Karsten extends Application {
     public static void main(String[] args) {
         launch(args);

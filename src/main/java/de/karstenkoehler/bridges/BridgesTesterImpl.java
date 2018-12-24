@@ -17,6 +17,9 @@ import de.karstenkoehler.bridges.model.solver.SolverImpl;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * A simple implementation to satisfy the {@link BridgesTester} interface.
+ */
 public class BridgesTesterImpl implements BridgesTester {
     private Generator generator;
     private Solver solver;
