@@ -5,7 +5,6 @@ import de.karstenkoehler.bridges.model.PuzzleSpecification;
 import de.karstenkoehler.bridges.ui.components.toast.ToastMessage;
 import de.karstenkoehler.bridges.ui.events.PuzzleChangeEvent;
 import de.karstenkoehler.bridges.ui.tasks.GeneratePuzzleTask;
-import javafx.beans.value.ChangeListener;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
@@ -14,6 +13,9 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
 
+/**
+ * The controller of the 'new puzzle' dialog.
+ */
 public class NewPuzzleController {
     @FXML
     private ProgressBar progress;
@@ -44,16 +46,43 @@ public class NewPuzzleController {
     private Stage stage;
     private Node node;
 
+    /**
+     * Initializes the control in the dialog.
+     */
     @FXML
     private void initialize() {
-        this.rbtnUseRandom.selectedProperty().addListener(useRandomSelected());
-        this.rbtnChooseParameters.selectedProperty().addListener(chooseParametersSelected());
-        this.cbxChooseNumOfIslands.selectedProperty().addListener(numOfIslandsSelected());
+        registerSelectionListeners();
 
         makeConstraints(txtWidth);
         makeConstraints(txtHeight);
         makeConstraints(txtIslands);
 
+        initializeTooltips();
+    }
+
+    /**
+     * Registers some listeners to enable and disable the corresponding controls.
+     */
+    private void registerSelectionListeners() {
+        this.rbtnUseRandom.selectedProperty().addListener((observable, old, selected) -> {
+            if (selected) {
+                setElementsDisabled(true);
+            }
+        });
+
+        this.rbtnChooseParameters.selectedProperty().addListener((observable, old, selected) -> {
+            if (selected) {
+                setElementsDisabled(false);
+            }
+        });
+
+        this.cbxChooseNumOfIslands.selectedProperty().addListener(((observable, old, selected) -> txtIslands.setDisable(!selected)));
+    }
+
+    /**
+     * Initializes the tooltips of the controls.
+     */
+    private void initializeTooltips() {
         rbtnUseRandom.setTooltip(new Tooltip("Uses a random specification for the generated puzzle."));
         rbtnChooseParameters.setTooltip(new Tooltip("Choose the specification for the generated puzzle by yourself."));
 
@@ -65,6 +94,10 @@ public class NewPuzzleController {
         cbxChooseNumOfIslands.setTooltip(new Tooltip("Check this box to choose the number of islands to generate. Otherwise the number of islands is chosen randomly."));
     }
 
+    /**
+     * Reads the configuration input and generates an appropriate bridges puzzle. The puzzle is passed
+     * to the main controller via the {@link PuzzleChangeEvent} event.
+     */
     @FXML
     private void onOk() {
         boolean solution = this.cbxGenerateSolution.isSelected();
@@ -90,6 +123,11 @@ public class NewPuzzleController {
         }
     }
 
+    /**
+     * Generates a bridges puzzle following the given specification.
+     *
+     * @param specs the specification for the puzzle to generate
+     */
     private void generateAndClose(PuzzleSpecification specs) {
         disableControls();
 
@@ -104,6 +142,9 @@ public class NewPuzzleController {
         new Thread(task).start();
     }
 
+    /**
+     * Disables all the controls in the dialog stage and shows an indeterminate progress bar.
+     */
     private void disableControls() {
         this.progress.setVisible(true);
 
@@ -120,6 +161,9 @@ public class NewPuzzleController {
         this.lblHeight.setDisable(true);
     }
 
+    /**
+     * Enables all necessary controls based on the user's current selection.
+     */
     private void enableControls() {
         this.progress.setVisible(false);
 
@@ -139,6 +183,14 @@ public class NewPuzzleController {
         }
     }
 
+    /**
+     * Tries to parse the content of a text field as an integer value.
+     *
+     * @param field     the field to read from
+     * @param fieldName the name of the field for displaying error messages
+     * @return the parsed integer
+     * @throws InputException if the parse operation fails
+     */
     private int tryParseInt(TextField field, String fieldName) throws InputException {
         if (field.getText().isEmpty()) {
             throw new InputException(fieldName + " is empty");
@@ -151,12 +203,21 @@ public class NewPuzzleController {
         }
     }
 
+    /**
+     * Closes the stage.
+     */
     @FXML
     private void onCancel() {
         stage.close();
         enableControls();
     }
 
+    /**
+     * Setter method for necessary dependencies.
+     *
+     * @param stage the stage of the dialog
+     * @param node  a node of the main stage to fire events to
+     */
     public void setDependencies(Stage stage, Node node) {
         this.stage = stage;
         this.node = node;
@@ -168,26 +229,11 @@ public class NewPuzzleController {
         });
     }
 
-    private ChangeListener<Boolean> useRandomSelected() {
-        return (observable, old, selected) -> {
-            if (selected) {
-                setElementsDisabled(true);
-            }
-        };
-    }
-
-    private ChangeListener<Boolean> chooseParametersSelected() {
-        return (observable, old, selected) -> {
-            if (selected) {
-                setElementsDisabled(false);
-            }
-        };
-    }
-
-    private ChangeListener<Boolean> numOfIslandsSelected() {
-        return ((observable, old, selected) -> txtIslands.setDisable(!selected));
-    }
-
+    /**
+     * Disables or enables some controls.
+     *
+     * @param value true to disable the controls, false to enable them
+     */
     private void setElementsDisabled(boolean value) {
         cbxChooseNumOfIslands.setDisable(value);
         txtWidth.setDisable(value);
@@ -197,6 +243,11 @@ public class NewPuzzleController {
         lblHeight.setDisable(value);
     }
 
+    /**
+     * Adds a listener to a text field, so it accepts only numeric input and at most four characters.
+     *
+     * @param field the text field to add the constraints to
+     */
     private void makeConstraints(TextField field) {
         field.textProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue.length() > 4) {
@@ -208,8 +259,11 @@ public class NewPuzzleController {
         });
     }
 
+    /**
+     * A custom exception type for internal error handling.
+     */
     private static class InputException extends Exception {
-        public InputException(String message) {
+        InputException(String message) {
             super(message);
         }
     }
