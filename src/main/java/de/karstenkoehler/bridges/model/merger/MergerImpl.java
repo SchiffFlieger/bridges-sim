@@ -27,16 +27,16 @@ public class MergerImpl implements Merger {
 
         if (yOffset > 0) {
             // rechtes Rätsel hochschieben
-            addIslandsAndConnections(islands, left.getIslands(), 0, 0);
-            addIslandsAndConnections(islands, right.getIslands(), left.getWidth() + 1, yOffset);
+            addIslandsAndConnections(islands, connections, left.getIslands(), left.getConnections(), 0, 0);
+            addIslandsAndConnections(islands, connections, right.getIslands(), right.getConnections(), left.getWidth() + 1, yOffset);
         } else if (yOffset < 0) {
             // linkes Rätsel hochschieben
-            addIslandsAndConnections(islands, left.getIslands(), 0, -yOffset);
-            addIslandsAndConnections(islands, right.getIslands(), left.getWidth() + 1, 0);
+            addIslandsAndConnections(islands, connections, left.getIslands(), left.getConnections(), 0, -yOffset);
+            addIslandsAndConnections(islands, connections, right.getIslands(), right.getConnections(), left.getWidth() + 1, 0);
         } else {
             // gar nichts hochschieben
-            addIslandsAndConnections(islands, left.getIslands(), 0, 0);
-            addIslandsAndConnections(islands, right.getIslands(), left.getWidth() + 1, 0);
+            addIslandsAndConnections(islands, connections, left.getIslands(), left.getConnections(), 0, 0);
+            addIslandsAndConnections(islands, connections, right.getIslands(), right.getConnections(), left.getWidth() + 1, 0);
         }
 
         BridgesPuzzle puzzle = new BridgesPuzzle(islands, connections, width, height);
@@ -44,16 +44,32 @@ public class MergerImpl implements Merger {
         return puzzle;
     }
 
-    private void addIslandsAndConnections(List<Island> islands, List<Island> islandsToAdd, int xOffset, int yOffset) {
+    private void addIslandsAndConnections(List<Island> islands, List<Connection> connections, List<Island> islandsToAdd, List<Connection> connectionsToAdd, int xOffset, int yOffset) {
         int idOffset = islands.size();
 
         for (int i = 0; i < islandsToAdd.size(); i++) {
-            int id = idOffset + i + 1;
+            int id = idOffset + i;
             int x = islandsToAdd.get(i).getX() + xOffset;
             int y = islandsToAdd.get(i).getY() + yOffset;
 
             Island newIsland = new Island(id, x, y, islandsToAdd.get(i).getRequiredBridges());
             islands.add(newIsland);
+        }
+
+        for (int i = 0; i < connectionsToAdd.size(); i++) {
+            Connection bridge = connectionsToAdd.get(i);
+            if (bridge.getBridgeCount() == 0) {
+                continue;
+            }
+
+            int startId = bridge.getStartIsland().getId() + idOffset;
+            Island start = islands.get(startId);
+
+            int endId = bridge.getEndIsland().getId() + idOffset;
+            Island end = islands.get(endId);
+
+            Connection newBridge = new Connection(start, end, bridge.getBridgeCount());
+            connections.add(newBridge);
         }
     }
 
