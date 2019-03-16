@@ -22,7 +22,7 @@ public class DefaultValidator implements Validator {
                 new BridgesConnectDifferentIslandsValidator(),
                 new BridgesDoNotCrossIslandValidator(),
                 new BridgesNotDiagonalValidator(),
-                new FieldSizeValidator(),
+                // new FieldSizeValidator(),
                 new IslandOrderValidator(),
                 new IslandsOnFieldValidator(),
                 new MaxOneBridgePerIslandPairValidator(),
