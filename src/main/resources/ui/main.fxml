@@ -11,6 +11,7 @@
         <MenuBar fx:id="menubar" BorderPane.alignment="CENTER">
             <Menu mnemonicParsing="false" text="File">
                 <MenuItem mnemonicParsing="false" onAction="#onNewPuzzle" text="New Puzzle"/>
+                <MenuItem mnemonicParsing="false" onAction="#onMergePuzzles" text="Merge two Puzzles"/>
                 <MenuItem mnemonicParsing="false" onAction="#onRestartPuzzle" text="Restart Puzzle"/>
                 <MenuItem mnemonicParsing="false" onAction="#onOpenPuzzle" text="Open Puzzle"/>
                 <MenuItem mnemonicParsing="false" onAction="#onSavePuzzle" text="Save Puzzle"/>

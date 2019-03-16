@@ -3,6 +3,8 @@ package de.karstenkoehler.bridges.ui;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.PuzzleState;
+import de.karstenkoehler.bridges.model.merger.Merger;
+import de.karstenkoehler.bridges.model.merger.MergerImpl;
 import de.karstenkoehler.bridges.model.solver.Solver;
 import de.karstenkoehler.bridges.model.solver.SolverImpl;
 import de.karstenkoehler.bridges.ui.components.AboutDialog;
@@ -72,6 +74,7 @@ public class MainController {
     private PlayingFieldController fieldController;
 
     private final Solver puzzleSolver;
+    private final Merger merger;
     private final FileUtils fileUtils;
     private NewPuzzleStage newPuzzleStage;
     private Stage stage;
@@ -82,6 +85,7 @@ public class MainController {
     public MainController() {
         this.fileUtils = new FileUtils();
         this.puzzleSolver = new SolverImpl();
+        this.merger = new MergerImpl();
     }
 
     /**
@@ -231,6 +235,23 @@ public class MainController {
         }
 
         newPuzzleStage.showAndWait();
+    }
+
+    @FXML
+    private void onMergePuzzles() {
+        SaveRequest.SaveAction action = this.fileUtils.saveIfNecessary(this.fieldController.getPuzzle());
+        if (action == SaveRequest.SaveAction.CANCEL) {
+            return;
+        }
+
+        Optional<BridgesPuzzle> left = this.fileUtils.openFile();
+        Optional<BridgesPuzzle> right = this.fileUtils.openFile();
+
+        if (left.isPresent() && right.isPresent()) {
+            BridgesPuzzle puzzle = merger.merge(left.get(), right.get());
+            fieldController.setPuzzle(puzzle);
+            this.fileUtils.setNewFile();
+        }
     }
 
     /**
