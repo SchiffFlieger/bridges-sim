@@ -237,6 +237,9 @@ public class MainController {
         newPuzzleStage.showAndWait();
     }
 
+    /**
+     * Displays two file choosers and merges the given puzzles.
+     */
     @FXML
     private void onMergePuzzles() {
         SaveRequest.SaveAction action = this.fileUtils.saveIfNecessary(this.fieldController.getPuzzle());
