@@ -1,9 +1,9 @@
 # Bridges Game Simulator
 _Bridges_  is a logic puzzle from Japan, where the player needs to connect islands with bridges.
 
-<h1 align="center">
+<p align="center">
 <a href="http://trudesk.io"><img src="https://github.com/SchiffFlieger/bridges-sim/blob/master/sample.png" width="500" /></a>
-</h1>
+</p>
 
 
 ## The Rules
