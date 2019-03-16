@@ -15,6 +15,15 @@ The board is a square grid with an arbitrary number of islands. Each island cont
 * Two islands can be connected by either one or two bridges.
 * At the end, all islands need to be connected to a single group.
 
+## Features
+
+* Create random puzzles with chosen complexity.
+* Save and loads puzzles from a file.
+* Generate a single safe bridge in the current state.
+* Automatic solving until a state cannot be solved unambiguously.
+* Merge two puzzles into a new one.
+* Different visual utilities to help the player.
+
 ## Installing
 
 To get a local copy just run the following commands.
