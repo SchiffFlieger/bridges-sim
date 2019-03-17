@@ -3,6 +3,7 @@ package de.karstenkoehler.bridges.ui;
 import de.karstenkoehler.bridges.model.BridgesPuzzle;
 import de.karstenkoehler.bridges.model.Connection;
 import de.karstenkoehler.bridges.model.Island;
+import de.karstenkoehler.bridges.model.PuzzleState;
 import de.karstenkoehler.bridges.ui.events.EventTypes;
 import de.karstenkoehler.bridges.ui.shapes.BridgeShape;
 import de.karstenkoehler.bridges.ui.shapes.IslandShape;
@@ -55,6 +56,10 @@ public class PlayingFieldController {
      * onto the canvas.
      */
     public void draw() {
+        if (this.puzzle == null) {
+            return;
+        }
+
         this.puzzle.markInvalidBridges();
 
         GraphicsContext gc = canvas.getGraphicsContext2D();
@@ -152,6 +157,19 @@ public class PlayingFieldController {
     }
 
     /**
+     * Returns the current puzzle state. If no puzzle is loaded, returns the {@link PuzzleState#NOT_LOADED} state.
+     *
+     * @return the current puzzle state
+     */
+    public PuzzleState getPuzzleState() {
+        if (this.puzzle == null) {
+            return PuzzleState.NOT_LOADED;
+        }
+
+        return this.puzzle.getState();
+    }
+
+    /**
      * Draws the outlines of the canvas.
      *
      * @param gc the graphics context of the canvas to draw on
@@ -200,5 +218,4 @@ public class PlayingFieldController {
         this.islands.clear();
         this.bridges.clear();
     }
-
 }

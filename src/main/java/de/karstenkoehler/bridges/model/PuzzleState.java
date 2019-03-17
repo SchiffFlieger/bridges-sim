@@ -7,7 +7,8 @@ public enum PuzzleState {
     SOLVED("Puzzle is solved"),
     NOT_SOLVED("Puzzle is not solved"),
     NO_LONGER_SOLVABLE("Puzzle is no longer solvable"),
-    ERROR("A rule has been violated");
+    ERROR("A rule has been violated"),
+    NOT_LOADED("No puzzle.");
 
     private final String state;
 

@@ -24,7 +24,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
-import java.io.File;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -97,9 +96,6 @@ public class MainController {
         initializeFieldController();
         registerMenuSelectionListeners();
         initializeSolveService();
-
-        Optional<BridgesPuzzle> puzzle = this.fileUtils.openInitialFile(new File("src\\main\\resources\\data\\bsp_25x25.bgs"));
-        puzzle.ifPresent(bridgesPuzzle -> this.fieldController.setPuzzle(bridgesPuzzle));
     }
 
     /**
@@ -212,7 +208,7 @@ public class MainController {
         });
 
         this.stage.addEventHandler(EVAL_STATE, event -> {
-            PuzzleState state = this.fieldController.getPuzzle().getState();
+            PuzzleState state = this.fieldController.getPuzzleState();
             lblState.setText(state.toString());
         });
 
@@ -290,7 +286,13 @@ public class MainController {
      */
     @FXML
     private void onSavePuzzle() {
-        this.fileUtils.saveToCurrentFile(this.fieldController.getPuzzle());
+        BridgesPuzzle puzzle = this.fieldController.getPuzzle();
+        if (puzzle == null) {
+            showError(PuzzleState.NOT_LOADED);
+            return;
+        }
+
+        this.fileUtils.saveToCurrentFile(puzzle);
     }
 
     /**
@@ -298,6 +300,12 @@ public class MainController {
      */
     @FXML
     private void onSaveAs() {
+        BridgesPuzzle puzzle = this.fieldController.getPuzzle();
+        if (puzzle == null) {
+            showError(PuzzleState.NOT_LOADED);
+            return;
+        }
+
         this.fileUtils.saveToNewFile(this.fieldController.getPuzzle());
     }
 
@@ -359,7 +367,8 @@ public class MainController {
      * @return the connection that holds the safe bridge, null if there are no more safe bridges
      */
     private Connection getNextSafeBridge() {
-        PuzzleState state = fieldController.getPuzzle().getState();
+        PuzzleState state = fieldController.getPuzzleState();
+
         if (state != PuzzleState.NOT_SOLVED) {
             showError(state);
             return null;
@@ -385,6 +394,8 @@ public class MainController {
             ToastMessage.show(this.stage, ToastMessage.Type.ERROR, "You need to fix the errors first");
         } else if (state == PuzzleState.NO_LONGER_SOLVABLE) {
             ToastMessage.show(this.stage, ToastMessage.Type.ERROR, "The puzzle is no longer solvable");
+        } else if (state == PuzzleState.NOT_LOADED) {
+            ToastMessage.show(this.stage, ToastMessage.Type.ERROR, "You need to load a puzzle");
         }
     }
 
